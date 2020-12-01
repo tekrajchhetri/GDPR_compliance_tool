@@ -7,13 +7,13 @@ Automated Contracting Tool, a component of smashHit. smashHit is a Horizon 2020 
 
 
 ```bash
-pip install foobar
+pip install python
 ```
 
 ## Usage
 
 ```python
-import foobar
+import math
 
 ```
 ## Contributors
