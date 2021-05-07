@@ -1,5 +1,13 @@
-==================Single record insert
+# Research 
+## [STI Innsbruck](https://www.sti-innsbruck.at), [Robert Bosch GmbH](https://www.bosch.at) and [Hochschule Kempten](https://www.hs-kempten.de/en/)
+<p float="left">
+<img src="https://www.sti-innsbruck.at/sites/default/files/uploads/media/STI-IBK-Logo_CMYK_Pfad_XL.jpg" alt="STI Innsbruck" width="200px"/>
+</p>
 
+# SPARQL QUERIES
+
+## SPARQL QUERY ....
+```
 PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
 PREFIX prov: <http://www.w3.org/ns/prov#>
 PREFIX fibo-fnd-agr-ctr: <https://spec.edmcouncil.org/fibo/ontology/FND/Agreements/Contracts/>
@@ -59,8 +67,9 @@ insert data{
    :6_month rdf:type :hasMinimumDuration .
    
 }
-
+```
 ================== Insert instances of a contract
+```
 PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
 PREFIX prov: <http://www.w3.org/ns/prov#>
 PREFIX dcat: <http://www.w3.org/ns/dcat#>
@@ -196,6 +205,7 @@ insert data{
     :kg244565 rdf:type :ContractId .
     
 }
+```
 ================== Select an instance of a contract
 PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
 PREFIX prov: <http://www.w3.org/ns/prov#>
