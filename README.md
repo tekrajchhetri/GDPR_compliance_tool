@@ -19,6 +19,7 @@ import math
 ## Contributors
 - Tek Raj Chhetri 
 - Anelia Kurteva 
+- Amar Tauqeer
 
 ## Project
 -  [smashHit](https://www.smashhit.eu/) 
