@@ -207,6 +207,7 @@ insert data{
 }
 ```
 ================== Select an instance of a contract
+```
 PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
 PREFIX prov: <http://www.w3.org/ns/prov#>
 PREFIX dcat: <http://www.w3.org/ns/dcat#>
@@ -217,13 +218,14 @@ PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 select * 
 where{
+
     ?Contract a :ContractId;
               :forPurpose ?Purpose;
               :contractType ?ContractType;
               dcat:startDate ?StartDate;
               dcat:endDate ?EndingDate;
               fibo-fnd-agr-ctr:hasEffectiveDate ?EffectiveDate;
-    		  fibo-fnd-agr-ctr:hasExecutionDate ?ExecutionDate;
+    		     fibo-fnd-agr-ctr:hasExecutionDate ?ExecutionDate;
               :inMedium ?Medium;
               :hasWaiver ?Waiver;
               :hasAmendment ?Amendment;
@@ -238,4 +240,6 @@ where{
               :hasTerminationForInsolvency ?TerminationForInsolvency;
               :hasTerminationForMaterialBreach ?TerminationForMaterialBreach;
               :hasTerminationOnNotice ?TerminationOnNotice;
+              
 }
+```
