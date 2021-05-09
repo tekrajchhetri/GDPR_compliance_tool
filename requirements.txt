@@ -1,0 +1,6 @@
+Flask
+Flask-RESTful
+Flask-JWT
+uwsgi
+psycopg2
+SPARQLWrapper
