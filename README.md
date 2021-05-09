@@ -2,7 +2,14 @@
 Automated Contracting Tool, a component of smashHit. smashHit is a Horizon 2020 project with the primary objective of creating a secure and trustworthy data-sharing platform with a focus on consent management in a distributed environment such as the automotiveindustry, insurance and smart cities following GDPR.
 
 ## Software Requirements
+- [Flask](https://flask.palletsprojects.com/en/1.1.x/)
+- [Flask-RESTful](https://flask-restful.readthedocs.io/en/latest/)
+- Flask-JWT 
+- uwsgi
+- psycopg2
+- SPARQLWrapper
 - [unittest](https://docs.python.org/3/library/unittest.html)
+
 ## Installation
 
 
