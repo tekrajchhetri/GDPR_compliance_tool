@@ -19,5 +19,21 @@ class TestComplianceEngine(unittest.TestCase):
         self.assertEqual(expected_decision, from_ce["decision"])
         self.assertEqual(expected_decision_id, from_ce["status_consent"])
 
+    def test_smashHitmessage_deny(self):
+        expected_decision = "DENY"
+        expected_decision_id = 6000
+        from_ce = self.cengine.deny()
+        self.assertEqual(expected_decision, from_ce["decision"])
+        self.assertEqual(expected_decision_id, from_ce["status_consent"])
+
+    def test_smashHitmessage_deny_incomplete(self):
+        expected_decision = "DENY"
+        expected_decision_id = 6100
+        from_ce = self.cengine.deny_incomplete()
+        self.assertEqual(expected_decision, from_ce["decision"])
+        self.assertEqual(expected_decision_id, from_ce["status_consent"])
+
+
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)
