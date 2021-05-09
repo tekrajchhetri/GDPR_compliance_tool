@@ -14,7 +14,7 @@ Automated Contracting Tool, a component of smashHit. smashHit is a Horizon 2020 
 
 
 ```bash
-pip install python
+pip install -r requirements.txt
 ```
 
 ## Usage
