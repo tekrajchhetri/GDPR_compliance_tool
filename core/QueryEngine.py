@@ -8,6 +8,7 @@
 
 from SPARQLWrapper import SPARQLWrapper, JSON
 import os
+import textwrap
 class QueryEngine:
     def __init__(self):
         self.HOST_URI = "https://smashhitactool.sti2.at/repositories/TestingNode"
@@ -63,6 +64,13 @@ class QueryEngine:
         """
         return query
 
+    def prefix(self):
+        prefix = textwrap.dedent("""PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
+            PREFIX gconsent: <https://w3id.org/GConsent#>
+            PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        """)
+        return prefix
+
     def get_consent_by_name_pur_dp(self,
                                          consentProvidedBy,
                                          purpose,
@@ -110,6 +118,29 @@ class QueryEngine:
                       ?ConsentID :isAboutData ?Data.
                     } LIMIT 1 
         """
+        return query
+
+    def bulk_consentID(self):
+        query = textwrap.dedent("""{0}
+                SELECT ?ConsentID   
+                 WHERE {{ 
+                  ?ConsentID a <http://ontologies.atb-bremen.de/smashHitCore#ConsentID>.
+                  ?ConsentID :GrantedAtTime ?GrantedAtTime.
+                  ?ConsentID :RevokedAtTime ?RevokedAtTime.
+                   FILTER (?RevokedAtTime = "None") 
+                }}""").format(self.prefix())
+        return query
+
+    def consentID_by_name(self, name):
+        query = textwrap.dedent("""{0}
+                SELECT ?ConsentID   
+                 WHERE {{ 
+                  ?ConsentID a <http://ontologies.atb-bremen.de/smashHitCore#ConsentID>.
+                  ?ConsentID :isProvidedBy :{1}.
+                  ?ConsentID :GrantedAtTime ?GrantedAtTime.
+                  ?ConsentID :RevokedAtTime ?RevokedAtTime.
+                   FILTER (?RevokedAtTime = "None") 
+                }}""").format(self.prefix(), name)
         return query
 
     def consent_by_name(self, name):
