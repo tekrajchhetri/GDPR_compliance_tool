@@ -1,0 +1,7 @@
+Scripts for automatic querying of the knowledge graph (TestingNode repo) and annotation of consent.
+
+Required Node.js modules:
+-npm
+-sparql-http-client
+-prompt-sync
+
