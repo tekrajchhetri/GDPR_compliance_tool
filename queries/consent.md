@@ -1,8 +1,10 @@
 # Research
 ## [STI Innsbruck](https://www.sti-innsbruck.at)
+
 <p float=“left”>
-<img src=“https://www.sti-innsbruck.at/sites/default/files/uploads/media/STI-IBK-Logo_CMYK_Pfad_XL.jpg” alt=“STI Innsbruck” width=“200px”/>
+<img src="https://www.sti-innsbruck.at/sites/default/files/uploads/media/STI-IBK-Logo_CMYK_Pfad_XL.jpg" alt="STI Innsbruck" width="200px"/>
 </p>
+
 # SPARQL QUERIES
 
 ## Get all consent records (consent id and all information about it) from the smashHit knowledge graph. Use the repository: TestingNode ....
