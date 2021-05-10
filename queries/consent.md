@@ -89,8 +89,8 @@ WHERE  {?ConsentID :GrantedAtTime "2021-03-03T09:00:00"^^xsd:dateTime.
 ## Consent revocation: Update existing consent status from "Granted" to "Revoked". The query creates a new isntance of the consent status with it's date.
 ```
 INSERT DATA{:kg234562  :RevokedAtTime "2020-04-30T09:00:00"^^xsd:dateTime.}
-
-```## Consent granting (for a new consent record, which does not have any consent decisions yet). The query needs the specific data (ConsentID, Consent granting date/time).  
+``````
+## Consent granting (for a new consent record, which does not have any consent decisions yet). The query needs the specific data (ConsentID, Consent granting date/time).  
 ```
 INSERT DATA{?ConsentiD :GrantedAtTime "YYY-MM-DDT00:00:00"^^xsd:dateTime.}
 ```
