@@ -6,8 +6,9 @@
 </p>
 
 # SPARQL QUERIES
+- Use the repository: TestingNode
 
-## Get all consent records (consent id and all information about it) from the smashHit knowledge graph. Use the repository: TestingNode ....
+## Get all consent records (consent id and all information about it) from the smashHit knowledge graph. 
 ```
 PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
 PREFIX gconsent: <https://w3id.org/GConsent#>
