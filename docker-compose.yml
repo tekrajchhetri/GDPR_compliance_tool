@@ -1,0 +1,13 @@
+version: '3'
+services:
+  tekactool:
+    container_name: tek-actool
+    hostname: tekactool
+    restart: always
+    build: ./
+    volumes:
+      - ./:/app
+    environment:
+      - PYTHONBUFFERED=1
+    ports:
+      - "5001:5001"
