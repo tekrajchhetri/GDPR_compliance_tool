@@ -22,23 +22,69 @@ SELECT ?ConsentID ?Name ?Purpose ?Data ?Duration ?DataRequester ?DataController 
   ?ConsentID :GrantedAtTime ?GrantedAtTime.
   ?ConsentID :RevokedAtTime ?RevokedAtTime.
 }
-LIMIT 200
-
  
 ```
-## SPARQL QUERY2 description ....
+## Get all ConsentID and Data Providers ....
 ```
-query2
+PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
+SELECT ?ConsentID ?Name ?DataRequester ?DataController
+ WHERE { 
+  ?ConsentID :isProvidedBy ?Name.
+  ?ConsentID :requestedBy ?DataRequester.
+  ?ConsentID :hasDataController ?DataController.
+} LIMIT 20
 ```
-## SPARQL QUERY3 description ....
+## Get ConsentID based on the name of the data provider ....
 ```
-query3
+PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
+
+SELECT ?ConsentID
+ WHERE { 
+  ?ConsentID :isProvidedBy :JaneDoe.	
+} LIMIT 10 
+
 ```
-## SPARQL QUERY4 description ....
+## Get ConsentID and all ralated information based on the name of the data provider ....
+``````
+PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
+
+SELECT ?ConsentID ?Purpose ?Data ?Duration ?DataRequester ?DataController ?GrantedAtTime ?RevokedAtTime ?Medium
+ WHERE { 
+  ?ConsentID :isProvidedBy :JaneDoe.
+  ?ConsentID :inMedium ?Medium.
+  ?ConsentID :forPurpose ?Purpose.
+  ?ConsentID :requestedBy ?DataRequester.
+  ?ConsentID :isAboutData ?Data.
+  ?ConsentID :hasExpiry ?Duration.
+  ?ConsentID :hasDataController ?DataController.
+  ?ConsentID :GrantedAtTime ?GrantedAtTime.
+  ?ConsentID :RevokedAtTime ?RevokedAtTime.
+} LIMIT 10 
+
 ```
-query4
+## Update existing consent statuses and it's date.
+
 ```
-## SPARQL QUERY5 description ....
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+DELETE {?ConsentID :GrantedAtTime "2021-03-03T09:00:00"^^xsd:dateTime.
+    ?ConsentID :RevokedAtTime "2021-04-30T09:00:00"^^xsd:dateTime.
+}
+
+INSERT {?ConsentID :GrantedAtTime "2020-03-03T09:00:00"^^xsd:dateTime.
+		?ConsentID :RevokedAtTime "2020-04-30T09:00:00"^^xsd:dateTime. }
+
+WHERE  {?ConsentID :GrantedAtTime "2021-03-03T09:00:00"^^xsd:dateTime.
+    	?ConsentID :RevokedAtTime "2021-04-30T09:00:00"^^xsd:dateTime.
+         FILTER (?ConsentID = :kg234562) 
+}
+
 ```
-query5
+## Consent revocation: Update existing consent status from "Granted" to "Revoked". 
+## The query creates a new isntance of the consent status with it's date.
 ```
+INSERT DATA{:kg234562  :RevokedAtTime "2020-04-30T09:00:00"^^xsd:dateTime.}
+```
+
