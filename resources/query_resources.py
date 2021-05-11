@@ -23,10 +23,6 @@ import json
 class QueryConsentIDName(MethodResource, Resource):
     @doc(description='Get consent ID by name.', tags=['ConsentID By Name'])
     def get(self, name):
-        """
-        :param name: name of the data subject
-        :return:  consent provided by data subject in json format
-        """
         query = QueryEngine()
         return json.loads(query.select_query_gdb(consentProvidedBy=name,purpose=None, dataProcessing=None, dataController=None,
                     dataRequester=None, additionalData="consentID"))
