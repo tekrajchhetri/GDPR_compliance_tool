@@ -2,5 +2,6 @@ Flask
 Flask-RESTful
 Flask-JWT
 uwsgi
+flask_apispec
 psycopg2
 SPARQLWrapper
