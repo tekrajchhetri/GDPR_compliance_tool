@@ -24,13 +24,13 @@ class QueryConsentIDName(MethodResource, Resource):
     @doc(description='Get consent ID by name.', tags=['ConsentID By Name'])
     def get(self, name):
         query = QueryEngine()
-        return json.loads(query.select_query_gdb(consentProvidedBy=name,purpose=None, dataProcessing=None, dataController=None,
-                    dataRequester=None, additionalData="consentID"))
+        return json.loads(query.select_query_gdb(consentProvidedBy=name,purpose=None, dataProcessing=None,
+                                                 dataController=None, dataRequester=None, additionalData="consentID"))
 
 class QueryAllConsentID(MethodResource, Resource):
     @doc(description='Get all consent ID.', tags=['All ConsentID'])
     def get(self):
         query = QueryEngine()
-        return json.loads(query.select_query_gdb(consentProvidedBy=None,purpose=None, dataProcessing=None, dataController=None,
-                    dataRequester=None, additionalData="bconsentID"))
+        return json.loads(query.select_query_gdb(consentProvidedBy=None,purpose=None, dataProcessing=None,
+                                                 dataController=None,dataRequester=None, additionalData="bconsentID"))
 
