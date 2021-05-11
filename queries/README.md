@@ -223,14 +223,14 @@ insert data{
     	:CXAM :hasAssociation :kg244563 .
     	:CXAM :hasAssociation :kg244564 .
     	:CXAM :hasAssociation :kg244565 .
-	   :Data_Controller rdf:type :DataController .
+	:Data_Controller rdf:type :DataController .
      	:CXAM :hasRole :Data_Controller .
-      :1_Year :hasAssociation :kg244562 .
-      :6_month :hasAssociation :kg244563 .
+        :1_Year :hasAssociation :kg244562 .
+        :6_month :hasAssociation :kg244563 .
     	:6_month :hasAssociation :kg244564 .	
     	:1_year :hasAssociation :kg244565 .
-      :kg244562 :hasExpiry :1_Year .
-      :kg244563 :hasExpiry :6_month .
+        :kg244562 :hasExpiry :1_Year .
+        :kg244563 :hasExpiry :6_month .
     	:kg244564 :hasExpiry :6_month .
     	:kg244565 :hasExpiry :1_Year .
     	:kg244562 :hasDataController :CXAM .
