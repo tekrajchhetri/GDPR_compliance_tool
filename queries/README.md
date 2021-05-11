@@ -206,6 +206,40 @@ insert data{
     
 }
 ```
+================== Update insert
+```
+PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX fibo-fnd-agr-ctr: <https://spec.edmcouncil.org/fibo/ontology/FND/Agreements/Contracts/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX dct: <http://purl.org/dc/terms/>
+PREFIX dcat: <http://www.w3.org/ns/dcat#>
+PREFIX fibo-fnd-plc-adr: <https://spec.edmcouncil.org/fibo/ontology/FND/Places/Addresses/>
+insert data{
+      
+      :hasDataController rdfs:domain :contract .
+    	:CXAM rdf:type prov:Organization .
+    	:CXAM :hasAssociation :kg244562 .
+    	:CXAM :hasAssociation :kg244563 .
+    	:CXAM :hasAssociation :kg244564 .
+    	:CXAM :hasAssociation :kg244565 .
+	   :Data_Controller rdf:type :DataController .
+     	:CXAM :hasRole :Data_Controller .
+      :1_Year :hasAssociation :kg244562 .
+      :6_month :hasAssociation :kg244563 .
+    	:6_month :hasAssociation :kg244564 .	
+    	:1_year :hasAssociation :kg244565 .
+      :kg244562 :hasExpiry :1_Year .
+      :kg244563 :hasExpiry :6_month .
+    	:kg244564 :hasExpiry :6_month .
+    	:kg244565 :hasExpiry :1_Year .
+    	:kg244562 :hasDataController :CXAM .
+    	:kg244563 :hasDataController :CXAM .
+    	:kg244564 :hasDataController :CXAM .
+    	:kg244565 :hasDataController :CXAM .
+   
+}
+```
 ================== Select an instance of a contract
 ```
 PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
