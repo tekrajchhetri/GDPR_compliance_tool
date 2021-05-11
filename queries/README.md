@@ -240,6 +240,22 @@ insert data{
    
 }
 ```
+================== Delete data
+```
+PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX dcat: <http://www.w3.org/ns/dcat#>
+PREFIX fibo-fnd-agr-ctr: <https://spec.edmcouncil.org/fibo/ontology/FND/Agreements/Contracts/>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+PREFIX dct: <http://purl.org/dc/terms/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+delete data{
+        :kg244562 :hasExpiry :1_Year .
+        :kg244563 :hasExpiry :6_month .
+    	:kg244564 :hasExpiry :6_month .
+    	:kg244565 :hasExpiry :1_Year .
+}
+```
 ================== Select an instance of a contract
 ```
 PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
