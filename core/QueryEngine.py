@@ -61,15 +61,15 @@ class QueryEngine:
         return all([elem == toCheck for elem in list_of_elements])
 
     def function_map(self, name):
-        mapfunc = {"consent_by_name": self.consent_by_name,
-                   "bulk_consentid": self.bulk_consentid,
+        mapfunc = {
+                   "bulk_consentid": self.bulk_consentID,
                    "consentID_by_name": self.consentID_by_name,
 
                    }
         return mapfunc[name]
 
     def which_query(self, consentProvidedBy=None, purpose=None, dataProcessing=None, dataController=None,
-                    additionalData=None):
+                    dataRequester=None, additionalData=None):
         if additionalData=="bconsentID":
             return dict({"map": "bulk_consentid"})
 
@@ -78,8 +78,8 @@ class QueryEngine:
 
 
 
-    def select_query_gdb(self, consentProvidedBy, purpose, dataProcessing, dataController,
-                    dataRequester, additionalData=None):
+    def select_query_gdb(self, consentProvidedBy=None, purpose=None, dataProcessing=None, dataController=None,
+                    dataRequester=None, additionalData=None):
         sparql_inits = self.init_sparql(self.HOST_URI, self.get_username(), self.get_password())
         which_query_return = self.which_query(consentProvidedBy, purpose, dataProcessing, dataController,
                     dataRequester, additionalData)
