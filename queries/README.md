@@ -256,10 +256,11 @@ where{
     ?Contract a :ContractId;
               :forPurpose ?Purpose;
               :contractType ?ContractType;
+	      :hasDataController ?DataController;
               dcat:startDate ?StartDate;
               dcat:endDate ?EndingDate;
               fibo-fnd-agr-ctr:hasEffectiveDate ?EffectiveDate;
-    		     fibo-fnd-agr-ctr:hasExecutionDate ?ExecutionDate;
+    	      fibo-fnd-agr-ctr:hasExecutionDate ?ExecutionDate;
               :inMedium ?Medium;
               :hasWaiver ?Waiver;
               :hasAmendment ?Amendment;
