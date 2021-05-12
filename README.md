@@ -4,10 +4,11 @@ Automated Contracting Tool, a component of smashHit. smashHit is a Horizon 2020 
 ## Software Requirements
 - [Flask](https://flask.palletsprojects.com/en/1.1.x/)
 - [Flask-RESTful](https://flask-restful.readthedocs.io/en/latest/)
-- Flask-JWT 
-- uwsgi
-- psycopg2
-- SPARQLWrapper
+- [Flask-JWT](https://flask-jwt-extended.readthedocs.io/en/stable/) 
+- [uwsgi](https://uwsgi-docs.readthedocs.io/en/latest/)
+- [Docker](https://www.docker.com)
+- [flask_apispec](https://flask-apispec.readthedocs.io/en/latest/index.html)
+- [SPARQLWrapper](https://rdflib.dev/sparqlwrapper/)
 - [unittest](https://docs.python.org/3/library/unittest.html)
 
 ## Installation
