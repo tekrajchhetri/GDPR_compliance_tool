@@ -6,14 +6,14 @@
 # @Software: PyCharm
 
 
-from SPARQLWrapper import SPARQLWrapper, JSON
-import os
+from SPARQLWrapper import  JSON
+from core.Credentials import Credentials
+from core.SPARQL import SPARQL
 import textwrap
 import json
-class QueryEngine:
+class QueryEngine (Credentials, SPARQL):
     def __init__(self):
-        self.HOST_URI = "https://smashhitactool.sti2.at/repositories/TestingNode"
-
+        super().__init__()
 
     def prefix(self):
         prefix = textwrap.dedent("""PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
@@ -33,6 +33,28 @@ class QueryEngine:
                 }}""").format(self.prefix())
         return query
 
+    def insert_query(self, ConsentIDInput, DataControllerInput, DataInput, DataProcessingInput, DataRequesterInput,
+                     DurationInput, GrantedAtTimeInput, MediumInput, NameInput, PurposeInput):
+        insquery = textwrap.dedent("""{0}
+                INSERT DATA {{
+                :{1} a <http://ontologies.atb-bremen.de/smashHitCore#ConsentID>;
+                :isProvidedBy '{2}';
+               :inMedium '{3}';
+                :forPurpose '{4}';
+                :forDataProcessing '{5}';
+               :requestedBy '{6}';
+               :isAboutData '{7}';
+               :hasExpiry '{8}';
+               :hasDataController '{9}';
+               :GrantedAtTime '{10}'.
+           }}
+          """).format(self.prefix(),  ConsentIDInput, NameInput, MediumInput, PurposeInput, DataProcessingInput,
+                      DataRequesterInput, DataInput, DurationInput,
+                      DataControllerInput, GrantedAtTimeInput)
+        return insquery
+
+
+
     def consentID_by_name(self, name):
         query = textwrap.dedent("""{0}
                 SELECT ?ConsentID   
@@ -45,16 +67,6 @@ class QueryEngine:
                 }}""").format(self.prefix(), name)
         return query
 
-    def get_username(self):
-        return os.environ.get("USERNAME")
-
-    def get_password(self):
-        return os.environ.get("PASSWORD")
-
-    def init_sparql(self, hostname, userid, password):
-        sparql = SPARQLWrapper(hostname)
-        sparql.setCredentials(userid, password)
-        return sparql
 
     def check_all_none(self, list_of_elements):
         toCheck = None
@@ -90,3 +102,24 @@ class QueryEngine:
         sparql_inits.setReturnFormat(JSON)
         results = sparql_inits.query().convert()
         return json.dumps(results)
+
+    def post_data(self, ConsentIDInput, DataControllerInput, DataInput, DataProcessingInput, DataRequesterInput,
+                  DurationInput, GrantedAtTimeInput, MediumInput, NameInput, PurposeInput):
+
+
+        respone = self.post_sparql(self.get_username(), self.get_password(),
+                                   self.insert_query(ConsentIDInput= ConsentIDInput,
+                                                     DataControllerInput = DataControllerInput,
+                                                     DataInput = DataInput,
+                                                     DataProcessingInput = DataProcessingInput,
+                                                     DataRequesterInput = DataRequesterInput,
+                                                     DurationInput=DurationInput,
+                                                     GrantedAtTimeInput = GrantedAtTimeInput,
+                                                     MediumInput = MediumInput, NameInput=NameInput,
+                                                     PurposeInput=PurposeInput)
+                                   )
+        return respone
+
+
+
+

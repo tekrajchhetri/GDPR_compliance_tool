@@ -14,11 +14,6 @@ from flask_apispec import marshal_with, doc, use_kwargs
 from core.QueryEngine import QueryEngine
 import json
 
-# class ResponseSchema(Schema):
-#     message = fields.Str(default="Success")
-#
-# class RequestSchema(Schema):
-#     api_type = fields.String(required=True, description="Input Query String")
 
 class QueryConsentIDName(MethodResource, Resource):
     @doc(description='Get consent ID by name.', tags=['ConsentID By Name'])
@@ -33,4 +28,6 @@ class QueryAllConsentID(MethodResource, Resource):
         query = QueryEngine()
         return json.loads(query.select_query_gdb(consentProvidedBy=None,purpose=None, dataProcessing=None,
                                                  dataController=None,dataRequester=None, additionalData="bconsentID"))
+
+
 
