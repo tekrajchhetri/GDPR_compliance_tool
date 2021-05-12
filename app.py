@@ -8,6 +8,7 @@ app = Flask(__name__)
 from apispec import APISpec
 from flask_apispec.extension import FlaskApiSpec
 from apispec.ext.marshmallow import MarshmallowPlugin
+from resources.consent_creaateresources import  ConsentCreate
 
 api = Api(app)
 
@@ -23,6 +24,8 @@ app.config.update({
 })
 docs = FlaskApiSpec(app)
 
+api.add_resource(ConsentCreate,"/consent/create/")
+docs.register(ConsentCreate)
 api.add_resource(QueryAllConsentID,"/query/bconsentid/")
 docs.register(QueryAllConsentID)
 api.add_resource(QueryConsentIDName,"/query/consentid/<string:name>/")
