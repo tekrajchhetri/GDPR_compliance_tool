@@ -35,22 +35,24 @@ class QueryEngine (Credentials, SPARQL):
 
     def insert_query(self, ConsentIDInput, DataControllerInput, DataInput, DataProcessingInput, DataRequesterInput,
                      DurationInput, GrantedAtTimeInput, MediumInput, NameInput, PurposeInput):
-        insquery = textwrap.dedent("""{0}
-                INSERT DATA {{
-                :{1} a <http://ontologies.atb-bremen.de/smashHitCore#ConsentID>;
-                :isProvidedBy '{2}';
-               :inMedium '{3}';
-                :forPurpose '{4}';
-                :forDataProcessing '{5}';
-               :requestedBy '{6}';
-               :isAboutData '{7}';
-               :hasExpiry '{8}';
-               :hasDataController '{9}';
-               :GrantedAtTime '{10}'.
-           }}
+        insquery = textwrap.dedent("""{0} 
+        INSERT DATA {{
+            :{1} a <http://ontologies.atb-bremen.de/smashHitCore#ConsentID>;
+            :isProvidedBy :{2};
+                       :inMedium :{3};
+                       :forPurpose "{4}";
+                        :forDataProcessing :{5}; 
+                       :requestedBy :{6};
+                       :isAboutData :{7};
+                       :hasExpiry :{8};
+                       :hasDataController :{9};
+                       :GrantedAtTime "{10}^^xsd:dateTime".
+                   }}       
+               
           """).format(self.prefix(),  ConsentIDInput, NameInput, MediumInput, PurposeInput, DataProcessingInput,
                       DataRequesterInput, DataInput, DurationInput,
                       DataControllerInput, GrantedAtTimeInput)
+
         return insquery
 
 
@@ -105,7 +107,6 @@ class QueryEngine (Credentials, SPARQL):
 
     def post_data(self, ConsentIDInput, DataControllerInput, DataInput, DataProcessingInput, DataRequesterInput,
                   DurationInput, GrantedAtTimeInput, MediumInput, NameInput, PurposeInput):
-
 
         respone = self.post_sparql(self.get_username(), self.get_password(),
                                    self.insert_query(ConsentIDInput= ConsentIDInput,
