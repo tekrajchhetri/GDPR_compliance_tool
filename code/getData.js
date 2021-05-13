@@ -13,8 +13,8 @@ const server = http.createServer((req, res) => {
 var literaltype = "";
 const SparqlClient = require('sparql-http-client');
 const endpointUrl = 'https://smashhitactool.sti2.at/repositories/TestingNode';
-const user='admin';
-const password='Sm@shHitA_CT00L';
+const user = process.env.USERNAME
+const password = process.env.PASSWORD
 
 
 const prompt = require("prompt-sync")({ sigint: true });
