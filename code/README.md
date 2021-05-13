@@ -1,5 +1,5 @@
-## Scripts for automatic querying of the knowledge graph (TestingNode repo) and annotation of consent.
-
+## Scripts for automatic querying of the knowledge graph (TestingNode repository) and annotation of consent.
+## Offered functionality: query by ConsentID, query by Data Provider's name and annotate new consent.
 
 ## Software Requirements
 - [nodejs](https://nodejs.org/en/)
