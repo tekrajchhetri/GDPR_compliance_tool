@@ -25,7 +25,7 @@ const question = prompt("Query by 1 - Name or 2 - ConsentID?");
 if (question=='1') {
 
   const name=prompt("Name: ");
-  const NameN=name.replace(/\w+/g, function(txt) {
+  /*const NameN=name.replace(/\w+/g, function(txt) {
   // uppercase first letter and add rest unchanged
   return txt.charAt(0).toUpperCase() + txt.substr(1);
   }).replace(/\s/g, '');// remove any spaces
@@ -35,12 +35,12 @@ if (question=='1') {
   return txt.charAt(0).toUpperCase() + txt.substr(1);
   })
 
-
+*/
   server.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/`);
         console.log(" ");
 
-      console.log(`Consent records for: ${NameCorrect}`);
+      console.log(`Consent records for: ${name}`);
           console.log("-------------------------");
     });
 
@@ -51,16 +51,15 @@ if (question=='1') {
 
     SELECT ?ConsentID ?Purpose ?DataController ?DataRequester ?Duration ?Data ?DataProcessing ?Status ?Date
      WHERE { 
-      ?ConsentID :isProvidedBy :${NameN}.
-     ?ConsentID :forPurpose ?Purpose.
-        ?Purpose :forDataProcessing ?DataProcessing.
+      ?ConsentID :isProvidedBy :${name}.
+      ?ConsentID :forPurpose ?Purpose.
+      ?Purpose :forDataProcessing ?DataProcessing.
       ?ConsentID :hasDataController ?DataController.
       ?ConsentID :requestedBy ?DataRequester.
       ?ConsentID :hasExpiry ?Duration.
       ?ConsentID :isAboutData ?Data.
-       ?ConsentID :isAboutData ?Data.
-    ?ConsentID :GrantedAtTime ?GrantedAtTime.
-    ?ConsentID :RevokedAtTime ?RevokedAtTime
+      ?ConsentID :GrantedAtTime ?GrantedAtTime.
+      ?ConsentID :RevokedAtTime ?RevokedAtTime.
     
     } LIMIT 10 `;
 
@@ -82,10 +81,14 @@ stream.on('data', row => {
 
 stream.on('error', err => {
       console.error(err)
-    })       
+    })
+   // if(!stream.length){console.log("no record exists")} 
+
+       
         }
         //if there is no query match in the KG 
  f()
+
 
 }
 //query by ConsentID
@@ -103,20 +106,23 @@ if (question=='2') {
   const consentIDN=consentID.toLowerCase();
   console.log(consentIDN);
 
+
+
+
 const queryByConsentID=`
   PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
 
-  SELECT ?Status ?Purpose ?Name ?DataRequester ?DataController ?Duration ?Data ?Date ?GrantedAtTime ?RevokedAtTime 
+  SELECT ?Status ?Purpose ?Name ?DataRequester ?DataController ?Duration ?Data ?Date ?GrantedAtTime ?RevokedAtTime ?DataProcessing 
    WHERE { 
-    :${consentIDN} :isProvidedBy ?Name.
-    ?ConsentID :forPurpose ?Purpose.
+    :${consentID} :isProvidedBy ?Name.
+    :${consentID} :forPurpose ?Purpose.
     ?Purpose :forDataProcessing ?DataProcessing.
-    ?ConsentID :hasDataController ?DataController.
-    ?ConsentID :requestedBy ?DataRequester.
-    :${consentIDN} :hasExpiry ?Duration.
-    ?ConsentID :isAboutData ?Data.
-    ?ConsentID :GrantedAtTime ?GrantedAtTime.
-    ?ConsentID :RevokedAtTime ?RevokedAtTime
+    :${consentID} :hasDataController ?DataController.
+    :${consentID} :requestedBy ?DataRequester.
+    :${consentID} :hasExpiry ?Duration.
+    :${consentID} :isAboutData ?Data.
+    :${consentID} :GrantedAtTime ?GrantedAtTime.
+    :${consentID} :RevokedAtTime ?RevokedAtTime.
     
 
   } LIMIT 10 `;
@@ -132,6 +138,7 @@ const client = new SparqlClient({ endpointUrl, user, password})
       })
               console.log("------------------------------------------------------------")
     })
+        //if (!stream.length){console.log("no record exists")}//if there is no query match in the KG 
 
     stream.on('error', err => {
       console.error(err)
