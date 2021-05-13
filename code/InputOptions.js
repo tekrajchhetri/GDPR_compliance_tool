@@ -25,10 +25,10 @@ const prompt = require("prompt-sync")({ sigint: true });
 const question = prompt("1 - Query or 2 - Annotate?");
 
 if (question=='1') {
-	var circle = require('./getData.js');
+	var x = require('./getData.js');
 	//console.log( 'done');
 }
-if (question=='2') {
-	var circle = require('./Annotate.js');
+else if(question=='2') {
+	var y = require('./insertData.js');
 	//console.log( 'done');
-};
+}
