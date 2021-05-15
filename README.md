@@ -12,12 +12,13 @@ Automated Contracting Tool, a component of smashHit. smashHit is a Horizon 2020 
 - [Ofelia - a job scheduler](https://github.com/mcuadros/ofelia)
 - [unittest](https://docs.python.org/3/library/unittest.html)
 
-## Installation
-
-
+## Running Locally
+Run the command below from the root directory for deployement and access via [localhost:5001](localhost:5001). The Swagger API documentation can be accessed via [localhost:5001/swagger-ui/](localhost:5001/swagger-ui/).
 ```bash
-pip install -r requirements.txt
+bash docker_run.sh
+
 ```
+## Deployment in Remote Server
 
 ## Usage
 
