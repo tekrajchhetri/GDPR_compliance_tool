@@ -4,9 +4,11 @@
 # @Email   : tekraj.chhetri@sti2.at
 # @File    : SPARQL.py
 # @Software: PyCharm
+from core.smashHitmessages import smashHitmessages
 from SPARQLWrapper import SPARQLWrapper, JSON,BASIC
-class  SPARQL:
+class  SPARQL(smashHitmessages):
     def __init__(self):
+        super().__init__()
         self.HOST_URI = "https://smashhitactool.sti2.at/repositories/TestingNode"
 
     def init_sparql(self, hostname, userid, password):
@@ -25,6 +27,6 @@ class  SPARQL:
         sparql.setReturnFormat('json')
         result = sparql.query()
         if str(result.response.read().decode("utf-8")) == "":
-            return {"status":"SUCCESS"}
+            return self.insert_success()
         else:
-            return {"status":"FAILED"}
+            return self.insert_fail()

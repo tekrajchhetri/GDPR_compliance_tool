@@ -33,3 +33,17 @@ class smashHitmessages(TokenGenerator):
                            "decision_token":self.token_generator()}
 
         return deny_incomplete
+
+    def insert_success(self):
+        deny_incomplete = {"status_consent": 7100,
+                           "decision": "RECORD_CREATION_SUCCESS",
+                           "decision_token":self.token_generator()}
+
+        return deny_incomplete
+
+    def insert_fail(self):
+        deny_incomplete = {"status_consent": 7100,
+                           "decision": "RECORD_CREATION_FAILURE",
+                           "decision_token":self.token_generator()}
+
+        return deny_incomplete
