@@ -1,5 +1,7 @@
 FROM tiangolo/uwsgi-nginx-flask:python3.8
 
+MAINTAINER tekrajchhetri@gmail.com
+
 WORKDIR ./
 
 COPY ./requirements.txt /app/
