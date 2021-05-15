@@ -9,6 +9,7 @@ Automated Contracting Tool, a component of smashHit. smashHit is a Horizon 2020 
 - [Docker](https://www.docker.com)
 - [flask_apispec](https://flask-apispec.readthedocs.io/en/latest/index.html)
 - [SPARQLWrapper](https://rdflib.dev/sparqlwrapper/)
+- [Ofelia - a job scheduler](https://github.com/mcuadros/ofelia)
 - [unittest](https://docs.python.org/3/library/unittest.html)
 
 ## Installation
