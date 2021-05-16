@@ -17,21 +17,21 @@ class TestComplianceEngine(unittest.TestCase):
         expected_decision_id = 5000
         from_ce = self.cengine.grant()
         self.assertEqual(expected_decision, from_ce["decision"])
-        self.assertEqual(expected_decision_id, from_ce["status_consent"])
+        self.assertEqual(expected_decision_id, from_ce["status_code"])
 
     def test_smashHitmessage_deny(self):
         expected_decision = "DENY"
         expected_decision_id = 6000
         from_ce = self.cengine.deny()
         self.assertEqual(expected_decision, from_ce["decision"])
-        self.assertEqual(expected_decision_id, from_ce["status_consent"])
+        self.assertEqual(expected_decision_id, from_ce["status_code"])
 
     def test_smashHitmessage_deny_incomplete(self):
         expected_decision = "DENY"
         expected_decision_id = 6100
         from_ce = self.cengine.deny_incomplete()
         self.assertEqual(expected_decision, from_ce["decision"])
-        self.assertEqual(expected_decision_id, from_ce["status_consent"])
+        self.assertEqual(expected_decision_id, from_ce["status_code"])
 
 
 
