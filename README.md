@@ -7,6 +7,7 @@ Automated Contracting Tool, a component of smashHit. smashHit is a Horizon 2020 
 - [Flask-JWT](https://flask-jwt-extended.readthedocs.io/en/stable/) 
 - [uwsgi](https://uwsgi-docs.readthedocs.io/en/latest/)
 - [Docker](https://www.docker.com)
+- [Dask - Dask provides advanced parallelism for analytics, enabling performance at scale for the tools you love](https://dask.org)
 - [flask_apispec](https://flask-apispec.readthedocs.io/en/latest/index.html)
 - [SPARQLWrapper](https://rdflib.dev/sparqlwrapper/)
 - [Ofelia - a job scheduler](https://github.com/mcuadros/ofelia)
