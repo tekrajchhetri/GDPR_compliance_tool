@@ -5,6 +5,8 @@
 # @File    : date_helper.py
 # @Software: PyCharm
 import re
+from dateutil.parser import parse
+
 class DateHelper:
 
     def helper_extract_days(self, datestr):
@@ -30,4 +32,12 @@ class DateHelper:
         """
         pattern = r"(([0-9]+\B(years|year))|[0-9]+\s(years|year))"
         return int(re.findall(r'\d+', datestr)[0]) if re.match(pattern, datestr) else None
+
+    def is_str(self, input):
+        return type(input) == str
+
+    def is_utc(self, datestr):
+        datestr = str(datestr) if not self.is_str(datestr) else datestr
+        return parse(datestr).tzname() == "UTC"
+
 

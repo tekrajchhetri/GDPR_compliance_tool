@@ -6,7 +6,7 @@
 # @Software: PyCharm
 from core.date_helper import DateHelper
 import  unittest
-import inspect
+import  datetime
 
 class  TestDateHelper(unittest.TestCase):
     def setUp(self):
@@ -35,6 +35,14 @@ class  TestDateHelper(unittest.TestCase):
         self.assertEqual(self.dthelper.helper_extract_year("10-year"), None)
         self.assertEqual(self.dthelper.helper_extract_year("10.years"), None)
         self.assertEqual(self.dthelper.helper_extract_year("10.day"), None)
+
+    def test_date_in_utc(self):
+        utc_time =   "2021-05-12T13:19:12.660Z"
+        non_utc_time = datetime.datetime.now()
+        self.assertEqual(self.dthelper.is_utc(utc_time), True)
+        self.assertEqual(self.dthelper.is_utc(non_utc_time), False)
+
+
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
