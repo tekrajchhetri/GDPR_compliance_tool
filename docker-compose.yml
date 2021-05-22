@@ -20,7 +20,6 @@ services:
       restart: always
       volumes:
         - ./:/app
-        - /var/run/docker.sock:/var/run/docker.sock
         - /var/run/docker.sock:/var/run/docker.sock:ro
       labels:
         ofelia.job-run.datecron.image: "parser"
