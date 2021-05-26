@@ -13,7 +13,7 @@
 PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
 PREFIX gconsent: <https://w3id.org/GConsent#>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-SELECT ?ConsentID ?Name ?Purpose ?Data ?Duration ?DataRequester ?DataController ?GrantedAtTime ?RevokedAtTime ?Medium
+SELECT ?ConsentID ?Name ?Purpose ?Data ?Duration ?DataRequester ?DataController ?GrantedAtTime ?RevokedAtTime ?Medium ?State ?City ?Country
  WHERE { 
   ?ConsentID a <http://ontologies.atb-bremen.de/smashHitCore#ConsentID>.
   ?ConsentID :isProvidedBy ?Name.
@@ -25,7 +25,11 @@ SELECT ?ConsentID ?Name ?Purpose ?Data ?Duration ?DataRequester ?DataController 
   ?ConsentID :hasDataController ?DataController.
   ?ConsentID :GrantedAtTime ?GrantedAtTime.
   ?ConsentID :RevokedAtTime ?RevokedAtTime.
+  ?ConsentID :atCity ?City.
+  ?ConsentID :atCountry ?Country.
+  ?ConsentID :atState ?State.
 }
+LIMIT 200
  
 ```
 ## Get all ConsentID and Data Providers ....
