@@ -24,6 +24,10 @@ bash docker_run.sh
 ```
 ## Deployment in Remote Server
 
+## FaaS
+![image](https://user-images.githubusercontent.com/52251022/120083394-b3f37080-c0c8-11eb-8362-99063e0fc720.png)
+
+
 ## Performance Monitor
 
 ![image](https://user-images.githubusercontent.com/52251022/120082126-7b9c6400-c0c1-11eb-874a-d5c4eb34e813.png)
