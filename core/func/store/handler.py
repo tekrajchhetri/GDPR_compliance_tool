@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+# @Time    : 29.05.21 17:51
+# @Author  : Tek Raj Chhetri
+# @Email   : tekraj.chhetri@sti2.at
+# @File    : a.py
+# @Software: PyCharm
+
 import pymongo
 import os, json, sys
 
