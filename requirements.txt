@@ -5,3 +5,5 @@ uwsgi
 flask_apispec
 psycopg2
 SPARQLWrapper
+pymongo
+pymongo[tls,srv]
