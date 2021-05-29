@@ -1,0 +1,19 @@
+version: 1.0
+provider:
+  name: openfaas
+  gateway: http://127.0.0.1:8080
+functions:
+  store:
+    lang: python3-debian
+    handler: ./store
+    image: tekrajchhetri/store:latest
+    environment:
+      content_type: application/json
+
+  query:
+    lang: python3-debian
+    handler: ./query
+    image: tekrajchhetri/query:latest
+    environment:
+      content_type: application/json
+
