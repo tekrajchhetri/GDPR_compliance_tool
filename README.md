@@ -24,6 +24,13 @@ bash docker_run.sh
 ```
 ## Deployment in Remote Server
 
+## Performance Monitor
+
+![image](https://user-images.githubusercontent.com/52251022/120082126-7b9c6400-c0c1-11eb-874a-d5c4eb34e813.png)
+
+![image](https://user-images.githubusercontent.com/52251022/120082109-68899400-c0c1-11eb-99cc-d4b23f80c89f.png)
+
+
 ## Usage
 
 ```python
