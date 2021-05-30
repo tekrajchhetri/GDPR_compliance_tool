@@ -1,0 +1,6 @@
+filter:
+    - PersonaldataId
+    - dataUsage
+    - DataProcessing
+    - GrantedAtTime
+    - Medium
