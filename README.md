@@ -16,6 +16,11 @@ Automated Contracting Tool, a component of smashHit. smashHit is a Horizon 2020 
 - [OpenFaaS](https://www.openfaas.com/)
 - [mongoDB](https://www.mongodb.com/)
 
+## Cluster Information
+- Tier: M0 Sandbox (General)
+- Cluster: AWS / Frankfurt (eu-central-1)
+- Type: Replica Set - 3 nodes
+
 ## Running Locally
 Run the command below from the root directory for deployement and access via [http://localhost:5001](http://localhost:5001). The Swagger API documentation can be accessed via [http://localhost:5001/swagger-ui/](http://localhost:5001/swagger-ui/).
 ```bash
