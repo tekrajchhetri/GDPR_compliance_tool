@@ -3,12 +3,12 @@ import os
 from flask import Flask
 from flask_restful import Api
 from resources.Test import Test
-from resources.query_resources import QueryConsentIDName, QueryAllConsentID
+from resources.query import QueryConsentIDName, QueryAllConsentID
 app = Flask(__name__)
 from apispec import APISpec
 from flask_apispec.extension import FlaskApiSpec
 from apispec.ext.marshmallow import MarshmallowPlugin
-from resources.consent_creaateresources import  ConsentCreate
+from resources.consent import  ConsentCreate, Revoke, BrokenConsent
 
 api = Api(app)
 
@@ -25,6 +25,8 @@ app.config.update({
 docs = FlaskApiSpec(app)
 
 api.add_resource(ConsentCreate,"/consent/create/")
+api.add_resource(Revoke,"/consent/revoke/")
+api.add_resource(BrokenConsent,"/consent/brokenconsent/")
 docs.register(ConsentCreate)
 api.add_resource(QueryAllConsentID,"/query/bconsentid/")
 docs.register(QueryAllConsentID)

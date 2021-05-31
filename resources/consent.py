@@ -2,7 +2,7 @@
 # @Time    : 12.05.21 14:32
 # @Author  : Tek Raj Chhetri
 # @Email   : tekraj.chhetri@sti2.at
-# @File    : consent_creaateresources.py
+# @File    : consent.py
 # @Software: PyCharm
 
 
@@ -63,4 +63,10 @@ class QueryAllConsentID(MethodResource, Resource):
                                                  dataController=None, dataRequester=None, additionalData="bconsentID"))
 
 
+
+class Revoke(MethodResource, Resource):
+    pass
+
+class BrokenConsent(MethodResource, Resource):
+    pass
 
