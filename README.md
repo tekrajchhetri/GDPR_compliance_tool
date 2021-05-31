@@ -27,6 +27,13 @@ Run the command below from the root directory for deployement and access via [ht
 bash docker_run.sh
 
 ```
+## Todo
+- [ ] Implement revoke endpoint functionalities 
+- [ ] Implement broken consent endpoint functionalities 
+- [ ] Implement Kafka message broker
+- [x] Add endpoint boilerplate code for revoke and broken consent 
+- [x] Implement serverless functions for recording and querying ACT decisions
+- [x] Test serverless functions  
 ## Deployment in Remote Server
 
 ## FaaS
