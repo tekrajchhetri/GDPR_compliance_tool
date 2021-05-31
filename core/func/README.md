@@ -5,7 +5,7 @@
             $ git clone https://github.com/openfaas/faasd --depth=1
             $ cd faasd
             $ ./hack/install.sh
-            ```
+       ```
 - CLI installation
     - ```sh 
         $ curl -sSL https://cli.openfaas.com | sudo -E sh 
