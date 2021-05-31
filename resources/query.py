@@ -2,7 +2,7 @@
 # @Time    : 11.05.21 16:10
 # @Author  : Tek Raj Chhetri
 # @Email   : tekraj.chhetri@sti2.at
-# @File    : query_resources.py
+# @File    : query.py
 # @Software: PyCharm
 
 
