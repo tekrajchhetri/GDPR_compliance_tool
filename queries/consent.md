@@ -13,12 +13,13 @@
 PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
 PREFIX gconsent: <https://w3id.org/GConsent#>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-SELECT ?ConsentID ?Name ?Purpose ?Data ?Duration ?DataRequester ?DataController ?GrantedAtTime ?RevokedAtTime ?Medium ?State ?City ?Country
+PREFIX dpv: <http://www.w3.org/ns/dpv#>
+SELECT ?ConsentID ?DataProvider ?Purpose ?Data ?Duration ?DataRequester ?DataController ?GrantedAtTime ?RevokedAtTime ?Medium ?State ?City ?Country
  WHERE { 
   ?ConsentID a <http://ontologies.atb-bremen.de/smashHitCore#ConsentID>.
-  ?ConsentID :isProvidedBy ?Name.
+  ?ConsentID :isProvidedBy ?DataProvider.
   ?ConsentID :inMedium ?Medium.
-  ?ConsentID :forPurpose ?Purpose.
+  ?ConsentID dpv:hasPurpose ?Purpose.
   ?ConsentID :requestedBy ?DataRequester.
   ?ConsentID :isAboutData ?Data.
   ?ConsentID :hasExpiry ?Duration.
@@ -55,12 +56,13 @@ SELECT ?ConsentID
 ## Get ConsentID and all ralated information based on the name of the data provider ....
 ``````
 PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
+PREFIX dpv: <http://www.w3.org/ns/dpv#>
 
 SELECT ?ConsentID ?Purpose ?Data ?Duration ?DataRequester ?DataController ?GrantedAtTime ?RevokedAtTime ?Medium
  WHERE { 
   ?ConsentID :isProvidedBy :JaneDoe.
   ?ConsentID :inMedium ?Medium.
-  ?ConsentID :forPurpose ?Purpose.
+  ?ConsentID dpv:hasPurpose ?Purpose.
   ?ConsentID :requestedBy ?DataRequester.
   ?ConsentID :isAboutData ?Data.
   ?ConsentID :hasExpiry ?Duration.
