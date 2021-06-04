@@ -9,6 +9,7 @@
 from SPARQLWrapper import  JSON
 from core.Credentials import Credentials
 from core.SPARQL import SPARQL
+from core.date_helper import DateHelper
 import textwrap
 import json
 class QueryEngine (Credentials, SPARQL):
@@ -19,6 +20,8 @@ class QueryEngine (Credentials, SPARQL):
         prefix = textwrap.dedent("""PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
             PREFIX gconsent: <https://w3id.org/GConsent#>
             PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+            PREFIX dc: <http://purl.org/dc/elements/1.1/>
+            PREFIX dpv: <http://www.w3.org/ns/dpv#>
         """)
         return prefix
 
@@ -33,26 +36,36 @@ class QueryEngine (Credentials, SPARQL):
                 }}""").format(self.prefix())
         return query
 
-    def insert_query(self, ConsentIDInput, DataControllerInput, DataInput, DataProcessingInput, DataRequesterInput,
-                     DurationInput, GrantedAtTimeInput, MediumInput, NameInput, PurposeInput):
+    def list_to_query(self, data):
+        querydata = ""
+        for vlaue in data:
+            strs = ":forDataProcessing :" + vlaue + ";\n"
+            querydata = strs + querydata
+        return querydata
+
+
+    def insert_query(self, requestedBy,hasDataController, fordataprocessing, GrantedAtTime, inMedium, purpose,
+                     isAboutData, city, consentID, country, state, dataprovider, expirationtime):
         insquery = textwrap.dedent("""{0} 
         INSERT DATA {{
             :{1} a <http://ontologies.atb-bremen.de/smashHitCore#ConsentID>;
-            :isProvidedBy :{2};
-                       :inMedium :{3};
-                       :forPurpose "{4}";
-                        :forDataProcessing :{5}; 
-                       :requestedBy :{6};
-                       :isAboutData :{7};
-                       :hasExpiry :{8};
-                       :hasDataController :{9};
-                       :GrantedAtTime "{10}^^xsd:dateTime".
+            :inMedium :{2};
+            dpv:hasPurpose :{3};
+            {4}
+            :GrantedAtTime {5};
+            {6}
+            :hasExpiry {7};
+            :atCountry :{8};
+            :atCity :{9};
+            :atState :{10};
+            :requestedBy :{11};
+            :hasDataController :{12};
+            :isProvidedBy :{13}
                    }}       
                
-          """).format(self.prefix(),  ConsentIDInput, NameInput, MediumInput, PurposeInput, DataProcessingInput,
-                      DataRequesterInput, DataInput, DurationInput,
-                      DataControllerInput, GrantedAtTimeInput)
-
+          """).format(self.prefix(),  consentID, inMedium, purpose, self.list_to_query(isAboutData),GrantedAtTime,
+                      self.list_to_query(fordataprocessing), expirationtime, country, city, state, requestedBy,
+                      hasDataController, dataprovider)
         return insquery
 
 
@@ -105,19 +118,74 @@ class QueryEngine (Credentials, SPARQL):
         results = sparql_inits.query().convert()
         return json.dumps(results)
 
-    def post_data(self, ConsentIDInput, DataControllerInput, DataInput, DataProcessingInput, DataRequesterInput,
-                  DurationInput, GrantedAtTimeInput, MediumInput, NameInput, PurposeInput):
+    def for_processing(resource_dict):
+        """
+            :input: resource dict
+            :returns: list of data processings
+        """
+        isAboutData = []
+        for processing in resource_dict:
+            whatToProcess = resource_dict[processing][0]["data"]
+            if len(whatToProcess) == 1:
+                isAboutData.append(whatToProcess[0])
+            else:
+                for value in range(len(whatToProcess)):
+                    isAboutData.append(whatToProcess[value])
+        return isAboutData
+
+
+    def post_data(self, validated_data):
+        requestedBy = None
+        hasDataController = None
+        for agent in validated_data["Agents"]:
+            if agent["role"] == "controller":
+                hasDataController = agent["id"]
+            elif agent["role"] == "requester":
+                requestedBy = agent["id"]
+        fordataprocessing = validated_data["DataProcessing"]
+        GrantedAtTime = validated_data["GrantedAtTime"]
+        inMedium = validated_data["Medium"]
+        purpose = validated_data["Purpose"]
+        isAboutData = validated_data["Resource"]
+        city = validated_data["city"]
+        consentID = validated_data["consentid"]
+        country = validated_data["country"]
+        state = validated_data["state"]
+        dataprovider = validated_data["dataprovider"]
+        if "expirationTime" in validated_data:
+            expirationtime = validated_data["expirationTime"]
+        else:
+            expirationtime=None
+
+
+        dt = DateHelper()
+        if expirationtime is not None and not dt.is_utc(expirationtime):
+            return self.dataformatnotmatch()
+
+        if not dt.is_utc(GrantedAtTime):
+            return self.dataformatnotmatch()
+
+        if expirationtime is not None:
+            expirationtime = '\'{}^^xsd:dateTime\''.format(expirationtime)
+        GrantedAtTime  = '\'{}^^xsd:dateTime\''.format(GrantedAtTime)
+
+
 
         respone = self.post_sparql(self.get_username(), self.get_password(),
-                                   self.insert_query(ConsentIDInput= ConsentIDInput,
-                                                     DataControllerInput = DataControllerInput,
-                                                     DataInput = DataInput,
-                                                     DataProcessingInput = DataProcessingInput,
-                                                     DataRequesterInput = DataRequesterInput,
-                                                     DurationInput=DurationInput,
-                                                     GrantedAtTimeInput = GrantedAtTimeInput,
-                                                     MediumInput = MediumInput, NameInput=NameInput,
-                                                     PurposeInput=PurposeInput)
+                                   self.insert_query(requestedBy= requestedBy,
+                                                     hasDataController = hasDataController,
+                                                     fordataprocessing = fordataprocessing,
+                                                     GrantedAtTime = GrantedAtTime,
+                                                     inMedium = inMedium,
+                                                     purpose=purpose,
+                                                     isAboutData = isAboutData,
+                                                     city = city,
+                                                     consentID=consentID,
+                                                     country=country,
+                                                     state=state,
+                                                    dataprovider= dataprovider,
+                                                     expirationtime=expirationtime
+                                                    )
                                    )
         return respone
 
