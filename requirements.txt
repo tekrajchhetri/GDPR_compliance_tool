@@ -7,3 +7,4 @@ psycopg2
 SPARQLWrapper
 pymongo
 pymongo[tls,srv]
+requests
