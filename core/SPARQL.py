@@ -9,7 +9,7 @@ from SPARQLWrapper import SPARQLWrapper, JSON,BASIC
 class  SPARQL(smashHitmessages):
     def __init__(self):
         super().__init__()
-        self.HOST_URI = "https://smashhitactool.sti2.at/repositories/TestingNode"
+        self.HOST_URI = "https://smashhitactool.sti2.at/repositories/EarlyPrototypeKG"
 
     def init_sparql(self, hostname, userid, password):
         sparql = SPARQLWrapper(hostname)
@@ -17,7 +17,7 @@ class  SPARQL(smashHitmessages):
         return sparql
 
     def post_sparql(self,userid, password, query):
-        hostname = "https://smashhitactool.sti2.at/repositories/TestingNode/statements"
+        hostname = "https://smashhitactool.sti2.at/repositories/EarlyPrototypeKG/statements"
         sparql = SPARQLWrapper(hostname)
         sparql.setHTTPAuth(BASIC)
         sparql.setCredentials(userid, password)
