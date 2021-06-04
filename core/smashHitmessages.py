@@ -13,7 +13,7 @@ class smashHitmessages(TokenGenerator):
         super().__init__()
 
     def grant(self):
-        decision =  {"status_code":5000,
+        decision =  {"act_status_code":5000,
                                 "decision":"GRANT",
                                 "decision_token":self.token_generator(),
                                 "timestamp":self.decision_timestamp()
@@ -22,7 +22,7 @@ class smashHitmessages(TokenGenerator):
         return decision
 
     def deny(self):
-        deny = {"status_code": 6000,
+        deny = {"act_status_code": 6000,
                            "decision": "DENY",
                            "decision_token":self.token_generator(),
                             "timestamp": self.decision_timestamp()
@@ -30,7 +30,7 @@ class smashHitmessages(TokenGenerator):
         return deny
 
     def deny_incomplete(self):
-        deny_incomplete = {"status_code": 6100,
+        deny_incomplete = {"act_status_code": 6100,
                            "decision": "DENY",
                            "decision_token":self.token_generator(),
                            "timestamp":self.decision_timestamp()
@@ -39,8 +39,8 @@ class smashHitmessages(TokenGenerator):
         return deny_incomplete
 
     def insert_success(self):
-        deny_incomplete = {"status_code": 7100,
-                           "decision": "RECORD_CREATION_SUCCESS",
+        deny_incomplete = {"act_status_code": 7100,
+                           "decision": "CONSENT_CREATION_SUCCESS",
                            "decision_token":self.token_generator(),
                            "timestamp":self.decision_timestamp()
                            }
@@ -48,8 +48,18 @@ class smashHitmessages(TokenGenerator):
         return deny_incomplete
 
     def insert_fail(self):
-        deny_incomplete = {"status_code": 7500,
+        deny_incomplete = {"act_status_code": 7500,
                            "decision": "RECORD_CREATION_FAILURE",
+                           "decision_token":self.token_generator(),
+                           "timestamp":self.decision_timestamp()
+                           }
+
+        return deny_incomplete
+
+
+    def dataformatnotmatch(self):
+        deny_incomplete = {"act_status_code": 8500,
+                           "decision": "DATA_FORMAT_ERROR",
                            "decision_token":self.token_generator(),
                            "timestamp":self.decision_timestamp()
                            }
