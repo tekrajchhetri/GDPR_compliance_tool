@@ -8,3 +8,4 @@ SPARQLWrapper
 pymongo
 pymongo[tls,srv]
 requests
+python-dateutil
