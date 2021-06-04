@@ -46,7 +46,6 @@ class ConsentRequests(Schema):
                                  description='["Analysis, collection, storage"]')
 
 class ReturnSchema(Schema):
-    # decisionToken = fields.String(required=True)
     act_status_code = fields.Integer(required=True)
     decision = fields.String(required=True)
     decision_token = fields.String(required=True)
