@@ -6,7 +6,8 @@
 # @Software: PyCharm
 from core.smashHitmessages import smashHitmessages
 from SPARQLWrapper import SPARQLWrapper, JSON,BASIC
-class  SPARQL(smashHitmessages):
+from core.Functions import Functions
+class  SPARQL(smashHitmessages, Functions):
     def __init__(self):
         super().__init__()
         self.HOST_URI = "https://smashhitactool.sti2.at/repositories/EarlyPrototypeKG"
@@ -27,6 +28,11 @@ class  SPARQL(smashHitmessages):
         sparql.setReturnFormat('json')
         result = sparql.query()
         if str(result.response.read().decode("utf-8")) == "":
-            return self.insert_success()
+            message =  self.insert_success()
+            record_success = self.store(message)
+            if "SUCCESS" in record_success:
+                return message
+            else:
+                message["message"] = "CONSENT creation success but decision logging error"
         else:
             return self.insert_fail()
