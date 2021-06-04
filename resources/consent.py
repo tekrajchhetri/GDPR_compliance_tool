@@ -17,28 +17,26 @@ import json
 
 class ForNestedSchema(Schema):
     data = fields.List(fields.String())
-    name = fields.Str()
+    # name = fields.Str()
 
 class AgentsSchema(Schema):
     id = fields.Str()
     role = fields.Str()
 
 class ConsentRequests(Schema):
-    PersonaldataId = fields.String(required=True,
+    consentid = fields.String(required=True,
                                    default_value= "AX13RCSD442",
                                    )
-    GrantedAtTime = fields.DateTime(required=True,
-                                    description="Date when consent was provided")
-    GivenAtLocation = fields.String(required=True, description="Location from where consent was given")
-    ExpirationDate = fields.DateTime(required=True,
-                                     description="Consent expiry date")
+    GrantedAtTime = fields.DateTime(required=True)
+    expirationTime = fields.DateTime()
+    city = fields.String(required=True)
+    state = fields.String(required=True)
+    country = fields.String(required=True)
+    dataprovider = fields.String(required=True)
     Resource = fields.Dict(
         required=True, keys=fields.Str(),
         values=fields.List(fields.Nested(ForNestedSchema))
     )
-    dataUsage = fields.List(fields.Str(),
-                            required=True,
-                            description='["GPS","speed","milleage","personalData","trafficJamLocation"]')
     Medium = fields.String(required=True, description="How consent was given? Eg. Online, MobileApp")
     Agents = fields.List(fields.Nested(AgentsSchema),required=True)
     Purpose = fields.String(required=True, description="For what purpose")
@@ -50,13 +48,13 @@ class ReturnSchema(Schema):
     decision = fields.String(required=True)
     decision_token = fields.String(required=True)
     message = fields.String(optional=True)
-    timestamp = fields.DateTime(required=True)
+    timestamp = fields.String(required=True)
 
 
 class ConsentCreate(MethodResource, Resource):
     @doc(description='create consent.', tags=['Create Consent'])
     @use_kwargs(ConsentRequests)
-    @marshal_with(ReturnSchema, code=200)
+    @marshal_with(ReturnSchema)
     def post(self, **kwargs):
         schema_serializer = ConsentRequests()
         data = request.get_json(force=True)
@@ -64,14 +62,8 @@ class ConsentCreate(MethodResource, Resource):
             validated_data = schema_serializer.load(data)
         except ValidationError as e:
             return {"error": str(e)}, 400
-
         qe = QueryEngine()
-        response = qe.post_data(
-            #add data
-
-        )
-
-
+        response = qe.post_data(validated_data)
         return response
 
 class QueryAllConsentID(MethodResource, Resource):
