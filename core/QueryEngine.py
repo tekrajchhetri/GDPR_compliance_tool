@@ -46,6 +46,7 @@ class QueryEngine (Credentials, SPARQL):
 
     def insert_query(self, requestedBy,hasDataController, fordataprocessing, GrantedAtTime, inMedium, purpose,
                      isAboutData, city, consentID, country, state, dataprovider, expirationtime):
+        granted = "GRANTED"
         insquery = textwrap.dedent("""{0} 
         INSERT DATA {{
             :{1} a <http://ontologies.atb-bremen.de/smashHitCore#ConsentID>;
@@ -60,12 +61,13 @@ class QueryEngine (Credentials, SPARQL):
             :atState :{10};
             :requestedBy :{11};
             :hasDataController :{12};
-            :isProvidedBy :{13}
+            :isProvidedBy :{13};
+            :status :{14}.
                    }}       
                
           """).format(self.prefix(),  consentID, inMedium, purpose, self.list_to_query(isAboutData),GrantedAtTime,
                       self.list_to_query(fordataprocessing), expirationtime, country, city, state, requestedBy,
-                      hasDataController, dataprovider)
+                      hasDataController, dataprovider, granted)
         return insquery
 
 
