@@ -48,10 +48,11 @@ class smashHitmessages(TokenGenerator):
         return deny_incomplete
 
     def insert_fail(self):
-        deny_incomplete = {"status_code": 7100,
+        deny_incomplete = {"status_code": 7500,
                            "decision": "RECORD_CREATION_FAILURE",
                            "decision_token":self.token_generator(),
                            "timestamp":self.decision_timestamp()
                            }
 
         return deny_incomplete
+
