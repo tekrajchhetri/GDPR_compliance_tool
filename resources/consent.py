@@ -17,7 +17,6 @@ import json
 
 class ForNestedSchema(Schema):
     data = fields.List(fields.String())
-    # name = fields.Str()
 
 class AgentsSchema(Schema):
     id = fields.Str()
@@ -66,18 +65,14 @@ class ConsentCreate(MethodResource, Resource):
         response = qe.post_data(validated_data)
         return response
 
-class QueryAllConsentID(MethodResource, Resource):
-    @doc(description='Get all consent ID.', tags=['All ConsentID'])
-    def get(self):
-        query = QueryEngine()
-        return json.loads(query.select_query_gdb(consentProvidedBy=None, purpose=None, dataProcessing=None,
-                                                 dataController=None, dataRequester=None, additionalData="bconsentID"))
-
-
-
 
 class Revoke(MethodResource, Resource):
-    pass
+    @marshal_with(ReturnSchema)
+    def put(self, consent_id):
+        qe = QueryEngine()
+        response = qe.revoke_consent(consentID=consent_id)
+        return response
+
 
 class BrokenConsent(MethodResource, Resource):
     pass
