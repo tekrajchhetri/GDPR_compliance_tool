@@ -66,7 +66,7 @@ class smashHitmessages(TokenGenerator):
 
         return deny_incomplete
 
-    def revoke_consent(self):
+    def revoke_consent_message(self):
         revoke_consent = {"act_status_code": 8000,
                            "decision": "CONSENT_REVOCATION_SUCCESS",
                            "decision_token": self.token_generator(),

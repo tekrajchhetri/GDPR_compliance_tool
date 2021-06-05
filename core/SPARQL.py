@@ -17,8 +17,9 @@ class  SPARQL(smashHitmessages, Functions):
         sparql.setCredentials(userid, password)
         return sparql
 
-    def post_sparql(self,userid, password, query):
+    def post_sparql(self,userid, password, query, type="insert"):
         hostname = "https://smashhitactool.sti2.at/repositories/EarlyPrototypeKG/statements"
+
         sparql = SPARQLWrapper(hostname)
         sparql.setHTTPAuth(BASIC)
         sparql.setCredentials(userid, password)
@@ -28,7 +29,12 @@ class  SPARQL(smashHitmessages, Functions):
         sparql.setReturnFormat('json')
         result = sparql.query()
         if str(result.response.read().decode("utf-8")) == "":
-            message =  self.insert_success()
+
+            if type == "revoke":
+                message = self.revoke_consent_message()
+            else:
+                message = self.insert_success()
+
             record_success = self.store(message)
             if "SUCCESS" in record_success:
                 return message

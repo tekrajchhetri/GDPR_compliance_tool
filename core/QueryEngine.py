@@ -10,9 +10,10 @@ from SPARQLWrapper import  JSON
 from core.Credentials import Credentials
 from core.SPARQL import SPARQL
 from core.date_helper import DateHelper
+from core.smashHitmessages import smashHitmessages
 import textwrap
 import json
-class QueryEngine (Credentials, SPARQL):
+class QueryEngine (Credentials, SPARQL, smashHitmessages):
     def __init__(self):
         super().__init__()
 
@@ -96,22 +97,44 @@ class QueryEngine (Credentials, SPARQL):
               SELECT ?ConsentID
               WHERE {{ 
               ?ConsentID a <http://ontologies.atb-bremen.de/smashHitCore#ConsentID>.
-                         FILTER(?ConsentID = :{1})
+               FILTER NOT EXISTS {{ ?ConsentID :RevokedAtTime ?RevokedAtTime.}}
+               FILTER(?ConsentID = :{1})
                 }}""").format(self.prefix(), consentID)
         return query
 
     def granted_consent_by_consentID(self, consentID):
         query = textwrap.dedent("""{0}
-              SELECT ?ConsentID
+              SELECT ?status
               WHERE {{ 
               ?ConsentID a <http://ontologies.atb-bremen.de/smashHitCore#ConsentID>.
               ?ConsentID :status ?status.
               FILTER(?ConsentID = :{1})
         }}""").format(self.prefix(), consentID)
+
         return query
 
-    def consent_exists(self, consentID):
-        pass
+    def revoke_query(self, consentID):
+        query = textwrap.dedent("""{0} 
+            DELETE {{?ConsentID :status :GRANTED.}}
+            INSERT {{?ConsentID :status :REVOKED.
+            ?ConsentID :RevokedAtTime {1}.
+            }}
+             WHERE {{
+             ?ConsentID a <http://ontologies.atb-bremen.de/smashHitCore#ConsentID>.
+              FILTER(?ConsentID = :{2})
+             }}""").format(self.prefix(), '\'{}^^xsd:dateTime\''.format(self.decision_timestamp()), consentID)
+
+        return query
+
+    def consent_exists(self, consent):
+        consent_data = consent["results"]["bindings"][0]["ConsentID"]["value"]
+        if len(consent_data.strip()) > 2:
+            return True
+        return False
+
+    def has_status_granted(self, consent):
+        isgranted = consent["results"]["bindings"][0]["status"]["value"]
+        return "granted" in isgranted.lower()
 
     def check_all_none(self, list_of_elements):
         toCheck = None
@@ -121,25 +144,34 @@ class QueryEngine (Credentials, SPARQL):
         mapfunc = {
                    "bulk_consentid": self.bulk_consentID,
                    "consentID_by_consentprovider_ID": self.consentID_by_consentprovider_ID,
+                    "granted_consent_by_consentID": self.granted_consent_by_consentID,
+                    "consent_by_consentID": self.consent_by_consentID,
+
 
                    }
         return mapfunc[name]
 
     def which_query(self, consentProvidedBy=None, purpose=None, dataProcessing=None, dataController=None,
-                    dataRequester=None, additionalData=None):
+                    dataRequester=None, additionalData=None, consentID=None):
         if additionalData=="bconsentID":
             return dict({"map": "bulk_consentid"})
 
-        if additionalData=="consentID" and consentProvidedBy is not None:
+        if additionalData == "consentID" and consentProvidedBy is not None:
             return dict({"map": "consentID_by_consentprovider_ID", "arg": consentProvidedBy})
+
+        if additionalData == "check_consent_granted" and consentID is not None:
+            return dict({"map": "granted_consent_by_consentID", "arg": consentID})
+
+        if additionalData=="check_consent" and consentID is not None:
+            return dict({"map": "consent_by_consentID", "arg": consentID})
 
 
 
     def select_query_gdb(self, consentProvidedBy=None, purpose=None, dataProcessing=None, dataController=None,
-                    dataRequester=None, additionalData=None):
+                    dataRequester=None, additionalData=None,consentID=None):
         sparql_inits = self.init_sparql(self.HOST_URI, self.get_username(), self.get_password())
         which_query_return = self.which_query(consentProvidedBy, purpose, dataProcessing, dataController,
-                    dataRequester, additionalData)
+                    dataRequester, additionalData, consentID)
         if("arg" in which_query_return.keys()):
             sparql_inits.setQuery(self.function_map(which_query_return["map"])(which_query_return["arg"]))
         else:
@@ -220,7 +252,19 @@ class QueryEngine (Credentials, SPARQL):
         return respone
 
     def revoke_consent(self, consentID):
-        pass
+        consent = json.loads(self.select_query_gdb(consentID=consentID, additionalData="check_consent"))
+
+        if(self.consent_exists(consent)):
+            hasGrantedStatus = json.loads(self.select_query_gdb(consentID=consentID,
+                                                                additionalData="check_consent_granted"))
+            if(self.has_status_granted(hasGrantedStatus)):
+                respone = self.post_sparql(self.get_username(), self.get_password(),
+                                           self.revoke_query(consentID=consentID), type="revoke" )
+
+
+                return respone
+
+
 
 
 
