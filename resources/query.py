@@ -25,22 +25,18 @@ class BulkResponseQuerySchema(Schema):
     bindings = fields.List(fields.Nested(NestedSchema),required=True)
 
 
-class ResponseSchema(Schema):
-    ConsentID =  fields.Dict(
-        required=True, keys=fields.Str(),
-        values=fields.Str()
-    )
+
 
 
 class QueryConsentIDByConsentProviderID(MethodResource, Resource):
     @doc(description='Get consent ID by consent provider.', tags=['ConsentID by consentprovider ID'])
-    @marshal_with(ResponseSchema)
+    @marshal_with(BulkResponseQuerySchema)
     def get(self, consentprovider_id):
         query = QueryEngine()
         resp =  json.loads(query.select_query_gdb(consentProvidedBy=consentprovider_id,purpose=None, dataProcessing=None,
                                                  dataController=None, dataRequester=None, additionalData="consentID"))
-        to_response = resp["results"]["bindings"]
-        return to_response[0], 200
+        to_response = resp["results"]
+        return to_response, 200
 
 class QueryAllConsentID(MethodResource, Resource):
     @doc(description='Get all consent ID.', tags=['All ConsentID'])
