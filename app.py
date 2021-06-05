@@ -3,7 +3,7 @@ import os
 from flask import Flask
 from flask_restful import Api
 from resources.Test import Test
-from resources.query import QueryConsentIDName, QueryAllConsentID
+from resources.query import QueryConsentIDByConsentProviderID, QueryAllConsentID
 app = Flask(__name__)
 from apispec import APISpec
 from flask_apispec.extension import FlaskApiSpec
@@ -30,8 +30,8 @@ api.add_resource(BrokenConsent,"/consent/brokenconsent/")
 docs.register(ConsentCreate)
 api.add_resource(QueryAllConsentID,"/query/bconsentid/")
 docs.register(QueryAllConsentID)
-api.add_resource(QueryConsentIDName,"/query/consentid/<string:name>/")
-docs.register(QueryConsentIDName)
+api.add_resource(QueryConsentIDByConsentProviderID,"/query/consentid/<string:consentprovider_id>/")
+docs.register(QueryConsentIDByConsentProviderID)
 
 api.add_resource(Test,"/")
 # api.add_resource(ClassName, "/compliance_verify/<string:name>")
