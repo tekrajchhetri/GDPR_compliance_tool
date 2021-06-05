@@ -67,6 +67,7 @@ class ConsentCreate(MethodResource, Resource):
 
 
 class Revoke(MethodResource, Resource):
+    @doc(description='Revoke consent.', tags=['Revoke consent'])
     @marshal_with(ReturnSchema)
     def put(self, consent_id):
         qe = QueryEngine()
