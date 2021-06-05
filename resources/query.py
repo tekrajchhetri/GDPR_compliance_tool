@@ -32,12 +32,12 @@ class ResponseSchema(Schema):
     )
 
 
-class QueryConsentIDName(MethodResource, Resource):
-    @doc(description='Get consent ID by name.', tags=['ConsentID By Name'])
+class QueryConsentIDByConsentProviderID(MethodResource, Resource):
+    @doc(description='Get consent ID by consent provider.', tags=['ConsentID by consentprovider ID'])
     @marshal_with(ResponseSchema)
-    def get(self, name):
+    def get(self, consentprovider_id):
         query = QueryEngine()
-        resp =  json.loads(query.select_query_gdb(consentProvidedBy=name,purpose=None, dataProcessing=None,
+        resp =  json.loads(query.select_query_gdb(consentProvidedBy=consentprovider_id,purpose=None, dataProcessing=None,
                                                  dataController=None, dataRequester=None, additionalData="consentID"))
         to_response = resp["results"]["bindings"]
         return to_response[0], 200
