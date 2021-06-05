@@ -31,12 +31,15 @@ class QueryEngine (Credentials, SPARQL):
                  WHERE {{ 
                   ?ConsentID a <http://ontologies.atb-bremen.de/smashHitCore#ConsentID>.
                   ?ConsentID :GrantedAtTime ?GrantedAtTime.
-                  ?ConsentID :RevokedAtTime ?RevokedAtTime.
-                   FILTER (?RevokedAtTime = "None") 
+                   FILTER NOT EXISTS {{ ?ConsentID :RevokedAtTime ?RevokedAtTime.}} 
                 }}""").format(self.prefix())
         return query
 
     def list_to_query(self, data):
+        """ Convert list to query
+        :input: list
+        :returns: SPARQL query string
+        """
         querydata = ""
         for vlaue in data:
             strs = ":forDataProcessing :" + vlaue + ";\n"
@@ -72,18 +75,43 @@ class QueryEngine (Credentials, SPARQL):
 
 
 
-    def consentID_by_name(self, name):
+    def consentID_by_consentprovider_ID(self, consentprovider_ID):
+        """
+        Get consent ID by consent provide ID
+        :param consentID_by_consentprovider_ID: Unique ID mapped to data subject
+        :return: consentID
+        """
         query = textwrap.dedent("""{0}
                 SELECT ?ConsentID   
                  WHERE {{ 
-                  ?ConsentID a <http://ontologies.atb-bremen.de/smashHitCore#ConsentID>.
+                 ?ConsentID a <http://ontologies.atb-bremen.de/smashHitCore#ConsentID>.
                   ?ConsentID :isProvidedBy :{1}.
                   ?ConsentID :GrantedAtTime ?GrantedAtTime.
-                  ?ConsentID :RevokedAtTime ?RevokedAtTime.
-                   FILTER (?RevokedAtTime = "None") 
-                }}""").format(self.prefix(), name)
+                   FILTER NOT EXISTS {{ ?ConsentID :RevokedAtTime ?RevokedAtTime.}}
+                }}""").format(self.prefix(), consentprovider_ID)
         return query
 
+    def consent_by_consentID(self, consentID):
+        query = textwrap.dedent("""{0}
+              SELECT ?ConsentID
+              WHERE {{ 
+              ?ConsentID a <http://ontologies.atb-bremen.de/smashHitCore#ConsentID>.
+                         FILTER(?ConsentID = :{1})
+                }}""").format(self.prefix(), consentID)
+        return query
+
+    def granted_consent_by_consentID(self, consentID):
+        query = textwrap.dedent("""{0}
+              SELECT ?ConsentID
+              WHERE {{ 
+              ?ConsentID a <http://ontologies.atb-bremen.de/smashHitCore#ConsentID>.
+              ?ConsentID :status ?status.
+              FILTER(?ConsentID = :{1})
+        }}""").format(self.prefix(), consentID)
+        return query
+
+    def consent_exists(self, consentID):
+        pass
 
     def check_all_none(self, list_of_elements):
         toCheck = None
@@ -92,7 +120,7 @@ class QueryEngine (Credentials, SPARQL):
     def function_map(self, name):
         mapfunc = {
                    "bulk_consentid": self.bulk_consentID,
-                   "consentID_by_name": self.consentID_by_name,
+                   "consentID_by_consentprovider_ID": self.consentID_by_consentprovider_ID,
 
                    }
         return mapfunc[name]
@@ -103,7 +131,7 @@ class QueryEngine (Credentials, SPARQL):
             return dict({"map": "bulk_consentid"})
 
         if additionalData=="consentID" and consentProvidedBy is not None:
-            return dict({"map": "consentID_by_name", "arg": consentProvidedBy})
+            return dict({"map": "consentID_by_consentprovider_ID", "arg": consentProvidedBy})
 
 
 
@@ -121,7 +149,7 @@ class QueryEngine (Credentials, SPARQL):
         return json.dumps(results)
 
     def for_processing(resource_dict):
-        """
+        """ Convert nested array of inputs into a single array
             :input: resource dict
             :returns: list of data processings
         """
@@ -190,6 +218,10 @@ class QueryEngine (Credentials, SPARQL):
                                                     )
                                    )
         return respone
+
+    def revoke_consent(self, consentID):
+        pass
+
 
 
 
