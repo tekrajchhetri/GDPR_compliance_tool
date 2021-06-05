@@ -26,6 +26,7 @@ docs = FlaskApiSpec(app)
 
 api.add_resource(ConsentCreate,"/consent/create/")
 api.add_resource(Revoke,"/consent/revoke/<string:consent_id>")
+docs.register(Revoke)
 api.add_resource(BrokenConsent,"/consent/brokenconsent/")
 docs.register(ConsentCreate)
 api.add_resource(QueryAllConsentID,"/query/bconsentid/")
