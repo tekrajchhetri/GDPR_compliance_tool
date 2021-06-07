@@ -7,8 +7,8 @@ class SPARQL(UserCredentials):
     
     def __init__(self):
         super().__init__()
-        self.HOST_URI_GET = "http://138.232.106.201:7200/repositories/SmashHit-Alpha"
-        self.HOST_URI_POST = "http://138.232.106.201:7200/repositories/SmashHit-Alpha/statements"
+        self.HOST_URI_GET = "http://95.217.61.124:7200/repositories/SmashHit-Alpha-Amar"
+        self.HOST_URI_POST = "http://95.217.61.124:7200/repositories/SmashHit-Alpha-Amar/statements"
     
     def init_sparql(self, hostname, userid, password):
         sparql = SPARQLWrapper(hostname)
