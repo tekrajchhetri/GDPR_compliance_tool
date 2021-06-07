@@ -2,7 +2,7 @@ import os
 
 class UserCredentials:
     def get_username(self):
-        return "USERNAME"
+        return os.environ.get("USERNAME")
 
     def get_password(self):
-        return "PASSWORD"
+        return os.environ.get("PASSWORD")
