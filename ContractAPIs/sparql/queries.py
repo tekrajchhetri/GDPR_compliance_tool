@@ -3,12 +3,13 @@ from SPARQLWrapper import SPARQLWrapper, JSON, BASIC
 import textwrap
 from werkzeug.wrappers import Response
 from credentials.user_credentials import UserCredentials
+from datetime import date
 
 class SPARQL(UserCredentials):
     def __init__(self):
         super().__init__()
-        self.HOST_URI_GET = "http://172.16.47.171:7200/repositories/SmashHit-Alpha"
-        self.HOST_URI_POST = "http://172.16.47.171:7200/repositories/SmashHit-Alpha/statements"
+        self.HOST_URI_GET = "http://138.232.106.201:7200/repositories/SmashHit-Alpha"
+        self.HOST_URI_POST = "http://138.232.106.201:7200/repositories/SmashHit-Alpha/statements"
     
     def init_sparql(self, hostname, userid, password):
         sparql = SPARQLWrapper(hostname)
@@ -32,6 +33,7 @@ class SPARQL(UserCredentials):
         query = textwrap.dedent("""{0}
             select * 
             where{{  ?Contract a :ContractId;
+                    :hasContractStatus ?ContractStatus;
                     :forPurpose ?Purpose;
                     :contractType ?ContractType;
                     :hasDataController ?DataController;
@@ -57,7 +59,6 @@ class SPARQL(UserCredentials):
                     :hasTerminationOnNotice ?TerminationOnNotice .
         }}
         """).format(self.prefix())
-        print(query)
         sparql.setQuery(query)
         sparql.setReturnFormat(JSON)
         results = sparql.query().convert()
@@ -89,13 +90,42 @@ class SPARQL(UserCredentials):
         results = sparql.query().convert()
         return results
     
+    def get_contract_by_id(self,id):
+        sparql=self.init_sparql(self.HOST_URI_GET, self.get_username(), self.get_password())
+        query = textwrap.dedent("""{0}
+            SELECT *   
+                WHERE {{ 
+                ?Contract a :ContractId;
+                filter(?Contract=:{1}) .
+            }}""").format(self.prefix(),id)
+        sparql.setQuery(query)
+        sparql.setReturnFormat(JSON)
+        results = sparql.query().convert()
+        return results
+    
+    def contract_revoke_by_id(self,id):
+        sparql=self.init_sparql(self.HOST_URI_POST, self.get_username(), self.get_password())
+        revoke_date=date.today()
+        query = textwrap.dedent("""{0} 
+            DELETE {{?ContractId :hasContractStatus :VALID.}}
+            INSERT {{?ContractId :hasContractStatus :REVOKED.
+            ?ContractId :RevokedAtTime {1}.
+            }}
+             WHERE {{
+             ?ContractId a <http://ontologies.atb-bremen.de/smashHitCore#ContractId>.
+              FILTER(?ContractId = :{2})
+             }}""").format(self.prefix(), '\'{}^^xsd:dateTime\''.format(revoke_date), id)
+        sparql.setQuery(query)
+        sparql.setReturnFormat(JSON)
+        results = "Contract has been revoked"
+        return results    
     def insert_query(self, ContractId, ContractType, Purpose,
                      ContractRequester, ContractProvider,DataController,StartDate,
                      ExecutionDate,EffectiveDate,ExpireDate,Medium,Waiver,Amendment,
                      ConfidentialityObligation,DataProtection,LimitationOnUse,
                      MethodOfNotice,NoThirdPartyBeneficiaries,PermittedDisclosure,
                      ReceiptOfNotice,Severability,TerminationForInsolvency,
-                     TerminationForMaterialBreach,TerminationOnNotice):
+                     TerminationForMaterialBreach,TerminationOnNotice,ContractStatus):
         insquery = textwrap.dedent("""{0} 
             INSERT DATA {{
             :{1} a <http://ontologies.atb-bremen.de/smashHitCore#ContractId>;
@@ -121,7 +151,8 @@ class SPARQL(UserCredentials):
                         :hasSeverability "{21}";
                         :hasTerminationForInsolvency "{22}";
                         :hasTerminationForMaterialBreach "{23}";
-                        :hasTerminationOnNotice "{24}" .
+                        :hasTerminationOnNotice "{24}";
+                        :hasContractStatus {25} .
                    }}       
                
           """.format(self.prefix(), ContractId, ContractType,
@@ -131,7 +162,7 @@ class SPARQL(UserCredentials):
                      ConfidentialityObligation,DataProtection,LimitationOnUse,
                      MethodOfNotice,NoThirdPartyBeneficiaries,PermittedDisclosure,
                      ReceiptOfNotice,Severability,TerminationForInsolvency,
-                     TerminationForMaterialBreach,TerminationOnNotice))
+                     TerminationForMaterialBreach,TerminationOnNotice,ContractStatus))
         return insquery
 
     def post_data(self, ContractId, ContractType, Purpose,
@@ -140,7 +171,7 @@ class SPARQL(UserCredentials):
                      ConfidentialityObligation,DataProtection,LimitationOnUse,
                      MethodOfNotice,NoThirdPartyBeneficiaries,PermittedDisclosure,
                      ReceiptOfNotice,Severability,TerminationForInsolvency,
-                     TerminationForMaterialBreach,TerminationOnNotice):
+                     TerminationForMaterialBreach,TerminationOnNotice,ContractStatus):
         respone = self.post_sparql(
             self.insert_query(ContractId=ContractId,
                               ContractType=ContractType,
@@ -165,7 +196,8 @@ class SPARQL(UserCredentials):
                               Severability=Severability,
                               TerminationForInsolvency=TerminationForInsolvency,
                               TerminationForMaterialBreach=TerminationForMaterialBreach,
-                              TerminationOnNotice=TerminationOnNotice))
+                              TerminationOnNotice=TerminationOnNotice,
+                              ContractStatus=ContractStatus ))
         return respone
 
     def post_sparql(self, query):
@@ -174,7 +206,6 @@ class SPARQL(UserCredentials):
         sparql.setQuery(query)
         sparql.method = "POST"
         sparql.queryType = "INSERT"
-        print(sparql)
         sparql.setReturnFormat('json')
         result = sparql.query()
 

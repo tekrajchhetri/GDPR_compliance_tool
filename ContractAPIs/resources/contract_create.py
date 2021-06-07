@@ -38,7 +38,9 @@ class ContractRequestSchema(Schema):
     TerminationForInsolvency = fields.String(required=False, description="Termination For Insolvency")
     TerminationForMaterialBreach = fields.String(required=False, description="Termination For Material Breach")
     TerminationOnNotice = fields.String(required=False, description="Termination On Notice")
+    ContractStatus = fields.String(required=False, description="Contract Status")
 
+ 
 
 class ContractCreate(MethodResource,Resource):
     @doc(description='create contract.', tags=['Create Contract'])
@@ -59,19 +61,20 @@ class ContractCreate(MethodResource,Resource):
         parser.add_argument('ExpireDate', required=True, location="json")                                                                                                        
         parser.add_argument('Medium', required=False, location="json")
         parser.add_argument('Waiver', required=False, location="json")
-        parser.add_argument('Amendment', required=True, location="json")                                                                                                        
+        parser.add_argument('Amendment', required=False, location="json")                                                                                                        
         parser.add_argument('ConfidentialityObligation', required=False, location="json")
         parser.add_argument('DataProtection', required=False, location="json")
-        parser.add_argument('LimitationOnUse', required=True, location="json")                                                                                                        
+        parser.add_argument('LimitationOnUse', required=False, location="json")                                                                                                        
         parser.add_argument('MethodOfNotice', required=False, location="json")
         parser.add_argument('NoThirdPartyBeneficiaries', required=False, location="json")
         parser.add_argument('PermittedDisclosure', required=True, location="json")                                                                                                        
         parser.add_argument('ReceiptOfNotice', required=False, location="json")
         parser.add_argument('Severability', required=False, location="json")
-        parser.add_argument('TerminationForInsolvency', required=True, location="json")                                                                                                        
+        parser.add_argument('TerminationForInsolvency', required=False, location="json")                                                                                                        
         parser.add_argument('TerminationForMaterialBreach', required=False, location="json")
-        parser.add_argument('TerminationOnNotice', required=False, location="json")        
-
+        parser.add_argument('TerminationOnNotice', required=False, location="json")
+        parser.add_argument('ContractStatus', required=False, location="json")
+ 
         args = parser.parse_args()
         response = query.post_data(
             ContractId=args["ContractId"],
@@ -97,7 +100,8 @@ class ContractCreate(MethodResource,Resource):
             Severability=args["Severability"],
             TerminationForInsolvency=args["TerminationForInsolvency"],
             TerminationForMaterialBreach=args["TerminationForMaterialBreach"],
-            TerminationOnNotice=args["TerminationOnNotice"]),
+            TerminationOnNotice=args["TerminationOnNotice"],
+            ContractStatus=args["ContractStatus"]),
 
             
         return response
