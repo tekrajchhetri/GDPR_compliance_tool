@@ -26,19 +26,19 @@ app.config.update({
 })
 docs = FlaskApiSpec(app)
 
-api.add_resource(Contracts, '/')
+api.add_resource(Contracts, '/contract/')
 docs.register(Contracts)
 
-api.add_resource(GetContractByRequester, '/query/contractbyrequester/<string:requester>/')
+api.add_resource(GetContractByRequester, '/contract/query/contractbyrequester/<string:requester>/')
 docs.register(GetContractByRequester)
 
-api.add_resource(GetContractById, '/query/contractbyid/<string:id>/')
+api.add_resource(GetContractById, '/contract/query/contractbyid/<string:id>/')
 docs.register(GetContractById)
 
-api.add_resource(ContractRevokeByContractId, '/query/contractrevokebyid/<string:id>/')
+api.add_resource(ContractRevokeByContractId, '/contract/query/contractrevokebyid/<string:id>/')
 docs.register(ContractRevokeByContractId)
 
-api.add_resource(GetContractByProvider, '/query/contractbyprovider/<string:provider>/')
+api.add_resource(GetContractByProvider, '/contract/query/contractbyprovider/<string:provider>/')
 docs.register(GetContractByProvider)
 
 api.add_resource(ContractCreate, "/contract/create/")
