@@ -1,11 +1,10 @@
-import sparql
 from SPARQLWrapper import SPARQLWrapper, JSON, BASIC
 import textwrap
-from werkzeug.wrappers import Response
 from credentials.user_credentials import UserCredentials
 from datetime import date
 
 class SPARQL(UserCredentials):
+    
     def __init__(self):
         super().__init__()
         self.HOST_URI_GET = "http://138.232.106.201:7200/repositories/SmashHit-Alpha"
@@ -61,8 +60,8 @@ class SPARQL(UserCredentials):
         """).format(self.prefix())
         sparql.setQuery(query)
         sparql.setReturnFormat(JSON)
-        results = sparql.query().convert()
-        return results
+        response = sparql.query().convert()
+        return response
     
     def get_contract_by_requester(self,name):
         sparql=self.init_sparql(self.HOST_URI_GET, self.get_username(), self.get_password())
@@ -74,8 +73,8 @@ class SPARQL(UserCredentials):
             }}""").format(self.prefix(),name)
         sparql.setQuery(query)
         sparql.setReturnFormat(JSON)
-        results = sparql.query().convert()
-        return results
+        response = sparql.query().convert()
+        return response
     
     def get_contract_by_provider(self,name):
         sparql=self.init_sparql(self.HOST_URI_GET, self.get_username(), self.get_password())
@@ -87,8 +86,8 @@ class SPARQL(UserCredentials):
             }}""").format(self.prefix(),name)
         sparql.setQuery(query)
         sparql.setReturnFormat(JSON)
-        results = sparql.query().convert()
-        return results
+        response = sparql.query().convert()
+        return response
     
     def get_contract_by_id(self,id):
         sparql=self.init_sparql(self.HOST_URI_GET, self.get_username(), self.get_password())
@@ -100,8 +99,8 @@ class SPARQL(UserCredentials):
             }}""").format(self.prefix(),id)
         sparql.setQuery(query)
         sparql.setReturnFormat(JSON)
-        results = sparql.query().convert()
-        return results
+        response = sparql.query().convert()
+        return response
     
     def contract_revoke_by_id(self,id):
         sparql=self.init_sparql(self.HOST_URI_POST, self.get_username(), self.get_password())
@@ -117,8 +116,8 @@ class SPARQL(UserCredentials):
              }}""").format(self.prefix(), '\'{}^^xsd:dateTime\''.format(revoke_date), id)
         sparql.setQuery(query)
         sparql.setReturnFormat(JSON)
-        results = "Contract has been revoked"
-        return results    
+        response = "Contract has been revoked"
+        return response    
     def insert_query(self, ContractId, ContractType, Purpose,
                      ContractRequester, ContractProvider,DataController,StartDate,
                      ExecutionDate,EffectiveDate,ExpireDate,Medium,Waiver,Amendment,
@@ -172,7 +171,7 @@ class SPARQL(UserCredentials):
                      MethodOfNotice,NoThirdPartyBeneficiaries,PermittedDisclosure,
                      ReceiptOfNotice,Severability,TerminationForInsolvency,
                      TerminationForMaterialBreach,TerminationOnNotice,ContractStatus):
-        respone = self.post_sparql(
+        response = self.post_sparql(
             self.insert_query(ContractId=ContractId,
                               ContractType=ContractType,
                               Purpose=Purpose,
@@ -198,7 +197,7 @@ class SPARQL(UserCredentials):
                               TerminationForMaterialBreach=TerminationForMaterialBreach,
                               TerminationOnNotice=TerminationOnNotice,
                               ContractStatus=ContractStatus ))
-        return respone
+        return response
 
     def post_sparql(self, query):
         sparql=self.init_sparql(self.HOST_URI_POST, self.get_username(), self.get_password())
