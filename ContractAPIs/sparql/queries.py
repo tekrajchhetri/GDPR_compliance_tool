@@ -2,13 +2,15 @@ from SPARQLWrapper import SPARQLWrapper, JSON, BASIC
 import textwrap
 from credentials.user_credentials import UserCredentials
 from datetime import date
+from flask import current_app
 
 class SPARQL(UserCredentials):
     
     def __init__(self):
         super().__init__()
-        self.HOST_URI_GET = "http://95.217.61.124:7200/repositories/SmashHit-Alpha-Amar"
-        self.HOST_URI_POST = "http://95.217.61.124:7200/repositories/SmashHit-Alpha-Amar/statements"
+
+        self.HOST_URI_GET = current_app.config['HOST_URI_GET']
+        self.HOST_URI_POST = current_app.config['HOST_URI_POST']
     
     def init_sparql(self, hostname, userid, password):
         sparql = SPARQLWrapper(hostname)

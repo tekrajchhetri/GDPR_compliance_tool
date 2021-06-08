@@ -11,6 +11,7 @@ from resources.contract_by_requester import GetContractByRequester
 from resources.contract_by_provider import GetContractByProvider
 from resources.contract_create import ContractCreate
 from resources.contract_revoke import ContractRevokeByContractId
+import app
 
 app = Flask(__name__)
 api = Api(app)
@@ -22,7 +23,7 @@ app.config.update({
         plugins=[MarshmallowPlugin()],
         openapi_version='2.0.0'
     ),
-    'APISPEC_SWAGGER_UI_URL': '/swagger-ui/'  # URI to access UI of API Doc
+    'APISPEC_SWAGGER_UI_URL': '/swagger-ui/'
 })
 docs = FlaskApiSpec(app)
 
@@ -46,3 +47,6 @@ docs.register(ContractCreate)
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+

@@ -6,3 +6,4 @@ class UserCredentials:
 
     def get_password(self):
         return os.environ.get("PASSWORD")
+        
