@@ -30,16 +30,16 @@ docs = FlaskApiSpec(app)
 api.add_resource(Contracts, '/api/contract/')
 docs.register(Contracts)
 
-api.add_resource(GetContractByRequester, '/api/contract/contract_by_requester/<string:_requester>/')
+api.add_resource(GetContractByRequester, '/api/contract/contract_by_requester/<string:requester>/')
 docs.register(GetContractByRequester)
 
-api.add_resource(GetContractById, '/api/contract/contract_by_id/<string:_id>/')
+api.add_resource(GetContractById, '/api/contract/contract_by_id/<string:id>/')
 docs.register(GetContractById)
 
-api.add_resource(ContractRevokeByContractId, '/api/contract/contract_revoke_by_id/<string:_id>/')
+api.add_resource(ContractRevokeByContractId, '/api/contract/contract_revoke_by_id/<string:id>/')
 docs.register(ContractRevokeByContractId)
 
-api.add_resource(GetContractByProvider, '/api/contract/contract_by_provider/<string:_provider>/')
+api.add_resource(GetContractByProvider, '/api/contract/contract_by_provider/<string:provider>/')
 docs.register(GetContractByProvider)
 
 api.add_resource(ContractCreate, "/api/contract/create/")

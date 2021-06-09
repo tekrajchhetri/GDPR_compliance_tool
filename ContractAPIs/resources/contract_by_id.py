@@ -5,7 +5,7 @@ from sparql.queries import SPARQL
 
 class GetContractById(MethodResource,Resource):
     @doc(description='Get contract by contract id.', tags=['Contract By Contract Id'])
-    def get(self, _id):
+    def get(self, id):
         query = SPARQL()
-        response = query.get_contract_by_id(_id)
+        response = query.get_contract_by_id(id)
         return response
