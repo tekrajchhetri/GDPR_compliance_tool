@@ -5,9 +5,9 @@ from sparql.queries import SPARQL
 
 class ContractRevokeByContractId(MethodResource,Resource):
     @doc(description='Contract revoke by contract id.', tags=['Contract revoke By Contract Id'])
-    def put(self, id):
+    def put(self, _id):
         query = SPARQL()
-        result = query.contract_revoke_by_id(id)
+        result = query.contract_revoke_by_id(_id)
         response={
             'STATUS':'Success',
             'Message':result,
