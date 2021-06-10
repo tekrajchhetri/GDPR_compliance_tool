@@ -153,7 +153,7 @@ class SPARQL(UserCredentials):
                         :hasTerminationForInsolvency "{22}";
                         :hasTerminationForMaterialBreach "{23}";
                         :hasTerminationOnNotice "{24}";
-                        :hasContractStatus {25} .
+                        :hasContractStatus :{25} .
                    }}       
                
           """.format(self.prefix(), ContractId, ContractType,

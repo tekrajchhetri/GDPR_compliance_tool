@@ -4,7 +4,6 @@ from flask_apispec import doc,use_kwargs
 from sparql.queries import SPARQL
 from marshmallow import Schema, fields
 
-
 class ContractRequestSchema(Schema):
     ContractId = fields.String(required=True, description="Contract ID")
     ContractType = fields.String(required=True,
@@ -40,12 +39,10 @@ class ContractRequestSchema(Schema):
     TerminationOnNotice = fields.String(required=False, description="Termination On Notice")
     ContractStatus = fields.String(required=False, description="Contract Status")
 
- 
 
 class ContractCreate(MethodResource,Resource):
     @doc(description='create contract.', tags=['Create Contract'])
     @use_kwargs(ContractRequestSchema)
-    
     def post(self, **kwargs):
         query = SPARQL()
         parser = reqparse.RequestParser()
@@ -103,5 +100,4 @@ class ContractCreate(MethodResource,Resource):
             TerminationOnNotice=args["TerminationOnNotice"],
             ContractStatus=args["ContractStatus"]),
 
-            
         return response

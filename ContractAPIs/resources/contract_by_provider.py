@@ -4,6 +4,7 @@ from flask_apispec import doc
 from sparql.queries import SPARQL
 
 class GetContractByProvider(MethodResource,Resource):
+    
     @doc(description='Get contract by contract provider.', tags=['Contract By Contract Provider'])
     def get(self, provider):
         query = SPARQL()

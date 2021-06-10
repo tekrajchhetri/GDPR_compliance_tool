@@ -1,0 +1,244 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Automatic Contracting Tool",
+    "description": "Contract API Specification.",
+    "contact": {
+      "name": "Amar Tauqeer",
+      "email": "amar.tauqeer@sti2.at",
+      "url": "https://github.com/AmarTauqeer"
+    },
+    "version": "0.1.9"
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:5000/api"
+    }
+  ],
+  "paths": {
+    "/contract/create/": {
+      "post": {
+        "summary": "Creates a contract.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "ContractId": {
+                    "type": "string"
+                  },
+                  "ContractType": {
+                    "type": "string"
+                  },
+                  "Purpose": {
+                    "type": "string"
+                  },
+                  "ContractRequester": {
+                    "type": "string"
+                  },
+                  "ContractProvider": {
+                    "type": "string"
+                  },
+                  "DataController": {
+                    "type": "string"
+                  },
+                  "StartDate": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "ExecutionDate": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "EffectiveDate": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "ExpireDate": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "Medium": {
+                    "type": "string"
+                  },
+                  "Waiver": {
+                    "type": "string"
+                  },
+                  "Amendment": {
+                    "type": "string"
+                  },
+                  "ConfidentialityObligation": {
+                    "type": "string"
+                  },
+                  "DataProtection": {
+                    "type": "string"
+                  },
+                  "LimitationOnUse": {
+                    "type": "string"
+                  },
+                  "MethodOfNotice": {
+                    "type": "string"
+                  },
+                  "NoThirdPartyBeneficiaries": {
+                    "type": "string"
+                  },
+                  "PermittedDisclosure": {
+                    "type": "string"
+                  },
+                  "ReceiptOfNotice": {
+                    "type": "string"
+                  },
+                  "Severability": {
+                    "type": "string"
+                  },
+                  "TerminationForInsolvency": {
+                    "type": "string"
+                  },
+                  "TerminationForMaterialBreach": {
+                    "type": "string"
+                  },
+                  "TerminationOnNotice": {
+                    "type": "string"
+                  },
+                  "ContractStatus": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/contract/contract_revoke_by_id/{id}/": {
+      "put": {
+        "summary": "Revoke a contract by contract id.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "contract id e.g. kg244565",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/contract/": {
+      "description": "Contract",
+      "get": {
+        "summary": "Returns a list of contracts.",
+        "responses": {
+          "200": {
+            "description": "A JSON array of contracts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contract/contract_by_id/{id}": {
+      "get": {
+        "summary": "Returns a contract by contract id.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "contract id e.g. kg244565",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/contract/contract_by_requester/{requester}": {
+      "get": {
+        "summary": "Returns a contract by contract requester.",
+        "parameters": [
+          {
+            "name": "requester",
+            "in": "path",
+            "required": true,
+            "description": "contract requester e.g. CompanyABC",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/contract/contract_by_provider/{provider}": {
+      "get": {
+        "summary": "Returns a contract by contract provider.",
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "provider",
+            "in": "path",
+            "required": true,
+            "description": "contract provider e.g. Brade",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "basicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    }
+  },
+  "security": [
+    {
+      "basicAuth": []
+    }
+  ]
+}
