@@ -36,14 +36,14 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages):
                 }}""").format(self.prefix())
         return query
 
-    def list_to_query(self, data):
+    def list_to_query(self, data, whatfor):
         """ Convert list to query
         :input: list
         :returns: SPARQL query string
         """
         querydata = ""
         for vlaue in data:
-            strs = ":forDataProcessing :" + vlaue + ";\n"
+            strs = ":"+whatfor+" :" + vlaue + ";\n"
             querydata = strs + querydata
         return querydata
 
@@ -69,8 +69,8 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages):
             :status :{14}.
                    }}       
                
-          """).format(self.prefix(),  consentID, inMedium, purpose, self.list_to_query(isAboutData),GrantedAtTime,
-                      self.list_to_query(fordataprocessing), expirationtime, country, city, state, requestedBy,
+          """).format(self.prefix(),  consentID, inMedium, purpose, self.list_to_query(isAboutData, "isAboutData"),GrantedAtTime,
+                      self.list_to_query(fordataprocessing, "forDataProcessing"), expirationtime, country, city, state, requestedBy,
                       hasDataController, dataprovider, granted)
         return insquery
 
