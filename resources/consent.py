@@ -76,5 +76,10 @@ class Revoke(MethodResource, Resource):
 
 
 class BrokenConsent(MethodResource, Resource):
-    pass
+    @doc(description='Broken consent chain.', tags=['Compliance'])
+    @marshal_with(ReturnSchema)
+    def post(self, consent_id, reason):
+        qe = QueryEngine()
+        response = qe.broken_consent(consentID=consent_id, reason_for_logging=reason)
+        return response
 
