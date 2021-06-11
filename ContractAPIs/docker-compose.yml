@@ -1,0 +1,13 @@
+version: "3"
+services:
+  contractact:
+    container_name: actool_contract
+    hostname: actool_contract
+    restart: always
+    build: ./
+    volumes:
+      - ./:/app
+    environment:
+      - PYTHONBUFFERED=1
+    ports:
+      - "5002:5002"

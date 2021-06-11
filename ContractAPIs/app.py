@@ -25,7 +25,7 @@ app.config.update({
         openapi_version='2.0.0'
     ),
     'APISPEC_SWAGGER_UI_URL': '/swagger-ui/',
-    
+
 })
 # contract api end points with swagger documentation
 docs = FlaskApiSpec(app)
