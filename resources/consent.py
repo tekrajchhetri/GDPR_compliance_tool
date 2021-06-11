@@ -51,7 +51,7 @@ class ReturnSchema(Schema):
 
 
 class ConsentCreate(MethodResource, Resource):
-    @doc(description='create consent.', tags=['Create Consent'])
+    @doc(description='create consent.', tags=['Consent'])
     @use_kwargs(ConsentRequests)
     @marshal_with(ReturnSchema)
     def post(self, **kwargs):
@@ -67,14 +67,19 @@ class ConsentCreate(MethodResource, Resource):
 
 
 class Revoke(MethodResource, Resource):
-    @doc(description='Revoke consent.', tags=['Revoke consent'])
+    @doc(description='Revoke consent.', tags=['Consent'])
     @marshal_with(ReturnSchema)
-    def put(self, consent_id):
+    def delete(self, consent_id):
         qe = QueryEngine()
         response = qe.revoke_consent(consentID=consent_id)
         return response
 
 
 class BrokenConsent(MethodResource, Resource):
-    pass
+    @doc(description='Broken consent chain.', tags=['Compliance'])
+    @marshal_with(ReturnSchema)
+    def post(self, consent_id, reason):
+        qe = QueryEngine()
+        response = qe.broken_consent(consentID=consent_id, reason_for_logging=reason)
+        return response
 

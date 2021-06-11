@@ -113,34 +113,45 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages):
 
         return query
 
-    def revoke_query(self, consentID):
+    def revoke_broken_consent_query(self, consentID, type="REVOKED"):
         query = textwrap.dedent("""{0} 
             DELETE {{?ConsentID :status :GRANTED.}}
-            INSERT {{?ConsentID :status :REVOKED.
-            ?ConsentID :RevokedAtTime {1}.
+            INSERT {{?ConsentID :status :{1}.
+            ?ConsentID :RevokedAtTime {2}.
             }}
              WHERE {{
              ?ConsentID a <http://ontologies.atb-bremen.de/smashHitCore#ConsentID>.
-              FILTER(?ConsentID = :{2})
-             }}""").format(self.prefix(), '\'{}^^xsd:dateTime\''.format(self.decision_timestamp()), consentID)
+              FILTER(?ConsentID = :{3})
+             }}""").format(self.prefix(), type,'\'{}^^xsd:dateTime\''.format(self.decision_timestamp()), consentID)
 
         return query
 
     def consent_exists(self, consent):
-        consent_data = consent["results"]["bindings"][0]["ConsentID"]["value"]
-        if len(consent_data.strip()) > 2:
-            return True
-        return False
+        try:
+            consent_data = consent["results"]["bindings"][0]["ConsentID"]["value"]
+            if len(consent_data.strip()) > 2:
+                return True
+            return False
+        except:
+            return False
 
     def has_status_granted(self, consent):
-        isgranted = consent["results"]["bindings"][0]["status"]["value"]
-        return "granted" in isgranted.lower()
+        try:
+            isgranted = consent["results"]["bindings"][0]["status"]["value"]
+            return "granted" in isgranted.lower()
+        except:
+            return False
+
 
     def check_all_none(self, list_of_elements):
         toCheck = None
         return all([elem == toCheck for elem in list_of_elements])
 
     def function_map(self, name):
+        """ Map to actual function
+        :param name: name which function to map
+        :return: function name
+        """
         mapfunc = {
                    "bulk_consentid": self.bulk_consentID,
                    "consentID_by_consentprovider_ID": self.consentID_by_consentprovider_ID,
@@ -153,6 +164,16 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages):
 
     def which_query(self, consentProvidedBy=None, purpose=None, dataProcessing=None, dataController=None,
                     dataRequester=None, additionalData=None, consentID=None):
+        """ Define mapping to appropriate function for query generation based on input
+        :param consentProvidedBy:
+        :param purpose:
+        :param dataProcessing:
+        :param dataController:
+        :param dataRequester:
+        :param additionalData:
+        :param consentID:
+        :return: <dict>
+        """
         if additionalData=="bconsentID":
             return dict({"map": "bulk_consentid"})
 
@@ -251,18 +272,45 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages):
                                    )
         return respone
 
-    def revoke_consent(self, consentID):
+    def check_active_granted_consent(self, consentID):
+        """Performs the following tasks.
+        1. Checks if there exists consent for the provided consent ID
+        2. If exist then again check if the status is granted and not revoked or broken chain
+        :param consentID: consent id
+        :return: bool
+        """
         consent = json.loads(self.select_query_gdb(consentID=consentID, additionalData="check_consent"))
-
-        if(self.consent_exists(consent)):
+        if (self.consent_exists(consent)):
             hasGrantedStatus = json.loads(self.select_query_gdb(consentID=consentID,
                                                                 additionalData="check_consent_granted"))
-            if(self.has_status_granted(hasGrantedStatus)):
-                respone = self.post_sparql(self.get_username(), self.get_password(),
-                                           self.revoke_query(consentID=consentID), type="revoke" )
+            if (self.has_status_granted(hasGrantedStatus)):
+                return True
+
+        return False
+
+    def revoke_consent(self, consentID):
+        if self.check_active_granted_consent(consentID=consentID):
+            respone = self.post_sparql(self.get_username(), self.get_password(),
+                                       self.revoke_broken_consent_query(consentID=consentID), type="revoke")
+            return respone
+        else:
+            return self.processing_fail_message()
 
 
-                return respone
+
+    def broken_consent(self, consentID, reason_for_logging):
+        if len(reason_for_logging.strip()) < 5:
+            return self.dataformatnotmatch()
+        if self.check_active_granted_consent(consentID=consentID):
+            respone = self.post_sparql(self.get_username(), self.get_password(),
+                                       self.revoke_broken_consent_query(consentID=consentID,type="BROKEN_CONSENT"),
+                                       reason_for_logging= reason_for_logging, type="broken_consent")
+            return respone
+        else:
+            return self.processing_fail_message()
+
+
+
 
 
 
