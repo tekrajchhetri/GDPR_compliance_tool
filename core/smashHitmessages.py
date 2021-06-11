@@ -76,7 +76,7 @@ class smashHitmessages(TokenGenerator):
         return revoke_consent
 
     def processing_fail_message(self):
-        revoke_consent = {"act_status_code": 8000,
+        revoke_consent = {"act_status_code": 8200,
                            "decision": "FAILED",
                             "message": "Processing failed, check input",
                            "decision_token": self.token_generator(),
