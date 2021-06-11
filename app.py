@@ -10,6 +10,8 @@ from flask_apispec.extension import FlaskApiSpec
 from apispec.ext.marshmallow import MarshmallowPlugin
 from resources.consent import  ConsentCreate, Revoke, BrokenConsent
 
+from resources.audit import AuditConsent
+
 api = Api(app)
 
 app.config.update({
@@ -34,7 +36,8 @@ api.add_resource(QueryAllConsentID,"/query/bulk_consent_id/")
 docs.register(QueryAllConsentID)
 api.add_resource(QueryConsentIDByConsentProviderID,"/query/consentid/<string:consentprovider_id>/")
 docs.register(QueryConsentIDByConsentProviderID)
-
+api.add_resource(AuditConsent, "/audit/<string:consent_id>")
+docs.register(AuditConsent)
 api.add_resource(Test,"/")
 # api.add_resource(ClassName, "/compliance_verify/<string:name>")
 
