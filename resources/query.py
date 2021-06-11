@@ -24,10 +24,6 @@ class NestedSchema(Schema):
 class BulkResponseQuerySchema(Schema):
     bindings = fields.List(fields.Nested(NestedSchema),required=True)
 
-
-
-
-
 class QueryConsentIDByConsentProviderID(MethodResource, Resource):
     @doc(description='Get consent ID by consent provider.', tags=['Query'])
     @marshal_with(BulkResponseQuerySchema)
