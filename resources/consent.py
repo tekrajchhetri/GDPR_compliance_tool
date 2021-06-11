@@ -51,7 +51,7 @@ class ReturnSchema(Schema):
 
 
 class ConsentCreate(MethodResource, Resource):
-    @doc(description='create consent.', tags=['Create Consent'])
+    @doc(description='create consent.', tags=['Consent'])
     @use_kwargs(ConsentRequests)
     @marshal_with(ReturnSchema)
     def post(self, **kwargs):
@@ -67,7 +67,7 @@ class ConsentCreate(MethodResource, Resource):
 
 
 class Revoke(MethodResource, Resource):
-    @doc(description='Revoke consent.', tags=['Revoke consent'])
+    @doc(description='Revoke consent.', tags=['Consent'])
     @marshal_with(ReturnSchema)
     def put(self, consent_id):
         qe = QueryEngine()

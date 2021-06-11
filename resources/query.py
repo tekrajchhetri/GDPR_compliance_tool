@@ -29,7 +29,7 @@ class BulkResponseQuerySchema(Schema):
 
 
 class QueryConsentIDByConsentProviderID(MethodResource, Resource):
-    @doc(description='Get consent ID by consent provider.', tags=['ConsentID by consentprovider ID'])
+    @doc(description='Get consent ID by consent provider.', tags=['Query'])
     @marshal_with(BulkResponseQuerySchema)
     def get(self, consentprovider_id):
         query = QueryEngine()
@@ -39,7 +39,7 @@ class QueryConsentIDByConsentProviderID(MethodResource, Resource):
         return to_response, 200
 
 class QueryAllConsentID(MethodResource, Resource):
-    @doc(description='Get all consent ID.', tags=['All ConsentID'])
+    @doc(description='Get all consent ID.', tags=['Query'])
     @marshal_with(BulkResponseQuerySchema)
     def get(self):
         query = QueryEngine()
