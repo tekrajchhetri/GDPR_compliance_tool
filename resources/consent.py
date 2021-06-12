@@ -74,12 +74,24 @@ class Revoke(MethodResource, Resource):
         response = qe.revoke_consent(consentID=consent_id)
         return response
 
+class BrokenConsentSchema(Schema):
+    consent_id = fields.String(required=True)
+    reason = fields.String(required=True)
 
 class BrokenConsent(MethodResource, Resource):
     @doc(description='Broken consent chain.', tags=['Compliance'])
     @marshal_with(ReturnSchema)
-    def post(self, consent_id, reason):
+    @use_kwargs(BrokenConsentSchema)
+    def post(self, **kwarg):
         qe = QueryEngine()
+        schema_serializer = BrokenConsentSchema()
+        data = request.get_json(force=True)
+        try:
+            validated_data = schema_serializer.load(data)
+        except ValidationError as e:
+            return {"error": str(e)}, 400
+        consent_id = validated_data["consent_id"]
+        reason = validated_data["reason"]
         response = qe.broken_consent(consentID=consent_id, reason_for_logging=reason)
         return response
 
