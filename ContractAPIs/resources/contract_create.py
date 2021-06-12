@@ -3,7 +3,7 @@ from flask_apispec.views import MethodResource
 from flask_apispec import doc,use_kwargs
 from sparql.queries import SPARQL
 from marshmallow import Schema, fields
-
+from credentials.user_credentials import UserCredentials
 class ContractRequestSchema(Schema):
     ContractId = fields.String(required=True, description="Contract ID")
     ContractType = fields.String(required=True,
@@ -40,8 +40,9 @@ class ContractRequestSchema(Schema):
     ContractStatus = fields.String(required=False, description="Contract Status")
 
 
-class ContractCreate(MethodResource,Resource):
+class ContractCreate(MethodResource,Resource,UserCredentials):
     @doc(description='create contract.', tags=['Create Contract'])
+    @UserCredentials.check_for_token
     @use_kwargs(ContractRequestSchema)
     def post(self, **kwargs):
         query = SPARQL()
@@ -71,7 +72,7 @@ class ContractCreate(MethodResource,Resource):
         parser.add_argument('TerminationForMaterialBreach', required=False, location="json")
         parser.add_argument('TerminationOnNotice', required=False, location="json")
         parser.add_argument('ContractStatus', required=False, location="json")
- 
+
         args = parser.parse_args()
         response = query.post_data(
             ContractId=args["ContractId"],

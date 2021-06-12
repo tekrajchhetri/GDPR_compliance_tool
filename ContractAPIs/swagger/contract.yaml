@@ -12,6 +12,8 @@ servers:
 paths:
   /contract/create/:
     post:
+      security:
+        - bearerAuth: []
       summary: Creates a contract.
       requestBody:
         required: true
@@ -80,6 +82,8 @@ paths:
   /contract/contract_revoke_by_id/{id}/:
     put:
       summary: Revoke a contract by contract id.
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -95,6 +99,8 @@ paths:
     description: Contract
     get:
       summary: Returns a list of contracts.
+      security:
+        - bearerAuth: []
       responses:
         '200':    # status code
           description: A JSON array of contracts
@@ -105,9 +111,11 @@ paths:
                 items: 
                   type: string
     
-  /contract/contract_by_id/{id}:
+  /contract/contract_by_id/{id}/:
     get:
       summary: Returns a contract by contract id.
+      security:
+        - bearerAuth: []      
       parameters:
         - name: id
           in: path
@@ -118,9 +126,11 @@ paths:
       responses: 
         '200':
           description: OK
-  /contract/contract_by_requester/{requester}:
+  /contract/contract_by_requester/{requester}/:
     get:
       summary: Returns a contract by contract requester.
+      security:
+        - bearerAuth: []
       parameters:
         - name: requester
           in: path
@@ -131,11 +141,11 @@ paths:
       responses: 
         '200':
           description: OK
-  /contract/contract_by_provider/{provider}:
+  /contract/contract_by_provider/{provider}/:
     get:
       summary: Returns a contract by contract provider.
       security:
-        - basicAuth: []
+        - bearerAuth: []
       parameters:
         - name: provider
           in: path
@@ -148,8 +158,9 @@ paths:
           description: OK
 components:
   securitySchemes:
-    basicAuth:    
+    bearerAuth:         
       type: http
-      scheme: basic
+      scheme: bearer
+      bearerFormat: JWT    
 security:
-  - basicAuth: []
+  - bearerAuth: []         # use the same name as above
