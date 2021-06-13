@@ -1,4 +1,3 @@
-from datetime import datetime
 from flask_restful import Resource
 from flask_apispec.views import MethodResource
 from flask_apispec import doc
@@ -12,4 +11,4 @@ class Contracts(MethodResource,Resource,UserCredentials):
     def get(self):
         query = SPARQL()
         response = query.get_all_contracts()
-        return response
+        return response 

@@ -1,8 +1,9 @@
 import unittest
 import requests
+import os
 class ContractApiTest(unittest.TestCase):
     # base url
-    CONTRACT_URL="http://127.0.0.1:5000/"
+    CONTRACT_URL= os.getenv('CONTRACT_URL')
     DATA= {
         "Amendment": "abccc",
         "ConfidentialityObligation": "string",

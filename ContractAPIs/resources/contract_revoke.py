@@ -10,8 +10,4 @@ class ContractRevokeByContractId(MethodResource,Resource,UserCredentials):
     def put(self, id):
         query = SPARQL()
         result = query.contract_revoke_by_id(id)
-        response={
-            'STATUS':'Success',
-            'Message':result,
-        }
-        return response
+        return  result

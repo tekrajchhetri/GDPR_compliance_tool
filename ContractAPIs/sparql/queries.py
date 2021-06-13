@@ -1,5 +1,7 @@
 from SPARQLWrapper import SPARQLWrapper, JSON, BASIC
 import textwrap
+
+from flask.json import jsonify
 from credentials.user_credentials import UserCredentials
 from datetime import date
 import os
@@ -63,7 +65,7 @@ class SPARQL(UserCredentials):
         sparql.setQuery(query)
         sparql.setReturnFormat(JSON)
         response = sparql.query().convert()
-        return response
+        return jsonify(response) 
     
     def get_contract_by_requester(self,name):
         sparql=self.init_sparql(self.HOST_URI_GET, self.get_username(), self.get_password())
@@ -76,7 +78,7 @@ class SPARQL(UserCredentials):
         sparql.setQuery(query)
         sparql.setReturnFormat(JSON)
         response = sparql.query().convert()
-        return response
+        return jsonify(response) 
     
     def get_contract_by_provider(self,name):
         sparql=self.init_sparql(self.HOST_URI_GET, self.get_username(), self.get_password())
@@ -89,8 +91,8 @@ class SPARQL(UserCredentials):
         sparql.setQuery(query)
         sparql.setReturnFormat(JSON)
         response = sparql.query().convert()
-        return response
-    
+        return jsonify(response) 
+        
     def get_contract_by_id(self,id):
         sparql=self.init_sparql(self.HOST_URI_GET, self.get_username(), self.get_password())
         query = textwrap.dedent("""{0}
@@ -102,7 +104,7 @@ class SPARQL(UserCredentials):
         sparql.setQuery(query)
         sparql.setReturnFormat(JSON)
         response = sparql.query().convert()
-        return response
+        return jsonify(response) 
     
     def contract_revoke_by_id(self,id):
         sparql=self.init_sparql(self.HOST_URI_POST, self.get_username(), self.get_password())
@@ -119,7 +121,7 @@ class SPARQL(UserCredentials):
         sparql.setQuery(query)
         sparql.setReturnFormat(JSON)
         response = "Contract has been revoked"
-        return response    
+        return jsonify(response)     
     def insert_query(self, ContractId, ContractType, Purpose,
                      ContractRequester, ContractProvider,DataController,StartDate,
                      ExecutionDate,EffectiveDate,ExpireDate,Medium,Waiver,Amendment,
