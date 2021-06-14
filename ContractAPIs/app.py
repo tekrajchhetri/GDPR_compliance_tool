@@ -1,4 +1,5 @@
 from functools import wraps
+import ssl
 from flask import Flask
 from flask_restful import Api
 from apispec import APISpec
@@ -14,6 +15,7 @@ from resources.contract_create import ContractCreate
 from resources.contract_revoke import ContractRevokeByContractId
 from resources.contract_by_id import GetContractById
 from resources.generate_token import GenerateToken
+
 # flask app
 app = Flask(__name__)
 load_dotenv()
@@ -49,4 +51,7 @@ api.add_resource(ContractCreate, "/api/contract/create/")
 docs.register(ContractCreate)
 
 if __name__ == '__main__':
+    # serving.run_simple("0.0.0.0", 8000, app, ssl_context=context)
+    # context = ('server.crt', 'server.key')
+    # app.run("0.0.0.0", 5000, api,ssl_context=context,threaded=True)
     app.run(debug=True)

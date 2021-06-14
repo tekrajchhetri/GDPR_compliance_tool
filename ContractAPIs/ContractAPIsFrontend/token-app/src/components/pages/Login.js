@@ -37,7 +37,9 @@ const Login = () => {
       <form onSubmit={submitHandler}>
         <div className="form-group row m-1">
           <div className="col-sm-2">
-            <label>User Name :</label>
+            <label style={{ fontStyle: "italic", fontWeight: "bold" }}>
+              User Name :
+            </label>
           </div>
           <div className="col-sm-8">
             <input
@@ -51,7 +53,9 @@ const Login = () => {
         </div>
         <div className="form-group row m-1">
           <div className="col-sm-2">
-            <label>Password :</label>
+            <label style={{ fontStyle: "italic", fontWeight: "bold" }}>
+              Password :
+            </label>
           </div>
           <div className="col-sm-8">
             <input
