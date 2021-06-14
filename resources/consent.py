@@ -11,6 +11,7 @@ from flask_apispec.views import MethodResource
 from marshmallow import Schema, fields,ValidationError
 from flask_apispec import marshal_with, doc, use_kwargs
 from core.QueryEngine import QueryEngine
+from core.ComplianceEngine import  ComplianceEngine
 import datetime
 import json
 
@@ -83,7 +84,7 @@ class BrokenConsent(MethodResource, Resource):
     @marshal_with(ReturnSchema)
     @use_kwargs(BrokenConsentSchema)
     def post(self, **kwarg):
-        qe = QueryEngine()
+        ce = ComplianceEngine()
         schema_serializer = BrokenConsentSchema()
         data = request.get_json(force=True)
         try:
@@ -92,6 +93,6 @@ class BrokenConsent(MethodResource, Resource):
             return {"error": str(e)}, 400
         consent_id = validated_data["consent_id"]
         reason = validated_data["reason"]
-        response = qe.broken_consent(consentID=consent_id, reason_for_logging=reason)
+        response = ce.broken_consent(consentID=consent_id, reason_for_logging=reason)
         return response
 
