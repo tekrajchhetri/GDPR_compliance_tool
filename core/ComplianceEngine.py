@@ -4,7 +4,7 @@
 # @Email   : tekraj.chhetri@sti2.at
 # @File    : ComplianceEngine.py
 # @Software: PyCharm
-from core.QueryEngine import QueryEngine
+from core.QueryProcessor import QueryEngine
 import json
 
 class ComplianceEngine(QueryEngine):
