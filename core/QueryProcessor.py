@@ -2,7 +2,7 @@
 # @Time    : 07.05.21 13:01
 # @Author  : Tek Raj Chhetri
 # @Email   : tekraj.chhetri@sti2.at
-# @File    : QueryEngine.py
+# @File    : QueryProcessor.py
 # @Software: PyCharm
 
 

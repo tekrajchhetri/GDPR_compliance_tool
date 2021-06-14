@@ -5,7 +5,7 @@
 # @File    : ConsentValidation.py
 # @Software: PyCharm
 from core.date_helper import DateHelper
-from core.QueryEngine import QueryEngine
+from core.QueryProcessor import QueryEngine
 import dask
 class  ConsentValidation(QueryEngine):
 
