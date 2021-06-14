@@ -10,10 +10,8 @@ from flask_restful import Resource, reqparse, request
 from flask_apispec.views import MethodResource
 from marshmallow import Schema, fields,ValidationError
 from flask_apispec import marshal_with, doc, use_kwargs
-from core.QueryEngine import QueryEngine
+from core.ConsentValidation import ConsentValidation
 from core.ComplianceEngine import  ComplianceEngine
-import datetime
-import json
 
 
 class ForNestedSchema(Schema):
@@ -62,8 +60,8 @@ class ConsentCreate(MethodResource, Resource):
             validated_data = schema_serializer.load(data)
         except ValidationError as e:
             return {"error": str(e)}, 400
-        qe = QueryEngine()
-        response = qe.post_data(validated_data)
+        cv = ConsentValidation()
+        response = cv.post_data(validated_data)
         return response
 
 
@@ -71,8 +69,8 @@ class Revoke(MethodResource, Resource):
     @doc(description='Revoke consent.', tags=['Consent'])
     @marshal_with(ReturnSchema)
     def delete(self, consent_id):
-        qe = QueryEngine()
-        response = qe.revoke_consent(consentID=consent_id)
+        ce = ComplianceEngine()
+        response = ce.revoke_consent(consentID=consent_id)
         return response
 
 class BrokenConsentSchema(Schema):
