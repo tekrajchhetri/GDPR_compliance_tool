@@ -5,8 +5,8 @@
 # @File    : SPARQL.py
 # @Software: PyCharm
 from core.smashHitmessages import smashHitmessages
-from SPARQLWrapper import SPARQLWrapper, JSON,BASIC
-from core.Functions import Functions
+from SPARQLWrapper import SPARQLWrapper, BASIC
+from core.storage.Functions import Functions
 class  SPARQL(smashHitmessages, Functions):
     def __init__(self):
         super().__init__()

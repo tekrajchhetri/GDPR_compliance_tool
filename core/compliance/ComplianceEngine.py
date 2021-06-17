@@ -4,8 +4,8 @@
 # @Email   : tekraj.chhetri@sti2.at
 # @File    : ComplianceEngine.py
 # @Software: PyCharm
-from core.QueryProcessor import QueryEngine
-import json
+from core.query_processor.QueryProcessor import QueryEngine
+
 
 class ComplianceEngine(QueryEngine):
     def __init__(self):

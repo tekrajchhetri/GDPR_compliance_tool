@@ -4,7 +4,7 @@
 # @Email   : tekraj.chhetri@sti2.at
 # @File    : TestDateHelper.py
 # @Software: PyCharm
-from core.date_helper import DateHelper
+from core.helper.date_helper import DateHelper
 import  unittest
 import  datetime
 

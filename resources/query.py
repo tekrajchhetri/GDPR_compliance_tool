@@ -10,8 +10,8 @@
 from flask_restful import Resource
 from flask_apispec.views import MethodResource
 from marshmallow import Schema, fields
-from flask_apispec import marshal_with, doc, use_kwargs
-from core.QueryProcessor import QueryEngine
+from flask_apispec import marshal_with, doc
+from core.query_processor.QueryProcessor import QueryEngine
 import json
 
 

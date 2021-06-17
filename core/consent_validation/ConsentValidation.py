@@ -4,8 +4,8 @@
 # @Email   : tekraj.chhetri@sti2.at
 # @File    : ConsentValidation.py
 # @Software: PyCharm
-from core.date_helper import DateHelper
-from core.QueryProcessor import QueryEngine
+from core.helper.date_helper import DateHelper
+from core.query_processor.QueryProcessor import QueryEngine
 import dask
 class  ConsentValidation(QueryEngine):
 
