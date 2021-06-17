@@ -52,23 +52,23 @@ api.add_resource(Test, "/")
 
 # contract endpoint url
 # generate token
-api.add_resource(GenerateToken, '/api/token/')
+api.add_resource(GenerateToken, '/token/')
 # contract api end points with swagger documentation
-docs = FlaskApiSpec(app)
-api.add_resource(Contracts, '/api/contract/')
+
+api.add_resource(Contracts, '/contract/')
 docs.register(Contracts)
 api.add_resource(GetContractByRequester,
-                 '/api/contract/contract_by_requester/<string:requester>/')
+                 '/contract/contract_by_requester/<string:requester>/')
 docs.register(GetContractByRequester)
-api.add_resource(GetContractById, '/api/contract/contract_by_id/<string:id>/')
+api.add_resource(GetContractById, '/contract/contract_by_id/<string:id>/')
 docs.register(GetContractById)
 api.add_resource(ContractRevokeByContractId,
-                 '/api/contract/contract_revoke_by_id/<string:id>/')
+                 '/contract/contract_revoke_by_id/<string:id>/')
 docs.register(ContractRevokeByContractId)
 api.add_resource(GetContractByProvider,
-                 '/api/contract/contract_by_provider/<string:provider>/')
+                 '/contract/contract_by_provider/<string:provider>/')
 docs.register(GetContractByProvider)
-api.add_resource(ContractCreate, "/api/contract/create/")
+api.add_resource(ContractCreate, "/contract/create/")
 docs.register(ContractCreate)
 
 

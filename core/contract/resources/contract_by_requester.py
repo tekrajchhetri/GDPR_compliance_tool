@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from flask_apispec.views import MethodResource
 from flask_apispec import doc
-from sparql.queries import SPARQL
+from core.contract.sparql.queries import SPARQL
 from core.Credentials import Credentials
 
 

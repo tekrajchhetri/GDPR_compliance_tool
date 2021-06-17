@@ -1,7 +1,7 @@
 from flask_restful import Resource, reqparse
 from flask_apispec.views import MethodResource
 from flask_apispec import doc, use_kwargs
-from sparql.queries import SPARQL
+from core.contract.sparql.queries import SPARQL
 from marshmallow import Schema, fields
 from core.Credentials import Credentials
 
