@@ -2,7 +2,7 @@ from SPARQLWrapper import SPARQLWrapper, JSON, BASIC
 import textwrap
 
 from flask.json import jsonify
-import Credentials
+from core.Credentials import Credentials
 from datetime import date
 import os
 
