@@ -8,8 +8,8 @@
 
 
 from core.Credentials import Credentials
-from core.SPARQL import SPARQL
-from core.HelperACT import HelperACT
+from core.storage.SPARQL import SPARQL
+from core.helper.HelperACT import HelperACT
 from core.smashHitmessages import smashHitmessages
 import textwrap
 

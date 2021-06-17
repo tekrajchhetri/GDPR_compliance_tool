@@ -5,7 +5,7 @@
 # @File    : TestComplianceEngine.py
 # @Software: PyCharm
 
-from core.ComplianceEngine import ComplianceEngine
+from core.compliance.ComplianceEngine import ComplianceEngine
 import unittest
 class TestComplianceEngine(unittest.TestCase):
 

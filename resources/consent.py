@@ -6,12 +6,12 @@
 # @Software: PyCharm
 
 
-from flask_restful import Resource, reqparse, request
+from flask_restful import Resource, request
 from flask_apispec.views import MethodResource
 from marshmallow import Schema, fields,ValidationError
 from flask_apispec import marshal_with, doc, use_kwargs
-from core.ConsentValidation import ConsentValidation
-from core.ComplianceEngine import  ComplianceEngine
+from core.consent_validation.ConsentValidation import ConsentValidation
+from core.compliance.ComplianceEngine import  ComplianceEngine
 
 
 class ForNestedSchema(Schema):
