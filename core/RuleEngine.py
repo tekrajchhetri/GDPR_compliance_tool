@@ -15,11 +15,12 @@ class RuleEngine:
         return input_string.lower().strip()
 
     def remove_punct(self, input_string):
-        return re.sub(r'[^\w\s]', '', self.trim_and_lower(input_string))
+        return re.sub(r'[^\w\s]', '', input_string)
 
     def remove_stop_words(self, input_string):
         doc = self.nlp(input_string)
         return " ".join([w.text for w in doc if not w.is_stop])
 
     def full_match_ptext(self, purpose_from_consent_doc, purpose_from_dpc):
-        return self.trim_and_lower(purpose_from_consent_doc) == self.trim_and_lower(purpose_from_dpc)
+        return self.remove_punct(self.trim_and_lower(purpose_from_consent_doc)) == self.remove_punct(
+            self.trim_and_lower(purpose_from_dpc))
