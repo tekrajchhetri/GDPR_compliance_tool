@@ -33,6 +33,39 @@ SELECT ?ConsentID ?DataProvider ?Purpose ?Data ?Duration ?DataRequester ?DataCon
 LIMIT 200
  
 ```
+
+
+## Group by to eleminate multi row access issue
+```
+PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
+            PREFIX gconsent: <https://w3id.org/GConsent#>
+            PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+            PREFIX dc: <http://purl.org/dc/elements/1.1/>
+            PREFIX dpv: <http://www.w3.org/ns/dpv#>
+SELECT ?ConsentID (group_concat(?forDataProcessing;separator=', ') as ?DataProcessing)  ?DataProvider  ?Purpose ?Data ?Duration ?DataRequester ?DataController ?GrantedAtTime   ?Medium ?State ?City ?Country
+ 
+ WHERE { 
+  ?ConsentID a <http://ontologies.atb-bremen.de/smashHitCore#ConsentID>.
+  ?ConsentID :isProvidedBy ?DataProvider.
+  ?ConsentID :inMedium ?Medium.
+  ?ConsentID dpv:hasPurpose ?Purpose.
+  ?ConsentID :requestedBy ?DataRequester.
+  ?ConsentID :isAboutData ?Data.
+  ?ConsentID :forDataProcessing ?forDataProcessing.
+  ?ConsentID :hasExpiry ?Duration.
+  ?ConsentID :hasDataController ?DataController.
+  ?ConsentID :GrantedAtTime ?GrantedAtTime. 
+  ?ConsentID :atCity ?City.
+  ?ConsentID :atCountry ?Country.
+  ?ConsentID :atState ?State. 
+    FILTER (?ConsentID = :TCWXW9990092ABMOP)
+    
+}  GROUP BY ?ConsentID ?DataProvider ?Purpose ?Data ?Duration ?DataRequester ?DataController ?GrantedAtTime   ?Medium ?State ?City ?Country
+LIMIT 200
+ 
+```
+
+
 ## Get all ConsentID and Data Providers ....
 ```
 PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
