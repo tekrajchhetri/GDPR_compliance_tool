@@ -64,7 +64,9 @@ class ConsentCreate(MethodResource, Resource):
         response = cv.post_data(validated_data)
         return response
 
-
+"""
+Compliance rest endpoints
+"""
 class Revoke(MethodResource, Resource):
     @doc(description='Revoke consent.', tags=['Consent'])
     @marshal_with(ReturnSchema)

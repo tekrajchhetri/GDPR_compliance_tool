@@ -6,7 +6,6 @@
 # @Software: PyCharm
 from core.helper.date_helper import DateHelper
 from core.query_processor.QueryProcessor import QueryEngine
-import dask
 class  ConsentValidation(QueryEngine):
 
     def __init__(self):
@@ -19,6 +18,7 @@ class  ConsentValidation(QueryEngine):
             if agent["role"] == "controller":
                 hasDataController = agent["id"]
             elif agent["role"] == "requester":
+                #data
                 requestedBy = agent["id"]
         fordataprocessing = validated_data["DataProcessing"]
         GrantedAtTime = validated_data["GrantedAtTime"]
@@ -66,18 +66,3 @@ class  ConsentValidation(QueryEngine):
                                                     )
                                    )
         return respone
-
-    def get_consent_data(self):
-        pass
-
-    def process_data_for_expiry_check(self, data):
-        pass
-
-    def check_consent_expiry(self):
-        pass
-
-    def parallelise(self):
-        consent_data = self.get_consent_data()
-        for i in range(len(consent_data)):
-            processdata = dask.delayed(self.get_consent_data)(consent_data[i]).compute()
-            check_consent_expiry = dask.delayed(self.check_consent_expiry)(processdata[0],processdata[1],processdata[2]).compute()
