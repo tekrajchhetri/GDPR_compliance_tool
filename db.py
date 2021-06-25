@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
-# @Time    : 25.06.21 10:49
+# @Time    : 25.06.21 14:32
 # @Author  : Tek Raj Chhetri
 # @Email   : tekraj.chhetri@sti2.at
-# @File    : __init__.py.py
+# @File    : db.py
 # @Software: PyCharm
-class UserModel:
-    pass
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy()
