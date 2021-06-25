@@ -57,3 +57,20 @@ def ccc_required():
         return decorator
 
     return wrapper
+
+
+def access_to_all():
+    def wrapper(fn):
+        @wraps(fn)
+        def decorator(*args, **kwargs):
+            verify_jwt_in_request()
+            claims = get_jwt()
+            if claims["is_authorised_for_endpoint"] == 3030 or claims["is_authorised_for_endpoint"] == 2040 or \
+                    claims["is_authorised_for_endpoint"] == 2020:
+                return fn(*args, **kwargs)
+            else:
+                return jsonify(msg="Unauthorized"), 403
+
+        return decorator
+
+    return wrapper
