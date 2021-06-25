@@ -13,7 +13,7 @@ from marshmallow import Schema, fields
 from flask_apispec import marshal_with, doc
 from core.query_processor.QueryProcessor import QueryEngine
 import json
-
+from core.security.JWTDecorator import access_to_all
 
 class NestedSchema(Schema):
     ConsentID =  fields.Dict(
@@ -24,7 +24,9 @@ class NestedSchema(Schema):
 class BulkResponseQuerySchema(Schema):
     bindings = fields.List(fields.Nested(NestedSchema),required=True)
 
+
 class QueryConsentIDByConsentProviderID(MethodResource, Resource):
+    @access_to_all()
     @doc(description='Get consent ID by consent provider.', tags=['Query'])
     @marshal_with(BulkResponseQuerySchema)
     def get(self, consentprovider_id):
@@ -34,7 +36,9 @@ class QueryConsentIDByConsentProviderID(MethodResource, Resource):
         to_response = resp["results"]
         return to_response, 200
 
+
 class QueryAllConsentID(MethodResource, Resource):
+    @access_to_all()
     @doc(description='Get all consent ID.', tags=['Query'])
     @marshal_with(BulkResponseQuerySchema)
     def get(self):
