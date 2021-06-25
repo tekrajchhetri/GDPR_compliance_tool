@@ -6,8 +6,10 @@
 # @Software: PyCharm
 from core.helper.JWTHelper import JWTHelper
 from core.smashHitmessages import  smashHitmessages
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 from core.models.models import User
+from flask_jwt_extended import create_access_token
+import json
 
 class JWTUser(JWTHelper, smashHitmessages):
     def __init__(self):
@@ -32,4 +34,12 @@ class JWTUser(JWTHelper, smashHitmessages):
         else:
             return self.processing_fail_message()
 
-
+    def login_user(self, username, password):
+        user = User.query.filter_by(username=username).first()
+        if user and check_password_hash(user.password, password):
+            additional_claims = {"is_authorised_for_endpoint":user.role}
+            access_token = create_access_token(username, additional_claims=additional_claims)
+            raccess_token = {"access_token":access_token}
+            return raccess_token
+        else:
+           return  {"access_token": "Invalid Credentials"}, 401

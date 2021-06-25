@@ -7,16 +7,19 @@ from resources.query import QueryConsentIDByConsentProviderID, QueryAllConsentID
 from flask_jwt_extended import JWTManager
 
 app = Flask(__name__)
-
+jwt = JWTManager(app)
 app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280b1245'
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///act_database.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 from apispec import APISpec
 from flask_apispec.extension import FlaskApiSpec
 from apispec.ext.marshmallow import MarshmallowPlugin
-from resources.consent import  ConsentCreate, Revoke, BrokenConsent
+from resources.consent import  ConsentCreate
+from resources.consent import  Revoke
+from resources.consent import  BrokenConsent
 from resources.audit import AuditConsent
 from resources.user import JWTUserRegister
+from resources.user import JWTUserLogin
 
 api = Api(app)
 app.config.update({
@@ -48,12 +51,21 @@ docs.register(QueryConsentIDByConsentProviderID)
 api.add_resource(AuditConsent, "/audit/<string:consent_id>")
 docs.register(AuditConsent)
 
-#default
-api.add_resource(Test,"/")
+#JWTLogin
+api.add_resource(JWTUserLogin, "/jwt/login/")
+docs.register(JWTUserLogin)
 
 #register
 api.add_resource(JWTUserRegister, "/jwt/register/")
 docs.register(JWTUserRegister)
+
+#default
+api.add_resource(Test,"/")
+
+
+
+
+
 
 
 if __name__ == '__main__':
