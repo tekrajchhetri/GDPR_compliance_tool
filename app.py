@@ -14,7 +14,7 @@ from core.contract.resources.contracts import Contracts
 from core.contract.resources.contract_by_requester import GetContractByRequester
 from core.contract.resources.contract_by_provider import GetContractByProvider
 from core.contract.resources.contract_create import ContractCreate
-from core.contract.resources.contract_revoke import ContractRevokeByContractId
+from core.contract.resources.contract_update import ContractUpdateByContractId
 from core.contract.resources.contract_by_id import GetContractById
 from core.contract.resources.generate_token import GenerateToken
 app = Flask(__name__)
@@ -62,9 +62,9 @@ api.add_resource(GetContractByRequester,
 docs.register(GetContractByRequester)
 api.add_resource(GetContractById, '/contract/contract_by_id/<string:id>/')
 docs.register(GetContractById)
-api.add_resource(ContractRevokeByContractId,
-                 '/contract/contract_revoke_by_id/<string:id>/')
-docs.register(ContractRevokeByContractId)
+# api.add_resource(ContractRevokeByContractId,
+#                  '/contract/contract_revoke_by_id/<string:id>/')
+# docs.register(ContractRevokeByContractId)
 api.add_resource(GetContractByProvider,
                  '/contract/contract_by_provider/<string:provider>/')
 docs.register(GetContractByProvider)

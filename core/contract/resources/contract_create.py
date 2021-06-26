@@ -1,9 +1,14 @@
-from flask_restful import Resource, reqparse
+from flask.json import jsonify
+from core.contract_validation.ContractValidation import ContractValidation
+from flask_restful import Resource, reqparse, request
 from flask_apispec.views import MethodResource
 from flask_apispec import doc, use_kwargs
 from core.contract.sparql.queries import SPARQL
 from marshmallow import Schema, fields
-from core.Credentials import Credentials
+
+
+class ForNestedSchema(Schema):
+    data = fields.List(fields.String())
 
 
 class ContractRequestSchema(Schema):
@@ -53,72 +58,17 @@ class ContractRequestSchema(Schema):
         required=False, description="Contract Status")
 
 
-class ContractCreate(MethodResource, Resource, Credentials):
+class ContractCreate(MethodResource, Resource):
     @doc(description='create contract.', tags=['Create Contract'])
     # @UserCredentials.check_for_token
     @use_kwargs(ContractRequestSchema)
     def post(self, **kwargs):
-        query = SPARQL()
-        parser = reqparse.RequestParser()
-        parser.add_argument('ContractId', required=True, location="json")
-        parser.add_argument('ContractType', required=True, location="json")
-        parser.add_argument('Purpose', required=True, location="json")
-        parser.add_argument('ContractRequester',
-                            required=True, location="json")
-        parser.add_argument('ContractProvider', required=True, location="json")
-        parser.add_argument('DataController', required=True, location="json")
-        parser.add_argument('StartDate', required=False, location="json")
-        parser.add_argument('ExecutionDate', required=False, location="json")
-        parser.add_argument('EffectiveDate', required=False, location="json")
-        parser.add_argument('ExpireDate', required=True, location="json")
-        parser.add_argument('Medium', required=False, location="json")
-        parser.add_argument('Waiver', required=False, location="json")
-        parser.add_argument('Amendment', required=False, location="json")
-        parser.add_argument('ConfidentialityObligation',
-                            required=False, location="json")
-        parser.add_argument('DataProtection', required=False, location="json")
-        parser.add_argument('LimitationOnUse', required=False, location="json")
-        parser.add_argument('MethodOfNotice', required=False, location="json")
-        parser.add_argument('NoThirdPartyBeneficiaries',
-                            required=False, location="json")
-        parser.add_argument('PermittedDisclosure',
-                            required=True, location="json")
-        parser.add_argument('ReceiptOfNotice', required=False, location="json")
-        parser.add_argument('Severability', required=False, location="json")
-        parser.add_argument('TerminationForInsolvency',
-                            required=False, location="json")
-        parser.add_argument('TerminationForMaterialBreach',
-                            required=False, location="json")
-        parser.add_argument('TerminationOnNotice',
-                            required=False, location="json")
-        parser.add_argument('ContractStatus', required=False, location="json")
-
-        args = parser.parse_args()
-        response = query.post_data(
-            ContractId=args["ContractId"],
-            ContractType=args["ContractType"],
-            Purpose=args["Purpose"],
-            ContractRequester=args["ContractRequester"],
-            ContractProvider=args["ContractProvider"],
-            DataController=args["DataController"],
-            StartDate=args["StartDate"],
-            ExecutionDate=args["ExecutionDate"],
-            EffectiveDate=args["EffectiveDate"],
-            ExpireDate=args["ExpireDate"],
-            Medium=args["Medium"],
-            Waiver=args["Waiver"],
-            Amendment=args["Amendment"],
-            ConfidentialityObligation=args["ConfidentialityObligation"],
-            DataProtection=args["DataProtection"],
-            LimitationOnUse=args["LimitationOnUse"],
-            MethodOfNotice=args["MethodOfNotice"],
-            NoThirdPartyBeneficiaries=args["NoThirdPartyBeneficiaries"],
-            PermittedDisclosure=args["PermittedDisclosure"],
-            ReceiptOfNotice=args["ReceiptOfNotice"],
-            Severability=args["Severability"],
-            TerminationForInsolvency=args["TerminationForInsolvency"],
-            TerminationForMaterialBreach=args["TerminationForMaterialBreach"],
-            TerminationOnNotice=args["TerminationOnNotice"],
-            ContractStatus=args["ContractStatus"]),
-
-        return response
+        schema_serializer = ContractRequestSchema()
+        data = request.get_json(force=True)
+        validated_data = schema_serializer.load(data)
+        cv = ContractValidation()
+        response = cv.post_data(validated_data)
+        if(response):
+            return jsonify({'Success': "Record inserted successfully."})
+        else:
+            return jsonify({'Error': "Record not inserted due to some errors."})

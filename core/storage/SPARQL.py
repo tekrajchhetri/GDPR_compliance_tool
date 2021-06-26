@@ -7,7 +7,9 @@
 from core.smashHitmessages import smashHitmessages
 from SPARQLWrapper import SPARQLWrapper, BASIC
 from core.storage.Functions import Functions
-class  SPARQL(smashHitmessages, Functions):
+
+
+class SPARQL(smashHitmessages, Functions):
     def __init__(self):
         super().__init__()
         self.HOST_URI = "https://smashhitactool.sti2.at/repositories/EarlyPrototypeKG"
@@ -17,7 +19,7 @@ class  SPARQL(smashHitmessages, Functions):
         sparql.setCredentials(userid, password)
         return sparql
 
-    def post_sparql(self,userid, password, query, type="insert", reason_for_logging=""):
+    def post_sparql(self, userid, password, query, type="insert", reason_for_logging=""):
         hostname = "https://smashhitactool.sti2.at/repositories/EarlyPrototypeKG/statements"
 
         sparql = SPARQLWrapper(hostname)
@@ -40,7 +42,8 @@ class  SPARQL(smashHitmessages, Functions):
             else:
                 message = self.insert_success()
 
-            record_success = self.store(tolog) if type == "broken_consent" else self.store(message)
+            record_success = self.store(
+                tolog) if type == "broken_consent" else self.store(message)
             if "SUCCESS" in record_success:
                 return message
             else:
