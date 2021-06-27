@@ -65,8 +65,7 @@ def access_to_all(optional=False, fresh=False, refresh=False, locations=None):
         def decorator(*args, **kwargs):
             verify_jwt_in_request(optional, fresh, refresh, locations)
             claims = get_jwt()
-            if claims["is_authorised_for_endpoint"] == 3030 or claims["is_authorised_for_endpoint"] == 2040 or \
-                    claims["is_authorised_for_endpoint"] == 2020:
+            if claims["is_authorised_for_endpoint"] in [3030, 2040, 2020]:
                 return fn(*args, **kwargs)
             else:
                 return jsonify(msg="Unauthorized"), 403
