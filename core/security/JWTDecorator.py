@@ -12,11 +12,11 @@ from functools import wraps
 
 
 
-def luh_required():
+def luh_required(optional=False, fresh=False, refresh=False, locations=None):
     def wrapper(fn):
         @wraps(fn)
         def decorator(*args, **kwargs):
-            verify_jwt_in_request()
+            verify_jwt_in_request(optional, fresh, refresh, locations)
             claims = get_jwt()
             if claims["is_authorised_for_endpoint"] == 2040:
                 return fn(*args, **kwargs)
@@ -27,12 +27,12 @@ def luh_required():
 
     return wrapper
 
-def spm_required():
+def spm_required(optional=False, fresh=False, refresh=False, locations=None):
     def wrapper(fn):
         @wraps(fn)
         def decorator(*args, **kwargs):
             verify_jwt_in_request()
-            claims = get_jwt()
+            claims = get_jwt(optional, fresh, refresh, locations)
             if claims["is_authorised_for_endpoint"] == 2020:
                 return fn(*args, **kwargs)
             else:
@@ -43,11 +43,11 @@ def spm_required():
     return wrapper
 
 
-def ccc_required():
+def ccc_required(optional=False, fresh=False, refresh=False, locations=None):
     def wrapper(fn):
         @wraps(fn)
         def decorator(*args, **kwargs):
-            verify_jwt_in_request()
+            verify_jwt_in_request(optional, fresh, refresh, locations)
             claims = get_jwt()
             if claims["is_authorised_for_endpoint"] == 3030:
                 return fn(*args, **kwargs)
@@ -59,11 +59,11 @@ def ccc_required():
     return wrapper
 
 
-def access_to_all():
+def access_to_all(optional=False, fresh=False, refresh=False, locations=None):
     def wrapper(fn):
         @wraps(fn)
         def decorator(*args, **kwargs):
-            verify_jwt_in_request()
+            verify_jwt_in_request(optional, fresh, refresh, locations)
             claims = get_jwt()
             if claims["is_authorised_for_endpoint"] == 3030 or claims["is_authorised_for_endpoint"] == 2040 or \
                     claims["is_authorised_for_endpoint"] == 2020:
