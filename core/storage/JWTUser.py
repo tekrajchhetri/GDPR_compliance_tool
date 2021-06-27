@@ -38,7 +38,7 @@ class JWTUser(JWTHelper, smashHitmessages):
         user = User.query.filter_by(username=username).first()
         if user and check_password_hash(user.password, password):
             additional_claims = {"is_authorised_for_endpoint":user.role}
-            access_token = create_access_token(username, additional_claims=additional_claims)
+            access_token = create_access_token(username, additional_claims=additional_claims, fresh=True)
             raccess_token = {"access_token":access_token}
             return raccess_token
         else:

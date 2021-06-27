@@ -5,10 +5,12 @@ from flask_restful import Api
 from resources.Test import Test
 from resources.query import QueryConsentIDByConsentProviderID, QueryAllConsentID
 from flask_jwt_extended import JWTManager
+from datetime import timedelta
 
 app = Flask(__name__)
 jwt = JWTManager(app)
 app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280b1245'
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(seconds=70)
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///act_database.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 from apispec import APISpec

@@ -38,7 +38,7 @@ class QueryConsentIDByConsentProviderID(MethodResource, Resource):
 
 
 class QueryAllConsentID(MethodResource, Resource):
-    @access_to_all()
+    @access_to_all(fresh=True)
     @doc(description='Get all consent ID.', tags=['Query'])
     @marshal_with(BulkResponseQuerySchema)
     def get(self):
