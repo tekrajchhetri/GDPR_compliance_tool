@@ -15,6 +15,7 @@ Automated Contracting Tool, a component of smashHit. smashHit is a Horizon 2020 
 - [unittest](https://docs.python.org/3/library/unittest.html)
 - [OpenFaaS](https://www.openfaas.com/)
 - [mongoDB](https://www.mongodb.com/)
+- [Flask-JWT-Extended](https://flask-jwt-extended.readthedocs.io/en)
 
 ## Cluster Information
 - Tier: M0 Sandbox (General)
