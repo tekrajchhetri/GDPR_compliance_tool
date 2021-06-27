@@ -12,7 +12,7 @@ from marshmallow import Schema, fields,ValidationError
 from flask_apispec import marshal_with, doc, use_kwargs
 from core.consent_validation.ConsentValidation import ConsentValidation
 from core.compliance.ComplianceEngine import  ComplianceEngine
-
+from  core.security.JWTDecorator import ccc_required
 
 class ForNestedSchema(Schema):
     data = fields.List(fields.String())
@@ -50,6 +50,7 @@ class ReturnSchema(Schema):
 
 
 class ConsentCreate(MethodResource, Resource):
+    @ccc_required(fresh=True)
     @doc(description='create consent.', tags=['Consent'])
     @use_kwargs(ConsentRequests)
     @marshal_with(ReturnSchema)
@@ -64,8 +65,11 @@ class ConsentCreate(MethodResource, Resource):
         response = cv.post_data(validated_data)
         return response
 
-
+"""
+Compliance rest endpoints
+"""
 class Revoke(MethodResource, Resource):
+    @ccc_required(fresh=True)
     @doc(description='Revoke consent.', tags=['Consent'])
     @marshal_with(ReturnSchema)
     def delete(self, consent_id):
@@ -78,6 +82,7 @@ class BrokenConsentSchema(Schema):
     reason = fields.String(required=True)
 
 class BrokenConsent(MethodResource, Resource):
+    @ccc_required(fresh=True)
     @doc(description='Broken consent chain.', tags=['Compliance'])
     @marshal_with(ReturnSchema)
     @use_kwargs(BrokenConsentSchema)
