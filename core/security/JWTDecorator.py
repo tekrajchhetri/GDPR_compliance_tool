@@ -9,9 +9,10 @@ from flask_jwt_extended import verify_jwt_in_request
 from flask_jwt_extended import get_jwt
 from flask import jsonify
 from functools import wraps
+from core.smashHitmessages import smashHitmessages
 
 
-
+sm = smashHitmessages()
 def luh_required(optional=False, fresh=False, refresh=False, locations=None):
     def wrapper(fn):
         @wraps(fn)
@@ -21,7 +22,7 @@ def luh_required(optional=False, fresh=False, refresh=False, locations=None):
             if claims["is_authorised_for_endpoint"] == 2040:
                 return fn(*args, **kwargs)
             else:
-                return jsonify(msg="Unauthorized"), 403
+                return sm.jwt_invalid_message(), 403
 
         return decorator
 
@@ -36,7 +37,7 @@ def spm_required(optional=False, fresh=False, refresh=False, locations=None):
             if claims["is_authorised_for_endpoint"] == 2020:
                 return fn(*args, **kwargs)
             else:
-                return jsonify(msg="Unauthorized"), 403
+                return sm.jwt_invalid_message(), 403
 
         return decorator
 
@@ -52,7 +53,7 @@ def ccc_required(optional=False, fresh=False, refresh=False, locations=None):
             if claims["is_authorised_for_endpoint"] == 3030:
                 return fn(*args, **kwargs)
             else:
-                return jsonify(msg="Unauthorized"), 403
+                return sm.jwt_invalid_message(), 403
 
         return decorator
 
@@ -68,7 +69,7 @@ def access_to_all(optional=False, fresh=False, refresh=False, locations=None):
             if claims["is_authorised_for_endpoint"] in [3030, 2040, 2020]:
                 return fn(*args, **kwargs)
             else:
-                return jsonify(msg="Unauthorized"), 403
+                return sm.jwt_invalid_message(), 403
 
         return decorator
 

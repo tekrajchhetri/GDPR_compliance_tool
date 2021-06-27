@@ -85,3 +85,13 @@ class smashHitmessages(TokenGenerator):
 
         return revoke_consent
 
+    def jwt_invalid_message(self):
+        revoke_consent = {"act_status_code": 8900,
+                           "decision": "FAILED",
+                            "message": "JWT invalid / Unauthorized",
+                           "decision_token": self.token_generator(),
+                           "timestamp": self.decision_timestamp()
+                           }
+
+        return revoke_consent
+
