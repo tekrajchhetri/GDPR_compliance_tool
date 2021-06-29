@@ -8,32 +8,43 @@
 import os
 class  CryptoHelper:
 
-    def __init__(self):
-        self.directory_name = "sec"
-        self.directory = f"{self.getCurrentDirectory()}/{self.directory_name}"
-
     def getCurrentDirectory(self):
         return os.path.abspath(os.getcwd())
 
-    def directory_exists(self):
-        isdir = os.path.isdir(self.directory)
+    def directory_exists(self, directory):
+        directory = f"{self.getCurrentDirectory()}/{directory}"
+        isdir = os.path.isdir(directory)
         return isdir
 
-    def makedir(self):
-        isdir = self.directory_exists()
+    def makedir(self, directory="sec"):
+        isdir = self.directory_exists(directory)
         if not isdir:
-            os.mkdir(self.directory)
-            return True
-        else:
-            return False
+            try:
+                success = os.mkdir(f"{self.getCurrentDirectory()}/{directory}")
+                return True if success is None else False
+            except:
+                pass
+        return False
 
-    def is_correct_type(self, filename):
-        return filename.split(".")[1] == "pem"
 
+
+    def write_file(self, filename, data):
+        try:
+            file_out = open(filename, "wb")
+            file_out.write(data)
+            file_out.close()
+        except:
+            pass
 
     def file_exists(self, filename):
-        if self.is_correct_type(filename):
-            if self.directory_exists():
-                filepath = f"{self.directory}/{filename}"
-                return os.path.isfile(filepath)
-        return False
+        try:
+            filematched = [s for s in [x.lower() for x in os.listdir()] if filename.lower() in s]
+        except:
+            pass
+        return True if len(filematched) == 1 else False
+
+
+if __name__ == '__main__':
+    a = CryptoHelper()
+    print(a.makedir())
+
