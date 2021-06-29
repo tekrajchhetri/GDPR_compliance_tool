@@ -14,9 +14,7 @@ class KeyGeneration(CryptoHelper):
     def initKey(self):
         return RSA.generate(4096)
 
-    def generate_public(self):
-        keyfile = self.initKey()
-        self.generate_private(keyfile=keyfile)
+    def generate_public(self, keyfile):
         public_key = keyfile.publickey().export_key()
         directory = "sec_public_key"
         file = f"{directory}.pem"
@@ -38,7 +36,9 @@ class KeyGeneration(CryptoHelper):
                 self.write_file(f"{self.getCurrentDirectory()}/{directory}/{file}", private_key)
 
     def generate_key(self):
-        self.generate_public()
+        keyfile = self.initKey()
+        self.generate_public(keyfile=keyfile)
+        self.generate_private(keyfile=keyfile)
 
 
 
