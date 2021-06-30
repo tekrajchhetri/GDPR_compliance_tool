@@ -14,31 +14,25 @@ class KeyGeneration(CryptoHelper):
     def initKey(self):
         return RSA.generate(4096)
 
-    def generate_public(self, keyfile):
-        public_key = keyfile.publickey().export_key()
-        directory = "sec_public_key"
-        file = f"{directory}.pem"
+    def generate_asymetric_key(self, keyfile):
+        directory = self.get_directory_name()
+        encrypted_key = keyfile.export_key(passphrase=self.get_pass_phrase(), pkcs=8,
+                                       protection="scryptAndAES128-CBC")
+        file = f"{directory}.bin"
         if self.makedir(directory):
-            self.write_file(f"{self.getCurrentDirectory()}/{directory}/{file}", public_key)
+            self.write_file(f"{self.getCurrentDirectory()}/{directory}/{file}", encrypted_key)
 
         if not self.makedir(directory) and not self.file_exists(file):
-                self.write_file(f"{self.getCurrentDirectory()}/{directory}/{file}", public_key)
+                self.write_file(f"{self.getCurrentDirectory()}/{directory}/{file}", encrypted_key)
 
 
-    def generate_private(self, keyfile):
-        private_key = keyfile.export_key()
-        directory = "sec_key_private"
-        file = f"{directory}.pem"
-        if self.makedir(directory):
-             self.write_file(f"{self.getCurrentDirectory()}/{directory}/{file}", private_key)
-
-        if not self.makedir(directory) and not self.file_exists(file):
-                self.write_file(f"{self.getCurrentDirectory()}/{directory}/{file}", private_key)
 
     def generate_key(self):
         keyfile = self.initKey()
-        self.generate_public(keyfile=keyfile)
-        self.generate_private(keyfile=keyfile)
+        self.generate_asymetric_key(keyfile=keyfile)
+
+
+
 
 
 

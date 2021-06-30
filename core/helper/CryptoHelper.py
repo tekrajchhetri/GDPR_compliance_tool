@@ -11,10 +11,16 @@ class  CryptoHelper:
     def getCurrentDirectory(self):
         return os.path.abspath(os.getcwd())
 
+    def get_pass_phrase(self):
+        return os.environ.get("SECURITY_KEY_RSA")
+
     def directory_exists(self, directory):
         directory = f"{self.getCurrentDirectory()}/{directory}"
         isdir = os.path.isdir(directory)
         return isdir
+
+    def get_directory_name(self):
+        return "sec_public_private_key"
 
     def makedir(self, directory="sec"):
         isdir = self.directory_exists(directory)
@@ -44,7 +50,7 @@ class  CryptoHelper:
         return True if len(filematched) == 1 else False
 
 
-if __name__ == '__main__':
-    a = CryptoHelper()
-    print(a.makedir())
+
+
+
 
