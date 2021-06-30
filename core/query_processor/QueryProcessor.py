@@ -12,9 +12,10 @@ from core.storage.SPARQL import SPARQL
 from core.helper.HelperACT import HelperACT
 from core.smashHitmessages import smashHitmessages
 import textwrap
-
+from core.security.Cryptography import Encrypt
 class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
     def __init__(self):
+        self.encobj = Encrypt()
         super().__init__()
 
     def prefix(self):
@@ -41,6 +42,7 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
 
     def insert_query(self, requestedBy,hasDataController, fordataprocessing, GrantedAtTime, inMedium, purpose,
                      isAboutData, city, consentID, country, state, dataprovider, expirationtime):
+
         granted = "GRANTED"
         insquery = textwrap.dedent("""{0} 
         INSERT DATA {{
@@ -48,9 +50,9 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
             :inMedium :{2};
             dpv:hasPurpose :{3};
             {4}
-            :GrantedAtTime {5};
+            :GrantedAtTime :{5};
             {6}
-            :hasExpiry {7};
+            :hasExpiry :{7};
             :atCountry :{8};
             :atCity :{9};
             :atState :{10};
@@ -60,9 +62,22 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
             :status :{14}.
                    }}       
                
-          """).format(self.prefix(),  consentID, inMedium, purpose, self.list_to_query(isAboutData, "isAboutData"),GrantedAtTime,
-                      self.list_to_query(fordataprocessing, "forDataProcessing"), expirationtime, country, city, state, requestedBy,
-                      hasDataController, dataprovider, granted)
+          """).format(self.prefix(),
+                      consentID,
+                      self.encobj.encrypt(inMedium),
+                      self.encobj.encrypt(purpose),
+                      self.list_to_query(isAboutData, "isAboutData", self.encobj),
+                      self.encobj.encrypt(GrantedAtTime),
+                      self.list_to_query(fordataprocessing, "forDataProcessing", self.encobj),
+                      self.encobj.encrypt(expirationtime),
+                      self.encobj.encrypt(country),
+                      self.encobj.encrypt(city),
+                      self.encobj.encrypt(state),
+                      self.encobj.encrypt(requestedBy),
+                      self.encobj.encrypt(hasDataController),
+                      self.encobj.encrypt(dataprovider),
+                      self.encobj.encrypt(granted))
+
         return insquery
 
 
@@ -70,7 +85,7 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
     def consentID_by_consentprovider_ID(self, consentprovider_ID):
         """
         Get consent ID by consent provide ID
-        :param consentID_by_consentprovider_ID: Unique ID mapped to data subject
+        :param consentID_by_consentprovider_ID: Unique ID mapped to data subjectr
         :return: consentID
         """
         query = textwrap.dedent("""{0}
@@ -80,7 +95,8 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
                   ?ConsentID :isProvidedBy :{1}.
                   ?ConsentID :GrantedAtTime ?GrantedAtTime.
                    FILTER NOT EXISTS {{ ?ConsentID :RevokedAtTime ?RevokedAtTime.}}
-                }}""").format(self.prefix(), consentprovider_ID)
+                }}""").format(self.prefix(), self.encobj.encrypt(consentprovider_ID))
+
         return query
 
     def consent_by_consentID(self, consentID):

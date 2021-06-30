@@ -6,10 +6,11 @@
 # @Software: PyCharm
 
 import os
+import rootpath
 class  CryptoHelper:
 
     def getCurrentDirectory(self):
-        return os.path.abspath(os.getcwd())
+        return f"{rootpath.detect()}/core/security"
 
     def get_pass_phrase(self):
         return os.environ.get("SECURITY_KEY_RSA")
@@ -21,6 +22,12 @@ class  CryptoHelper:
 
     def get_directory_name(self):
         return "sec_public_private_key"
+
+    def get_file_name(self):
+        return f"{self.get_directory_name()}.bin"
+
+    def get_full_file_path_name(self):
+        return f"{self.getCurrentDirectory()}/{self.get_directory_name()}/{self.get_file_name()}"
 
     def makedir(self, directory="sec"):
         isdir = self.directory_exists(directory)
@@ -48,6 +55,8 @@ class  CryptoHelper:
         except:
             pass
         return True if len(filematched) == 1 else False
+
+
 
 
 
