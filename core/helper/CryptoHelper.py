@@ -1,0 +1,177 @@
+# -*- coding: utf-8 -*-
+# @Time    : 29.06.21 20:38
+# @Author  : Tek Raj Chhetri
+# @Email   : tekraj.chhetri@sti2.at
+# @Web     : http://tekrajchhetri.com/
+# @File    : CryptoHelper.py
+# @Software: PyCharm
+
+import os
+import random
+
+import rootpath
+import pickle
+import random
+from Crypto.Random import get_random_bytes
+
+class  CryptoHelper:
+
+    def getCurrentDirectory(self):
+        """
+        Get the root directory and set the specified sub-level directory and return it.
+        :return: String, directory name
+        """
+        return f"{rootpath.detect()}/core/security"
+
+    def get_pass_phrase(self):
+        """
+        Read the pass phrase from environment variable
+        :return: String, pass phrase
+        """
+        return os.environ.get("SECURITY_KEY")
+
+    def directory_exists(self, directory):
+        """ Helper funcition to check if the directory exists
+        :param directory: name of the directory to check inside current directory specified by getCurrentDirectory()
+        :return: boolean, True if exists False otherwise.
+        """
+        directory = f"{self.getCurrentDirectory()}/{directory}"
+        isdir = os.path.isdir(directory)
+        return isdir
+
+    def get_directory_name(self):
+        """Helper function for directory name
+        :return: String, directory name
+        """
+        return "sec_public_private_key"
+
+    def get_file_name(self):
+        """
+        Return a file name that is to be created to store security key
+        :return: String, file name
+        """
+        return f"{self.get_directory_name()}.bin"
+
+    def get_secret_name(self):
+        """
+        Return a file name that is to be created to store secret key
+        :return: String, file name
+        """
+        filename = f"{self.get_directory_name()}_secret"
+        return f"{filename}.bin"
+
+    def get_ivfile_name(self):
+        """
+        Return a file name that is to be created to store iv key
+        :return: String, file name
+        """
+        filename = f"{self.get_directory_name()}_four"
+        return f"{filename}.bin"
+
+    def get_random_name(self):
+        """
+        Return a file name that is to be created to store iv key
+        :return: String, file name
+        """
+        filename = f"{self.get_directory_name()}_random"
+        return f"{filename}.bin"
+
+    def get_full_file_path_name(self,type):
+        """ Creates a qualified path for file
+        :return: full path with file name
+        """
+        if type=="rsa":
+            filename = self.get_file_name()
+        elif type == "secret":
+            filename = self.get_secret_name()
+        elif type == "four":
+            filename = self.get_ivfile_name()
+        elif type=="random":
+            filename = self.get_random_name()
+
+        if filename is None:
+            raise ValueError
+        return f"{self.getCurrentDirectory()}/{self.get_directory_name()}/{filename}"
+
+    def makedir(self, directory="sec"):
+        """ Create a directory in a specified location
+        :param directory: name of the directory that is to be created
+        :return: boolean, True in case of successful directory creation and False otherwise
+        """
+        isdir = self.directory_exists(directory)
+        if not isdir:
+            try:
+                success = os.mkdir(f"{self.getCurrentDirectory()}/{directory}")
+                return True if success is None else False
+            except:
+                pass
+        return False
+
+
+
+    def write_file(self, filename, data):
+        """ Write file
+        :param filename: name of the file that data will be written to
+        :param data: actual data that is to be written in the file
+        :return: None
+        """
+        try:
+            file_out = open(filename, "wb")
+            if type(data) == list:
+                pickle.dump(data, file_out)
+            else:
+                file_out.write(data)
+            file_out.close()
+        except:
+            pass
+
+    def file_exists(self, filename):
+        """ Check if the file exists by filename
+        :param filename: name of the file to be checked
+        :return: boolean, True if file exists and False otherwise
+        """
+        try:
+            filematched = [s for s in [x.lower() for x in os.listdir()] if filename.lower() in s]
+        except:
+            pass
+        return True if len(filematched) == 1 else False
+
+    def _helper_pickle(self, file):
+        """Reads the binary pickle file
+        :param file: file to be read from
+        :return: read data, list of array
+        """
+        filehandle =  open(file, 'rb')
+        pickle_data = pickle.load(filehandle)
+        filehandle.close()
+        return pickle_data
+
+
+    def read_pickle_file(self, file):
+        listdata = self._helper_pickle(file)
+        return listdata
+
+    def generate_random__sec_key(self, bits):
+        """ Generates a random key
+        :param bits: Key size
+        :return: random generated byte string of size bits
+        """
+        return get_random_bytes(bits)
+
+    def generate_random__sec_keyP(self):
+        """
+        Generate random number
+        :return: integer
+        """
+        return random.randrange(17,129+1,2)
+
+
+
+
+
+
+
+
+
+
+

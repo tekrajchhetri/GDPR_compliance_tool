@@ -2,8 +2,10 @@
 # @Time    : 12.05.21 15:28
 # @Author  : Tek Raj Chhetri
 # @Email   : tekraj.chhetri@sti2.at
+# @Web     : http://tekrajchhetri.com/
 # @File    : SPARQL.py
 # @Software: PyCharm
+
 from core.smashHitmessages import smashHitmessages
 from SPARQLWrapper import SPARQLWrapper, BASIC
 from core.storage.Functions import Functions

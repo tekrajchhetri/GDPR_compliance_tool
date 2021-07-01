@@ -2,6 +2,7 @@
 # @Time    : 14.06.21 14:07
 # @Author  : Tek Raj Chhetri
 # @Email   : tekraj.chhetri@sti2.at
+# @Web     : http://tekrajchhetri.com/
 # @File    : HelperACT.py
 # @Software: PyCharm
 import json
@@ -59,14 +60,14 @@ class HelperACT:
                    }
         return mapfunc[name]
 
-    def list_to_query(self, data, whatfor):
+    def list_to_query(self, data, whatfor, EncryptObj):
         """ Convert list to query
         :input: list
         :returns: SPARQL query string
         """
         querydata = ""
         for vlaue in data:
-            strs = ":"+whatfor+" :" + vlaue + ";\n"
+            strs = ":"+whatfor+" :" + EncryptObj.encrypt(vlaue) + ";\n"
             querydata = strs + querydata
         return querydata
 
