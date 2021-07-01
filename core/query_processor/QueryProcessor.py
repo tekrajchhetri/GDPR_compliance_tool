@@ -2,6 +2,7 @@
 # @Time    : 07.05.21 13:01
 # @Author  : Tek Raj Chhetri
 # @Email   : tekraj.chhetri@sti2.at
+# @Web     : http://tekrajchhetri.com/
 # @File    : QueryProcessor.py
 # @Software: PyCharm
 

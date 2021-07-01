@@ -2,8 +2,10 @@
 # @Time    : 29.06.21 15:53
 # @Author  : Tek Raj Chhetri
 # @Email   : tekraj.chhetri@sti2.at
+# @Web     : http://tekrajchhetri.com/
 # @File    : Cryptography.py
 # @Software: PyCharm
+
 from Crypto.PublicKey import RSA
 from core.helper.CryptoHelper import CryptoHelper
 import base64
@@ -45,19 +47,30 @@ class Encrypt(KeyObject):
         pattern_regex = r"[ -\/:-@\[-\`{-~]"
         return re.sub(r'([\'\"\=\/\.\\\+\*\?\[\^\]\$\(\)\{\}\!\<\>\|\:\-])', r'\\\1', str(data.decode("utf-8")))
 
-    def encrypt(self,  data):
+    def encrypt_rsa(self,  data):
         data =str(data).encode("utf-8")
         key =  self.get_key()
         cipher_rsa = PKCS1_OAEP.new(key)
         encd_data = cipher_rsa.encrypt(data)
         return  self.escape_special_character(base64.b64encode(encd_data))
 
+    def encrypt_aes(self, data):
+        pass
+
 class Decrypt(KeyObject):
-    def decrypt(self, encrypted_data):
+
+    def decrypt_rsa(self, encrypted_data):
         key = self.get_key()
         cipher_rsa = PKCS1_OAEP.new(key)
-        decrypted_data = cipher_rsa.decrypt(base64.b64decode(encrypted_data))
-        return decrypted_data
+        try:
+            decrypted_data = cipher_rsa.decrypt(base64.b64decode(encrypted_data))
+        except:
+            decrypted_data = cipher_rsa.decrypt(encrypted_data)
+
+        return decrypted_data.decode("utf-8")
+
+    def decrypt_aes(self, encrypted_data):
+        pass
 
 
 

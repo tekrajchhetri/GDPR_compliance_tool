@@ -2,6 +2,7 @@
 # @Time    : 09.05.21 19:03
 # @Author  : Tek Raj Chhetri
 # @Email   : tekraj.chhetri@sti2.at
+# @Web     : http://tekrajchhetri.com/
 # @File    : date_helper.py
 # @Software: PyCharm
 import re
@@ -34,9 +35,17 @@ class DateHelper:
         return int(re.findall(r'\d+', datestr)[0]) if re.match(pattern, datestr) else None
 
     def is_str(self, input):
+        """
+        :param input: date to check if the input date is in string format
+        :return: boolean
+        """
         return type(input) == str
 
     def is_utc(self, datestr):
+        """
+        :param datestr:
+        :return:
+        """
         datestr = str(datestr) if not self.is_str(datestr) else datestr
         return parse(datestr).tzname() == "UTC"
 
