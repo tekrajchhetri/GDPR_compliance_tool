@@ -8,7 +8,9 @@
 import json
 from SPARQLWrapper import  JSON
 
+from core.security.Cryptography import  Decrypt
 class HelperACT:
+
     def for_processing(resource_dict):
         """ Convert nested array of inputs into a single array
             :input: resource dict
@@ -35,8 +37,11 @@ class HelperACT:
 
     def has_status_granted(self, consent):
         try:
-            isgranted = consent["results"]["bindings"][0]["status"]["value"]
-            return "granted" in isgranted.lower()
+            decobj = Decrypt()
+            consent_fetched = consent["results"]["bindings"][0]["status"]["value"].split("#")[1]
+            consent_fetched = bytes(consent_fetched,"utf-8")
+            isgranted = decobj.decrypt_aes(consent_fetched).decode("utf-8")
+            return "granted" in str(isgranted).lower()
         except:
             return False
 
@@ -118,9 +123,12 @@ class HelperACT:
         :return: bool
         """
         consent = json.loads(self.select_query_gdb(consentID=consentID, additionalData="check_consent"))
+
+
         if (self.consent_exists(consent)):
             hasGrantedStatus = json.loads(self.select_query_gdb(consentID=consentID,
                                                                 additionalData="check_consent_granted"))
+
             if (self.has_status_granted(hasGrantedStatus)):
                 return True
 
