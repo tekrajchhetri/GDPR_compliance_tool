@@ -121,7 +121,7 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
 
         return query
 
-    def revoke_broken_consent_query(self, consentID, type="REVOKED"):
+       def revoke_broken_consent_query(self, consentID, type="REVOKED"):
         revokedTime = '\'{}^^xsd:dateTime\''.format(self.decision_timestamp())
         encRevoked = self.encobj.encrypt_aes(revokedTime)
         query = textwrap.dedent("""{0} 
@@ -140,7 +140,6 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
                            )
 
         return query
-
 
 
 
