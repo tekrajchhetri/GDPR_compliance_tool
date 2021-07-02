@@ -67,7 +67,7 @@ class HelperACT:
         """
         querydata = ""
         for vlaue in data:
-            strs = ":"+whatfor+" :" + EncryptObj.encrypt(vlaue) + ";\n"
+            strs = ":"+whatfor+" :" + EncryptObj.encrypt_aes(vlaue) + ";\n"
             querydata = strs + querydata
         return querydata
 

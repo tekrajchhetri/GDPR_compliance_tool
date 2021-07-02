@@ -65,19 +65,19 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
                
           """).format(self.prefix(),
                       consentID,
-                      self.encobj.encrypt(inMedium),
-                      self.encobj.encrypt(purpose),
+                      self.encobj.encrypt_aes(inMedium),
+                      self.encobj.encrypt_aes(purpose),
                       self.list_to_query(isAboutData, "isAboutData", self.encobj),
-                      self.encobj.encrypt(GrantedAtTime),
+                      self.encobj.encrypt_aes(GrantedAtTime),
                       self.list_to_query(fordataprocessing, "forDataProcessing", self.encobj),
-                      self.encobj.encrypt(expirationtime),
-                      self.encobj.encrypt(country),
-                      self.encobj.encrypt(city),
-                      self.encobj.encrypt(state),
-                      self.encobj.encrypt(requestedBy),
-                      self.encobj.encrypt(hasDataController),
-                      self.encobj.encrypt(dataprovider),
-                      self.encobj.encrypt(granted))
+                      self.encobj.encrypt_aes(expirationtime),
+                      self.encobj.encrypt_aes(country),
+                      self.encobj.encrypt_aes(city),
+                      self.encobj.encrypt_aes(state),
+                      self.encobj.encrypt_aes(requestedBy),
+                      self.encobj.encrypt_aes(hasDataController),
+                      self.encobj.encrypt_aes(dataprovider),
+                      self.encobj.encrypt_aes(granted))
 
         return insquery
 
@@ -96,7 +96,7 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
                   ?ConsentID :isProvidedBy :{1}.
                   ?ConsentID :GrantedAtTime ?GrantedAtTime.
                    FILTER NOT EXISTS {{ ?ConsentID :RevokedAtTime ?RevokedAtTime.}}
-                }}""").format(self.prefix(), self.encobj.encrypt(consentprovider_ID))
+                }}""").format(self.prefix(), self.encobj.encrypt_aes(consentprovider_ID))
 
         return query
 
@@ -130,7 +130,7 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
              WHERE {{
              ?ConsentID a <http://ontologies.atb-bremen.de/smashHitCore#ConsentID>.
               FILTER(?ConsentID = :{3})
-             }}""").format(self.prefix(), type,'\'{}^^xsd:dateTime\''.format(self.decision_timestamp()), consentID)
+             }}""").format(self.prefix(), type,'\'{}^^xsd:dateTime\''.format(self.encobj.encrypt_aes(self.decision_timestamp())), consentID)
 
         return query
 
