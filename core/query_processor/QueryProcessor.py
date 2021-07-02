@@ -121,19 +121,25 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
 
         return query
 
-    def revoke_broken_consent_query(self, consentID, type="REVOKED"):
+       def revoke_broken_consent_query(self, consentID, type="REVOKED"):
+        revokedTime = '\'{}^^xsd:dateTime\''.format(self.decision_timestamp())
+        encRevoked = self.encobj.encrypt_aes(revokedTime)
         query = textwrap.dedent("""{0} 
-            DELETE {{?ConsentID :status :GRANTED.}}
-            INSERT {{?ConsentID :status :{1}.
-            ?ConsentID :RevokedAtTime {2}.
+            DELETE {{?ConsentID :status :{1}.}}
+            INSERT {{?ConsentID :status :{2}.
+            ?ConsentID :RevokedAtTime :{3}.
             }}
              WHERE {{
              ?ConsentID a <http://ontologies.atb-bremen.de/smashHitCore#ConsentID>.
-              FILTER(?ConsentID = :{3})
-             }}""").format(self.prefix(), type,'\'{}^^xsd:dateTime\''.format(self.encobj.encrypt_aes(self.decision_timestamp())), consentID)
+              FILTER(?ConsentID = :{4})
+             }}""").format(self.prefix(),
+                           self.encobj.encrypt_aes("GRANTED"),
+                           self.encobj.encrypt_aes(type),
+                           encRevoked,
+                           consentID
+                           )
 
         return query
-
 
 
 
