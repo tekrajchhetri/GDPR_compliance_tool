@@ -91,7 +91,7 @@ class Encrypt(KeyObject):
         return  encd_data
 
     def encrypt_aes(self, data):
-        data = data.encode("utf-8")
+        data = str(data).encode("utf-8")
         ch = CryptoHelper()
         dec = Decrypt()
         secretf = ch.get_full_file_path_name(type="secret")
