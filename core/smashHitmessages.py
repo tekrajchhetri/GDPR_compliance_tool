@@ -32,7 +32,7 @@ class smashHitmessages(TokenGenerator):
 
     def deny_incomplete(self):
         deny_incomplete = {"act_status_code": 6100,
-                           "decision": "DENY",
+                           "decision": "DENY_INCOMPLETE",
                            "decision_token":self.token_generator(),
                            "timestamp":self.decision_timestamp()
                            }
