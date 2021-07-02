@@ -17,8 +17,7 @@ class SecurityTesting(unittest.TestCase):
 
     def test_enc_equal(self):
         testTexts = "A quick brown fox jumps over the lazy dog"
-        for i in range(10):
-            self.assertEqual(self.e.encrypt_aes(testTexts),self.enc)
+        self.assertEqual(self.e.encrypt_aes(testTexts),self.enc)
 
     def test_long_text_enc(self):
         long_text = """Conveying or northward offending admitting perfectly my. Colonel gravity get thought fat smiling add but. Wonder twenty hunted and put income set desire expect. Am cottage calling my is mistake cousins talking up. Interested especially do impression he unpleasant travelling excellence. All few our knew time done draw ask. 
@@ -43,9 +42,10 @@ class SecurityTesting(unittest.TestCase):
                     
                     """
         long_text_enc = self.e.encrypt_aes(long_text)
+        newlist = [long_text,"Incommode he depending do frankness remainder", "northward offending admitting perfectly my"]
 
-        for i in range(5):
-            self.assertEqual(self.e.encrypt_aes(long_text), long_text_enc)
+        for i in newlist:
+            self.assertEqual(self.e.encrypt_aes(i), long_text_enc)
 
     def test_text_decrypt(self):
         long_text = "Conveying or northward offending admitting perfectly my. Colonel gravity get thought fat smiling add but. Wonder twenty hunted and put income set desire expect. Am cottage calling my is mistake cousins talking up. Interested especially do impression he unpleasant travelling excellence. All few our knew time done draw ask."
