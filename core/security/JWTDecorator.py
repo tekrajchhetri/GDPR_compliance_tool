@@ -8,7 +8,6 @@
 
 from flask_jwt_extended import verify_jwt_in_request
 from flask_jwt_extended import get_jwt
-from flask import jsonify
 from functools import wraps
 from core.smashHitmessages import smashHitmessages
 
