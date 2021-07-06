@@ -28,6 +28,7 @@ from resources.consent import  ConsentCreate
 from resources.consent import  Revoke
 from resources.consent import  BrokenConsent
 from resources.audit import AuditConsent
+from resources.audit import AuditDataProvider
 from resources.user import JWTUserRegister
 from resources.user import JWTUserLogin
 
@@ -44,23 +45,24 @@ app.config.update({
 })
 docs = FlaskApiSpec(app)
 #Consent
-api.add_resource(ConsentCreate,"/consent/create/")
+api.add_resource(ConsentCreate,"/consent/create")
 docs.register(ConsentCreate)
-api.add_resource(Revoke,"/consent/revoke/<string:consent_id>")
+api.add_resource(Revoke,"/consent/<string:consent_id>/revoke")
 docs.register(Revoke)
 
 #Compliance
-api.add_resource(BrokenConsent,"/consent/broken_chain/")
+api.add_resource(BrokenConsent,"/consent/broken-chain")
 docs.register(BrokenConsent)
 #LUH Interaction
-api.add_resource(QueryAllConsentID,"/query/bulk_consent_id/")
+api.add_resource(QueryAllConsentID,"/query/bulk-consent-id")
 docs.register(QueryAllConsentID)
-api.add_resource(QueryConsentIDByConsentProviderID,"/query/consentid/<string:consentprovider_id>/")
+api.add_resource(QueryConsentIDByConsentProviderID,"/query/<string:consentprovider_id>/consentid")
 docs.register(QueryConsentIDByConsentProviderID)
-#Tracing
-api.add_resource(AuditConsent, "/audit/<string:consent_id>")
+#audit
+api.add_resource(AuditConsent, "/audit/<string:consent_id>/consent")
 docs.register(AuditConsent)
-
+api.add_resource(AuditDataProvider, "/audit/<string:data_provider>/data-provider")
+docs.register(AuditDataProvider)
 #JWTLogin
 api.add_resource(JWTUserLogin, "/jwt/login/")
 docs.register(JWTUserLogin)
