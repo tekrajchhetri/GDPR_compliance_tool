@@ -10,8 +10,6 @@ from Crypto.PublicKey import RSA
 from core.helper.CryptoHelper import CryptoHelper
 import base64
 from Crypto.Cipher import  PKCS1_OAEP, AES
-from Crypto.Random import get_random_bytes
-from Crypto.Util.Padding import pad, unpad
 import re
 class KeyGeneration(CryptoHelper):
     def __int__(self):
