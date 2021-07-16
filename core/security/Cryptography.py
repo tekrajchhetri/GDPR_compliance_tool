@@ -91,6 +91,7 @@ class Encrypt(KeyObject):
         return  encd_data
 
     def encrypt_aes(self, data):
+        ##Fix issue - plain text size multiple of len(iv)
         data_multiple16 = 16 - (len(data) % 16)
         datafix = data + ' ' * data_multiple16
         encdata = str(datafix).encode("utf-8")
