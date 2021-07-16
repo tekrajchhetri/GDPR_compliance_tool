@@ -7,8 +7,6 @@
 # @Software: PyCharm
 
 import os
-import random
-
 import rootpath
 import pickle
 import random
@@ -28,7 +26,7 @@ class  CryptoHelper:
         Read the pass phrase from environment variable
         :return: String, pass phrase
         """
-        return os.environ.get("SECURITY_KEY")
+        return "@R_Sa904T_EK_01_ASr"#os.environ.get("SECURITY_KEY")
 
     def directory_exists(self, directory):
         """ Helper funcition to check if the directory exists

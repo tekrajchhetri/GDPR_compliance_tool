@@ -10,8 +10,8 @@ from Crypto.PublicKey import RSA
 from core.helper.CryptoHelper import CryptoHelper
 import base64
 from Crypto.Cipher import  PKCS1_OAEP, AES
-from Crypto.Random import get_random_bytes
 from Crypto.Util.Padding import pad, unpad
+import math
 import re
 class KeyGeneration(CryptoHelper):
     def __int__(self):
@@ -91,19 +91,19 @@ class Encrypt(KeyObject):
         return  encd_data
 
     def encrypt_aes(self, data):
-        data = str(data).encode("utf-8")
+        data_multiple16 = 16 - (len(data) % 16)
+        datafix = data + ' ' * data_multiple16
+        encdata = str(datafix).encode("utf-8")
         ch = CryptoHelper()
         dec = Decrypt()
         secretf = ch.get_full_file_path_name(type="secret")
         secret = ch.read_pickle_file(secretf)
         fourf = ch.get_full_file_path_name(type="four")
         iv = ch.read_pickle_file(fourf)
-        enc_data=None
         for i in range(len(secret)):
             cipher_aes = AES.new(dec.decrypt_rsa(secret[i]), AES.MODE_EAX, dec.decrypt_rsa(iv[i]))
-            enc_data = cipher_aes.encrypt(data)
-
-        return self.escape_special_character(base64.b64encode(enc_data))
+            encdata = cipher_aes.encrypt(encdata)
+        return  self.escape_special_character(base64.b64encode(encdata))
 
 
 
@@ -116,17 +116,15 @@ class Decrypt(KeyObject):
         return decrypted_data
 
     def decrypt_aes(self, encrypted_data):
-        data = encrypted_data
+        chipertext = base64.b64decode(encrypted_data)
         ch = CryptoHelper()
         dec = Decrypt()
         secretf = ch.get_full_file_path_name(type="secret")
         secret = ch.read_pickle_file(secretf)
         fourf = ch.get_full_file_path_name(type="four")
         iv = ch.read_pickle_file(fourf)
-        dec_data=None
-        for i in range(len(secret)):
+        for i in [2,1,0]:
             cipher_aes = AES.new(dec.decrypt_rsa(secret[i]), AES.MODE_EAX, dec.decrypt_rsa(iv[i]))
-            dec_data = cipher_aes.decrypt(base64.b64decode(data))
-
-        return dec_data
+            chipertext= cipher_aes.decrypt(chipertext)
+        return chipertext.strip()
 
