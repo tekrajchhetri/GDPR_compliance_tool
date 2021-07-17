@@ -81,9 +81,9 @@ api.add_resource(Test,"/")
 
 
 if __name__ == '__main__':
-    from db import db
-    db.init_app(app)
-    with app.app_context():
-        db.create_all()
-
-    app.run(debug=True)
+    # from db import db
+    # db.init_app(app)
+    # with app.app_context():
+    #     db.create_all()
+    #     print("Running")
+    app.run(port=5000, debug=True)
