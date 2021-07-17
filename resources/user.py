@@ -16,6 +16,7 @@ from core.storage.JWTUser import JWTUser
 class UserSchema(Schema):
     username = fields.Str()
     password = fields.Str()
+    confirm_password = fields.Str()
     organizational_identifier = fields.Str()
 
 
@@ -47,6 +48,7 @@ class JWTUserRegister(MethodResource, Resource):
 
         jwt_user_inst = JWTUser()
         response = jwt_user_inst.register_user(username=validated_data["username"], password=validated_data["password"],
+                          confirm_password=validated_data["confirm_password"],
                           organization=validated_data["organizational_identifier"])
         return response
 
