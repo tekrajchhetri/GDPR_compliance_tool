@@ -10,6 +10,11 @@ from marshmallow import Schema, fields
 from flask_apispec import marshal_with, doc, use_kwargs
 
 class AuditConsent(MethodResource, Resource):
-    @doc(description='All consent information.', tags=['Audit'])
+    @doc(description='AuditConsent.', tags=['Audit'])
     def get(self, consent_id):
+        pass
+
+class  AuditDataProvider(MethodResource, Resource):
+    @doc(description="AuditDataProvider",tags=['Audit'])
+    def get(self, dataprovider):
         pass
