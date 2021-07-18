@@ -65,22 +65,27 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
                
           """).format(self.prefix(),
                       consentID,
-                      self.encobj.encrypt_aes(inMedium),
-                      self.encobj.encrypt_aes(purpose),
+                      self.encrypt_data(inMedium),
+                      self.encrypt_data(purpose),
                       self.list_to_query(isAboutData, "isAboutData", self.encobj),
-                      self.encobj.encrypt_aes(GrantedAtTime),
+                      self.encrypt_data(GrantedAtTime),
                       self.list_to_query(fordataprocessing, "forDataProcessing", self.encobj),
-                      self.encobj.encrypt_aes(expirationtime),
-                      self.encobj.encrypt_aes(country),
-                      self.encobj.encrypt_aes(city),
-                      self.encobj.encrypt_aes(state),
-                      self.encobj.encrypt_aes(requestedBy),
-                      self.encobj.encrypt_aes(hasDataController),
-                      self.encobj.encrypt_aes(dataprovider),
-                      self.encobj.encrypt_aes(granted))
+                      self.encrypt_data(expirationtime),
+                      self.encrypt_data(country),
+                      self.encrypt_data(city),
+                      self.encrypt_data(state),
+                      self.encrypt_data(requestedBy),
+                      self.encrypt_data(hasDataController),
+                      self.encrypt_data(dataprovider),
+                      self.encrypt_data(granted))
 
         return insquery
 
+    def encrypt_data(self, data):
+        if data is None:
+            return data
+        else:
+            return self.encobj.encrypt_aes(data)
 
 
     def consentID_by_consentprovider_ID(self, consentprovider_ID):
