@@ -7,6 +7,7 @@
 # @Software: PyCharm
 
 import requests
+import json
 class Functions:
     def __init__(self):
         self.STORE = "https://openfaas.sti2.at/function/store"
@@ -26,8 +27,7 @@ class Functions:
                                 json=json_data,
                                 headers=header
                                 )
-
-        return response.text
+        return json.loads(response.text)
 
 
 

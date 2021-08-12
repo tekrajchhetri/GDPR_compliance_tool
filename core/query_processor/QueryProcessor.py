@@ -90,7 +90,7 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
 
     def consentID_by_consentprovider_ID(self, consentprovider_ID):
         """
-        Get consent ID by consent provide ID
+        Get consent ID by consent provider ID( or data provider or data subject)
         :param consentID_by_consentprovider_ID: Unique ID mapped to data subjectr
         :return: consentID
         """
