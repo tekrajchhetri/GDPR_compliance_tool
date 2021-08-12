@@ -61,7 +61,7 @@ docs.register(QueryConsentIDByConsentProviderID)
 #audit
 api.add_resource(AuditConsent, "/audit/<string:consent_id>/consent")
 docs.register(AuditConsent)
-api.add_resource(AuditDataProvider, "/audit/<string:data_provider>/data-provider")
+api.add_resource(AuditDataProvider, "/audit/<string:data_provider_id>/<string:level_of_details>/data-provider")
 docs.register(AuditDataProvider)
 #JWTLogin
 api.add_resource(JWTUserLogin, "/jwt/login/")
