@@ -8,7 +8,7 @@
 
 import pymongo
 import os, json, sys
-from bson.json_util import dumps
+from bson.json_util import dumps,loads
 
 def is_json(input):
     """Checks if the input is a json
@@ -30,7 +30,7 @@ def handle(req):
         req (str): request body
     """
     method = os.getenv("Http_Method")
-    response = {"status":"","message":""}
+    response = {}
     if method in ["GET"]:
         if is_json(req):
             req = json.loads(req)
@@ -41,13 +41,11 @@ def handle(req):
             collection = database["consent_create_response"]
             if req["query_type"] == "all":
                 result = collection.find({'consent_id': {'$in': req["consent_id_list"]}})
-                response["status"] = "SUCCESS"
-                response["message"] = dumps(result)
+                return dumps(list(result), indent=2)
 
             if req["query_type"]=="single":
-                result = collection.find(req["consent_id_single"])
-                response["status"] = "SUCCESS"
-                response["message"] = dumps(result)
+                result = collection.find_one(req["consent_id_single"])
+                return result
         else:
             response["status"] = "FAIL"
             response["message"] = "DB Error, contact admin"

@@ -8,6 +8,9 @@ from flask_restful import Resource
 from flask_apispec.views import MethodResource
 from marshmallow import Schema, fields
 from flask_apispec import marshal_with, doc, use_kwargs
+from core.audit.Audit import  Audit
+import json
+
 
 class AuditConsent(MethodResource, Resource):
     @doc(description='AuditConsent.', tags=['Audit'])
@@ -16,5 +19,10 @@ class AuditConsent(MethodResource, Resource):
 
 class  AuditDataProvider(MethodResource, Resource):
     @doc(description="AuditDataProvider",tags=['Audit'])
-    def get(self, dataprovider):
-        pass
+    def get(self, data_provider_id, level_of_details):
+        auditInstance = Audit()
+        response = auditInstance.audit_all_consent_by_dp(data_provider_id=data_provider_id,
+                                                         level_of_details=level_of_details
+                                                         )
+
+        return response
