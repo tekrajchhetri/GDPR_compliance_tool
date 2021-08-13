@@ -40,13 +40,22 @@ class smashHitmessages(TokenGenerator):
         return deny_incomplete
 
     def insert_success(self):
-        deny_incomplete = {"act_status_code": 7100,
+        insert_success = {"act_status_code": 7100,
                            "decision": "CONSENT_CREATION_SUCCESS",
                            "decision_token":self.token_generator(),
                            "timestamp":self.decision_timestamp()
                            }
 
-        return deny_incomplete
+        return insert_success
+
+    def audit_success(self):
+        audit_success = {"act_status_code": 7200,
+                           "decision": "AUDIT_SUCCESS",
+                           "decision_token":self.token_generator(),
+                           "timestamp":self.decision_timestamp()
+                           }
+
+        return audit_success
 
     def insert_fail(self):
         deny_incomplete = {"act_status_code": 7500,
