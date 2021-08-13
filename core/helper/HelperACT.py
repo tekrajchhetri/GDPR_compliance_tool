@@ -137,3 +137,31 @@ class HelperACT:
                 return True
 
         return False
+    
+    def decrypt_data(self, data):
+        if data is None or "None" in data:
+            return data
+        else:
+            dec = Decrypt()
+            return dec.decrypt_aes(data).decode("utf-8")
+
+    def remove_uris(self, data):
+        return data.split('#')[1]
+
+    def process_consent_data(self, data):
+        resp_to_make = {}
+        for value in data["results"]["bindings"]:
+            list_of_consents = []
+            for k in value:
+                # skip consent ID as it causes error
+                if k == "ConsentID":
+                    continue
+                elif (k == "DataProcessing"):
+                    pass
+                    list_of_consents.append({k: [self.decrypt_data(self.remove_uris(litem)) for litem in value[k]["value"].split(",")]})
+                else:
+                    list_of_consents.append({k: self.decrypt_data(self.remove_uris(value[k]["value"]))})
+            resp_to_make[self.remove_uris(value["ConsentID"]["value"])] = list_of_consents
+        resp_to_make
+    
+    
