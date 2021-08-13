@@ -62,6 +62,33 @@ class Audit:
 
 
 
-    def audit__consent(self, consent_id):
-        pass
+    def audit__consent(self, consent_id, level_of_details):
+        faas_Call = Functions()
+        data = {"query_type": "all", "consent_id_list": [consent_id]}
+        response = faas_Call.invoke_query_function(json_data=data)
+        if level_of_details=="partial":
+            audit_success_message = self.qe.audit_success()
+            formatted_decision = {"consent_id":consent_id, "consent_decision":response}
+            audit_success_message["message"] = formatted_decision
+            return audit_success_message
+        elif level_of_details == "full":
+            allconsent_details = self.qe.select_query_gdb(consentID=consent_id, purpose=None,
+                                                     dataProcessing=None,
+                                                     dataController=None, dataRequester=None,
+                                                     additionalData="audit_by_consentid")
+
+            json_all_consent = json.loads(allconsent_details)
+            full_audit_success_message = self.qe.audit_success()
+            processed_consent_dec = self.qe.process_consent_data(json_all_consent)
+            formatted_decision = {"consent_id": consent_id,
+                                  "consent_decision": response,
+                                  "consent_data":processed_consent_dec}
+            full_audit_success_message["message"] = formatted_decision
+
+            return full_audit_success_message
+        else:
+            return self.qe.dataformatnotmatch()
+
+
+
 
