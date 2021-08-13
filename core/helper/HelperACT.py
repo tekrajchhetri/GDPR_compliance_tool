@@ -139,6 +139,10 @@ class HelperACT:
         return False
     
     def decrypt_data(self, data):
+        """Decrypt data
+        :param data: single value encrypted data
+        :return: decrypted data
+        """
         if data is None or "None" in data:
             return data
         else:
@@ -146,9 +150,17 @@ class HelperACT:
             return dec.decrypt_aes(data).decode("utf-8")
 
     def remove_uris(self, data):
+        """ return plain text data without URI's
+        :param data: semantic data
+        :return: data without semantic
+        """
         return data.split('#')[1]
 
     def process_consent_data(self, data):
+        """ process encrypted consent data
+        :param data: consent data retrieved from GraphDB
+        :return: decrypted consent in JSON format
+        """
         resp_to_make = {}
         for value in data["results"]["bindings"]:
             list_of_consents = []
