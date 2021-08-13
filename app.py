@@ -59,9 +59,9 @@ docs.register(QueryAllConsentID)
 api.add_resource(QueryConsentIDByConsentProviderID,"/query/<string:consentprovider_id>/consentid")
 docs.register(QueryConsentIDByConsentProviderID)
 #audit
-api.add_resource(AuditConsent, "/audit/<string:consent_id>/consent")
+api.add_resource(AuditConsent, "/audit/<string:consent_id>/<string:level_of_details>/consent")
 docs.register(AuditConsent)
-api.add_resource(AuditDataProvider, "/audit/<string:data_provider>/data-provider")
+api.add_resource(AuditDataProvider, "/audit/<string:data_provider_id>/<string:level_of_details>/data-provider")
 docs.register(AuditDataProvider)
 #JWTLogin
 api.add_resource(JWTUserLogin, "/jwt/login/")
@@ -81,9 +81,9 @@ api.add_resource(Test,"/")
 
 
 if __name__ == '__main__':
-    from db import db
-    db.init_app(app)
-    with app.app_context():
-        db.create_all()
-
-    app.run(debug=True)
+    # from db import db
+    # db.init_app(app)
+    # with app.app_context():
+    #     db.create_all()
+    #     print("Running")
+    app.run(port=5000, debug=True)

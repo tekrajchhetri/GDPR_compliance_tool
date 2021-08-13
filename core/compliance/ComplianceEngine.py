@@ -16,9 +16,11 @@ class ComplianceEngine(QueryEngine):
         if len(reason_for_logging.strip()) < 2:
             return self.dataformatnotmatch()
         if self.check_active_granted_consent(consentID=consentID):
-            respone = self.post_sparql(self.get_username(), self.get_password(),
-                                       self.revoke_broken_consent_query(consentID=consentID,type="BROKEN_CONSENT"),
-                                       reason_for_logging= reason_for_logging, type="broken_consent")
+            respone = self.post_sparql(userid=self.get_username(), password=self.get_password(),
+                                       query=self.revoke_broken_consent_query(consentID=consentID,type="BROKEN_CONSENT"),
+                                       consent_id_for_logging=consentID, reason_for_logging= reason_for_logging,
+                                       type="broken_consent"
+                                       )
             return respone
         else:
             return self.processing_fail_message()
@@ -27,8 +29,9 @@ class ComplianceEngine(QueryEngine):
 
     def revoke_consent(self, consentID):
         if self.check_active_granted_consent(consentID=consentID):
-            respone = self.post_sparql(self.get_username(), self.get_password(),
-                                       self.revoke_broken_consent_query(consentID=consentID), type="revoke")
+            respone = self.post_sparql(userid=self.get_username(), password=self.get_password(),
+                                       query=self.revoke_broken_consent_query(consentID=consentID),
+                                       consent_id_for_logging=consentID, type="revoke")
             return respone
         else:
             return self.processing_fail_message()

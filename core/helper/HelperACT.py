@@ -60,6 +60,8 @@ class HelperACT:
                    "consentID_by_consentprovider_ID": self.consentID_by_consentprovider_ID,
                     "granted_consent_by_consentID": self.granted_consent_by_consentID,
                     "consent_by_consentID": self.consent_by_consentID,
+                    "all_details_by_dataprovider":self.all_details_by_dataprovider,
+                    "audit_by_consentid":self.audit_by_consentid,
 
 
                    }
@@ -98,8 +100,14 @@ class HelperACT:
         if additionalData == "check_consent_granted" and consentID is not None:
             return dict({"map": "granted_consent_by_consentID", "arg": consentID})
 
-        if additionalData=="check_consent" and consentID is not None:
+        if additionalData == "check_consent" and consentID is not None:
             return dict({"map": "consent_by_consentID", "arg": consentID})
+
+        if additionalData=="audit_by_consentprovider" and consentProvidedBy is not None:
+            return dict({"map": "all_details_by_dataprovider", "arg": consentProvidedBy})
+
+        if additionalData=="audit_by_consentid" and consentID is not None:
+            return dict({"map": "audit_by_consentid", "arg": consentID})
 
     def select_query_gdb(self, consentProvidedBy=None, purpose=None, dataProcessing=None, dataController=None,
                     dataRequester=None, additionalData=None,consentID=None):
@@ -133,3 +141,43 @@ class HelperACT:
                 return True
 
         return False
+    
+    def decrypt_data(self, data):
+        """Decrypt data
+        :param data: single value encrypted data
+        :return: decrypted data
+        """
+        if data is None or "None" in data:
+            return data
+        else:
+            dec = Decrypt()
+            return dec.decrypt_aes(data).decode("utf-8")
+
+    def remove_uris(self, data):
+        """ return plain text data without URI's
+        :param data: semantic data
+        :return: data without semantic
+        """
+        return data.split('#')[1]
+
+    def process_consent_data(self, data):
+        """ process encrypted consent data
+        :param data: consent data retrieved from GraphDB
+        :return: decrypted consent in JSON format
+        """
+        resp_to_make = {}
+        for value in data["results"]["bindings"]:
+            list_of_consents = []
+            for k in value:
+                # skip consent ID as it causes error
+                if k == "ConsentID":
+                    continue
+                elif (k == "DataProcessing"):
+                    pass
+                    list_of_consents.append({k: [self.decrypt_data(self.remove_uris(litem)) for litem in value[k]["value"].split(",")]})
+                else:
+                    list_of_consents.append({k: self.decrypt_data(self.remove_uris(value[k]["value"]))})
+            resp_to_make[self.remove_uris(value["ConsentID"]["value"])] = list_of_consents
+        return resp_to_make
+    
+    

@@ -19,7 +19,7 @@ class  SPARQL(smashHitmessages, Functions):
         sparql.setCredentials(userid, password)
         return sparql
 
-    def post_sparql(self,userid, password, query, type="insert", reason_for_logging=""):
+    def post_sparql(self,userid, password, query, consent_id_for_logging, type="insert", reason_for_logging=""):
         hostname = "https://smashhitactool.sti2.at/repositories/EarlyPrototypeKG/statements"
 
         sparql = SPARQLWrapper(hostname)
@@ -34,15 +34,18 @@ class  SPARQL(smashHitmessages, Functions):
 
             if type == "revoke":
                 message = self.revoke_consent_message()
-            elif type == "broken_consent":
+                tolog = message
+            if type == "broken_consent":
                 message = self.revoke_consent_message()
                 message["decision"] = "BROKEN_CONSENT_CHECK_SUCCESS"
                 tolog = message
                 tolog["reason"] = reason_for_logging
-            else:
+            if type=="insert":
                 message = self.insert_success()
+                tolog = message
 
-            record_success = self.store(tolog) if type == "broken_consent" else self.store(message)
+            tolog["consent_id"] = consent_id_for_logging
+            record_success = self.store(tolog)
             if "SUCCESS" in record_success:
                 return message
             else:

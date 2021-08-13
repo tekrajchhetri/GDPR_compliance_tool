@@ -4,8 +4,14 @@ Flask-JWT==0.3.2
 uwsgi==2.0.19.1
 flask_apispec==0.11.0
 SPARQLWrapper==1.8.5
+pyjwt[crypto]==2.1.0
 pymongo==3.11.4
 pymongo[tls,srv]
 requests==2.25.1
 dask==2021.5.0
 python-dateutil==2.8.1
+pycryptodome==3.10.1
+rootpath==0.1.1
+flask-jwt-extended==4.2.1
+cryptography==3.4.7
+Flask-SQLAlchemy==2.5.1

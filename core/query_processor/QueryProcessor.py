@@ -65,27 +65,32 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
                
           """).format(self.prefix(),
                       consentID,
-                      self.encobj.encrypt_aes(inMedium),
-                      self.encobj.encrypt_aes(purpose),
+                      self.encrypt_data(inMedium),
+                      self.encrypt_data(purpose),
                       self.list_to_query(isAboutData, "isAboutData", self.encobj),
-                      self.encobj.encrypt_aes(GrantedAtTime),
+                      self.encrypt_data(GrantedAtTime),
                       self.list_to_query(fordataprocessing, "forDataProcessing", self.encobj),
-                      self.encobj.encrypt_aes(expirationtime),
-                      self.encobj.encrypt_aes(country),
-                      self.encobj.encrypt_aes(city),
-                      self.encobj.encrypt_aes(state),
-                      self.encobj.encrypt_aes(requestedBy),
-                      self.encobj.encrypt_aes(hasDataController),
-                      self.encobj.encrypt_aes(dataprovider),
-                      self.encobj.encrypt_aes(granted))
+                      self.encrypt_data(expirationtime),
+                      self.encrypt_data(country),
+                      self.encrypt_data(city),
+                      self.encrypt_data(state),
+                      self.encrypt_data(requestedBy),
+                      self.encrypt_data(hasDataController),
+                      self.encrypt_data(dataprovider),
+                      self.encrypt_data(granted))
 
         return insquery
 
+    def encrypt_data(self, data):
+        if data is None:
+            return data
+        else:
+            return self.encobj.encrypt_aes(data)
 
 
     def consentID_by_consentprovider_ID(self, consentprovider_ID):
         """
-        Get consent ID by consent provide ID
+        Get consent ID by consent provider ID( or data provider or data subject)
         :param consentID_by_consentprovider_ID: Unique ID mapped to data subjectr
         :return: consentID
         """
@@ -141,8 +146,60 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
 
         return query
 
+    def all_details_by_dataprovider(self, consentprovider_ID):
+        query = textwrap.dedent("""{0} 
+             SELECT ?ConsentID (group_concat(?forDataProcessing;separator=', ') as ?DataProcessing)  ?DataProvider  ?Purpose ?Data ?Duration ?DataRequester ?DataController ?GrantedAtTime   ?Medium ?State ?City ?Country ?RevokedAtTime
+              WHERE {{
+               ?ConsentID a <http://ontologies.atb-bremen.de/smashHitCore#ConsentID>.
+               ?ConsentID :isProvidedBy ?DataProvider.
+               ?ConsentID :inMedium ?Medium.
+               ?ConsentID dpv:hasPurpose ?Purpose.
+               ?ConsentID :requestedBy ?DataRequester.
+               ?ConsentID :isAboutData ?Data.
+               ?ConsentID :forDataProcessing ?forDataProcessing.
+               ?ConsentID :hasExpiry ?Duration.
+               ?ConsentID :hasDataController ?DataController.
+               ?ConsentID :GrantedAtTime ?GrantedAtTime. 
+               ?ConsentID :atCity ?City.
+               ?ConsentID :atCountry ?Country.
+               ?ConsentID :atState ?State. 
+                   OPTIONAL{{
+                     ?ConsentID :RevokedAtTime ?RevokedAtTime.
+                 }}
+                    FILTER(?DataProvider = :{1})
+
+             }} GROUP BY ?ConsentID ?DataProvider ?Purpose ?Data ?Duration ?DataRequester ?DataController ?GrantedAtTime   ?Medium ?State ?City ?Country ?RevokedAtTime
+         """).format(self.prefix(), self.encobj.encrypt_aes(consentprovider_ID))
+
+        return query
 
 
+    def audit_by_consentid(self, consentID):
+        query = textwrap.dedent("""{0} 
+                SELECT ?ConsentID (group_concat(?forDataProcessing;separator=', ') as ?DataProcessing)  ?DataProvider  ?Purpose ?Data ?Duration ?DataRequester ?DataController ?GrantedAtTime   ?Medium ?State ?City ?Country ?RevokedAtTime
+                 WHERE {{
+                  ?ConsentID a <http://ontologies.atb-bremen.de/smashHitCore#ConsentID>.
+                  ?ConsentID :isProvidedBy ?DataProvider.
+                  ?ConsentID :inMedium ?Medium.
+                  ?ConsentID dpv:hasPurpose ?Purpose.
+                  ?ConsentID :requestedBy ?DataRequester.
+                  ?ConsentID :isAboutData ?Data.
+                  ?ConsentID :forDataProcessing ?forDataProcessing.
+                  ?ConsentID :hasExpiry ?Duration.
+                  ?ConsentID :hasDataController ?DataController.
+                  ?ConsentID :GrantedAtTime ?GrantedAtTime. 
+                  ?ConsentID :atCity ?City.
+                  ?ConsentID :atCountry ?Country.
+                  ?ConsentID :atState ?State. 
+                      OPTIONAL{{
+                        ?ConsentID :RevokedAtTime ?RevokedAtTime.
+                    }}
+                       FILTER(?ConsentID = :{1})
+    
+                }} GROUP BY ?ConsentID ?DataProvider ?Purpose ?Data ?Duration ?DataRequester ?DataController ?GrantedAtTime   ?Medium ?State ?City ?Country ?RevokedAtTime
+            """).format(self.prefix(), consentID)
+
+        return query
 
 
 

@@ -11,22 +11,31 @@ from core.smashHitmessages import  smashHitmessages
 from werkzeug.security import generate_password_hash, check_password_hash
 from core.models.models import User
 from flask_jwt_extended import create_access_token
-import json
 
 class JWTUser(JWTHelper, smashHitmessages):
     def __init__(self):
         super().__init__()
 
-    def register_user(self, username, password, organization):
-        organizationCheck = self.organisation_map(organization)
-        if organizationCheck > 0:
+    def register_user(self, username, password,confirm_password, organization):
+        organizationCheck_role = self.organisation_map(organization.upper())
+        if organizationCheck_role != 0:
             user = User.query.filter_by(username=username).first()
             if user:
                 msg =  self.processing_fail_message()
                 msg["message"] = "Username exists"
                 return msg
-            newuser = User(username=username, password=generate_password_hash(password, method='sha256'),
-                           role=organizationCheck, status=1)
+
+            if password != confirm_password:
+                msg = self.processing_fail_message()
+                msg["message"] = "Password and Confirm password mismatch"
+                return msg
+
+            newuser = User(username=username,
+                           password=generate_password_hash(password, method='sha256'),
+                           organization=organization.upper(),
+                           role=organizationCheck_role,
+                           status=1
+                           )
             newuser.save_to_db()
             newmsg = self.insert_success()
             newmsg["decision"]="USER_REGISTERED"
@@ -45,3 +54,10 @@ class JWTUser(JWTHelper, smashHitmessages):
             return raccess_token
         else:
            return  {"access_token": "Invalid Credentials"}, 401
+
+    def get_hex_data(self,role):
+        user = User.query.filter_by(role=role).first()
+        if user:
+            return {"organisation":user.organization, "role":user.role}
+        else:
+            return 0

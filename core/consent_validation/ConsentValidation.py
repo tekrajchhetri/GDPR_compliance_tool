@@ -50,8 +50,9 @@ class  ConsentValidation(QueryEngine):
 
 
 
-        respone = self.post_sparql(self.get_username(), self.get_password(),
-                                   self.insert_query(requestedBy= requestedBy,
+        respone = self.post_sparql(userid=self.get_username(), password=self.get_password(),
+
+                                   query=self.insert_query(requestedBy= requestedBy,
                                                      hasDataController = hasDataController,
                                                      fordataprocessing = fordataprocessing,
                                                      GrantedAtTime = GrantedAtTime,
@@ -64,6 +65,8 @@ class  ConsentValidation(QueryEngine):
                                                      state=state,
                                                     dataprovider= dataprovider,
                                                      expirationtime=expirationtime
-                                                    )
+                                                    ),
+                                   consent_id_for_logging=consentID
+
                                    )
         return respone
