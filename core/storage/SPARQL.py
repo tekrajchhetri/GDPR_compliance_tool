@@ -35,12 +35,12 @@ class  SPARQL(smashHitmessages, Functions):
             if type == "revoke":
                 message = self.revoke_consent_message()
                 tolog = message
-            elif type == "broken_consent":
+            if type == "broken_consent":
                 message = self.revoke_consent_message()
                 message["decision"] = "BROKEN_CONSENT_CHECK_SUCCESS"
                 tolog = message
                 tolog["reason"] = reason_for_logging
-            else:
+            if type=="insert":
                 message = self.insert_success()
                 tolog = message
 
