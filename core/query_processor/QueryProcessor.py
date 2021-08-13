@@ -148,28 +148,56 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
 
     def all_details_by_dataprovider(self, consentprovider_ID):
         query = textwrap.dedent("""{0} 
-            SELECT ?ConsentID (group_concat(?forDataProcessing;separator=', ') as ?DataProcessing)  ?DataProvider  ?Purpose ?Data ?Duration ?DataRequester ?DataController ?GrantedAtTime   ?Medium ?State ?City ?Country ?RevokedAtTime
-             WHERE {{
-              ?ConsentID a <http://ontologies.atb-bremen.de/smashHitCore#ConsentID>.
-              ?ConsentID :isProvidedBy ?DataProvider.
-              ?ConsentID :inMedium ?Medium.
-              ?ConsentID dpv:hasPurpose ?Purpose.
-              ?ConsentID :requestedBy ?DataRequester.
-              ?ConsentID :isAboutData ?Data.
-              ?ConsentID :forDataProcessing ?forDataProcessing.
-              ?ConsentID :hasExpiry ?Duration.
-              ?ConsentID :hasDataController ?DataController.
-              ?ConsentID :GrantedAtTime ?GrantedAtTime. 
-              ?ConsentID :atCity ?City.
-              ?ConsentID :atCountry ?Country.
-              ?ConsentID :atState ?State. 
-                  OPTIONAL{{
-                    ?ConsentID :RevokedAtTime ?RevokedAtTime.
-                }}
-                   FILTER(?DataProvider = :{1})
-                
-            }} GROUP BY ?ConsentID ?DataProvider ?Purpose ?Data ?Duration ?DataRequester ?DataController ?GrantedAtTime   ?Medium ?State ?City ?Country ?RevokedAtTime
-        """).format(self.prefix(),self.encobj.encrypt_aes(consentprovider_ID))
+             SELECT ?ConsentID (group_concat(?forDataProcessing;separator=', ') as ?DataProcessing)  ?DataProvider  ?Purpose ?Data ?Duration ?DataRequester ?DataController ?GrantedAtTime   ?Medium ?State ?City ?Country ?RevokedAtTime
+              WHERE {{
+               ?ConsentID a <http://ontologies.atb-bremen.de/smashHitCore#ConsentID>.
+               ?ConsentID :isProvidedBy ?DataProvider.
+               ?ConsentID :inMedium ?Medium.
+               ?ConsentID dpv:hasPurpose ?Purpose.
+               ?ConsentID :requestedBy ?DataRequester.
+               ?ConsentID :isAboutData ?Data.
+               ?ConsentID :forDataProcessing ?forDataProcessing.
+               ?ConsentID :hasExpiry ?Duration.
+               ?ConsentID :hasDataController ?DataController.
+               ?ConsentID :GrantedAtTime ?GrantedAtTime. 
+               ?ConsentID :atCity ?City.
+               ?ConsentID :atCountry ?Country.
+               ?ConsentID :atState ?State. 
+                   OPTIONAL{{
+                     ?ConsentID :RevokedAtTime ?RevokedAtTime.
+                 }}
+                    FILTER(?DataProvider = :{1})
+
+             }} GROUP BY ?ConsentID ?DataProvider ?Purpose ?Data ?Duration ?DataRequester ?DataController ?GrantedAtTime   ?Medium ?State ?City ?Country ?RevokedAtTime
+         """).format(self.prefix(), self.encobj.encrypt_aes(consentprovider_ID))
+
+        return query
+
+
+    def audit_by_consentid(self, consentID):
+        query = textwrap.dedent("""{0} 
+                SELECT ?ConsentID (group_concat(?forDataProcessing;separator=', ') as ?DataProcessing)  ?DataProvider  ?Purpose ?Data ?Duration ?DataRequester ?DataController ?GrantedAtTime   ?Medium ?State ?City ?Country ?RevokedAtTime
+                 WHERE {{
+                  ?ConsentID a <http://ontologies.atb-bremen.de/smashHitCore#ConsentID>.
+                  ?ConsentID :isProvidedBy ?DataProvider.
+                  ?ConsentID :inMedium ?Medium.
+                  ?ConsentID dpv:hasPurpose ?Purpose.
+                  ?ConsentID :requestedBy ?DataRequester.
+                  ?ConsentID :isAboutData ?Data.
+                  ?ConsentID :forDataProcessing ?forDataProcessing.
+                  ?ConsentID :hasExpiry ?Duration.
+                  ?ConsentID :hasDataController ?DataController.
+                  ?ConsentID :GrantedAtTime ?GrantedAtTime. 
+                  ?ConsentID :atCity ?City.
+                  ?ConsentID :atCountry ?Country.
+                  ?ConsentID :atState ?State. 
+                      OPTIONAL{{
+                        ?ConsentID :RevokedAtTime ?RevokedAtTime.
+                    }}
+                       FILTER(?ConsentID = :{1})
+    
+                }} GROUP BY ?ConsentID ?DataProvider ?Purpose ?Data ?Duration ?DataRequester ?DataController ?GrantedAtTime   ?Medium ?State ?City ?Country ?RevokedAtTime
+            """).format(self.prefix(), consentID)
 
         return query
 
