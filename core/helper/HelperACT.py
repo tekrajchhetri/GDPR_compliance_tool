@@ -162,6 +162,6 @@ class HelperACT:
                 else:
                     list_of_consents.append({k: self.decrypt_data(self.remove_uris(value[k]["value"]))})
             resp_to_make[self.remove_uris(value["ConsentID"]["value"])] = list_of_consents
-        resp_to_make
+        return resp_to_make
     
     
