@@ -60,6 +60,7 @@ class HelperACT:
                    "consentID_by_consentprovider_ID": self.consentID_by_consentprovider_ID,
                     "granted_consent_by_consentID": self.granted_consent_by_consentID,
                     "consent_by_consentID": self.consent_by_consentID,
+                    "all_details_by_dataprovider":self.all_details_by_dataprovider,
 
 
                    }
@@ -98,8 +99,11 @@ class HelperACT:
         if additionalData == "check_consent_granted" and consentID is not None:
             return dict({"map": "granted_consent_by_consentID", "arg": consentID})
 
-        if additionalData=="check_consent" and consentID is not None:
+        if additionalData == "check_consent" and consentID is not None:
             return dict({"map": "consent_by_consentID", "arg": consentID})
+
+        if additionalData=="audit_by_consentprovider" and consentProvidedBy is not None:
+            return dict({"map": "all_details_by_dataprovider", "arg": consentProvidedBy})
 
     def select_query_gdb(self, consentProvidedBy=None, purpose=None, dataProcessing=None, dataController=None,
                     dataRequester=None, additionalData=None,consentID=None):
