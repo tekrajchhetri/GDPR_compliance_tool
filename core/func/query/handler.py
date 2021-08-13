@@ -42,10 +42,6 @@ def handle(req):
             if req["query_type"] == "all":
                 result = collection.find({'consent_id': {'$in': req["consent_id_list"]}})
                 return dumps(list(result), indent=2)
-
-            if req["query_type"]=="single":
-                result = collection.find_one(req["consent_id_single"])
-                return result
         else:
             response["status"] = "FAIL"
             response["message"] = "DB Error, contact admin"
