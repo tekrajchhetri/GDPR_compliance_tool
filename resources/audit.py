@@ -11,14 +11,22 @@ from flask_apispec import marshal_with, doc, use_kwargs
 from core.audit.Audit import  Audit
 import json
 
+class ReturnSchema(Schema):
+    act_status_code = fields.Integer(required=True)
+    decision = fields.String(required=True)
+    decision_token = fields.String(required=True)
+    message = fields.String(optional=True)
+    timestamp = fields.String(required=True)
 
 class AuditConsent(MethodResource, Resource):
     @doc(description='AuditConsent.', tags=['Audit'])
     def get(self, consent_id):
         pass
 
+
 class  AuditDataProvider(MethodResource, Resource):
-    @doc(description="AuditDataProvider",tags=['Audit'])
+    @doc(description="Audit consent by data provider",tags=['Audit'])
+    @marshal_with(ReturnSchema)
     def get(self, data_provider_id, level_of_details):
         auditInstance = Audit()
         response = auditInstance.audit_all_consent_by_dp(data_provider_id=data_provider_id,
@@ -26,3 +34,7 @@ class  AuditDataProvider(MethodResource, Resource):
                                                          )
 
         return response
+
+
+
+
