@@ -30,17 +30,20 @@ class Audit:
                         Full: fetch complete details about all the given consent as well as the decision information.
         :return: JSON response with fetched details
         """
+        all_consentID = self.qe.select_query_gdb(consentProvidedBy=data_provider_id, purpose=None, dataProcessing=None,
+                                                 dataController=None, dataRequester=None, additionalData="consentID")
+        to_match_cid = self.consent_id_to_list(json.loads(all_consentID)["results"])
+        data = {"query_type": "all", "consent_id_list": to_match_cid}
+        faas_Call = Functions()
+        response = faas_Call.invoke_query_function(json_data=data)
+
         if level_of_details=="partial":
-            all_consentID = self.qe.select_query_gdb(consentProvidedBy=data_provider_id,purpose=None, dataProcessing=None,
-                                                     dataController=None, dataRequester=None, additionalData="consentID")
-            to_match_cid = self.consent_id_to_list(json.loads(all_consentID)["results"])
-            data = {"query_type":"all","consent_id_list":to_match_cid}
-            faas_Call = Functions()
-            response = faas_Call.invoke_query_function(json_data=data)
-            to_return = {"data_provider":data_provider_id, "consent_decision":response}
-            return to_return
+            audit_success_message = self.qe.audit_success()
+            formatted_decision = {"data_provider":data_provider_id, "consent_decision":response}
+            audit_success_message["message"] = formatted_decision
+            return audit_success_message
         elif level_of_details == "full":
-            return "FULL"
+            return self.qe.audit_success()
         else:
             return self.qe.dataformatnotmatch()
 
