@@ -14,12 +14,6 @@ class Audit:
     def __init__(self):
         self.qe = QueryEngine()
 
-    def helper_dec_data(self, data):
-        if data is None:
-            return data
-        else:
-            return self.dec_obj.decrypt_aes(data)
-
     def consent_id_to_list(self, retrieved_consentID):
         to_match_cid = []
         for consent_id in retrieved_consentID["bindings"]:
@@ -55,19 +49,19 @@ class Audit:
                                                      additionalData="audit_by_consentprovider")
 
             json_all_consent = json.loads(allconsent_details)
-            audit_success_message = self.qe.audit_success()
+            full_audit_success_message = self.qe.audit_success()
             processed_consent_dec = self.qe.process_consent_data(json_all_consent)
             formatted_decision = {"data_provider": data_provider_id,
                                   "consent_decision": response,
                                   "consent_data":processed_consent_dec}
-            audit_success_message["message"] = formatted_decision
+            full_audit_success_message["message"] = formatted_decision
 
-            return audit_success_message
+            return full_audit_success_message
         else:
             return self.qe.dataformatnotmatch()
 
 
 
-    def audit_all_active_consent(self):
+    def audit__consent(self, consent_id):
         pass
 
