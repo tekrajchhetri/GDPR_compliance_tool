@@ -173,7 +173,6 @@ class HelperACT:
                 if k == "ConsentID":
                     continue
                 elif (k == "DataProcessing"):
-                    pass
                     list_of_consents.append({k: [self.decrypt_data(self.remove_uris(litem)) for litem in value[k]["value"].split(",")]})
                 else:
                     list_of_consents.append({k: self.decrypt_data(self.remove_uris(value[k]["value"]))})
