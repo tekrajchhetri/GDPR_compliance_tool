@@ -9,10 +9,11 @@ from core.query_processor.QueryProcessor import QueryEngine
 from  core.helper.date_helper import DateHelper
 import json
 import requests
+import ast
 class ComplianceEngine(QueryEngine, DateHelper):
     def __init__(self):
         super().__init__()
-        self.TRIGGER_URL_NOTIFY = "http://127.0.0.1:5056/notify"
+        self.TRIGGER_URL_NOTIFY = "http://127.0.0.1:5056/notify" #dummy test URL to be replaced
 
     def broken_consent(self, consentID, reason_for_logging):
         if len(reason_for_logging.strip()) < 2:
@@ -38,20 +39,6 @@ class ComplianceEngine(QueryEngine, DateHelper):
         else:
             return self.processing_fail_message()
 
-    def compliance_check_act(self):
-        pass
-
-    def compliance_check_spc(self):
-        pass
-
-
-    def joint_compliance(self, act_compliance, spc_compliance):
-        """
-        :param act_compliance: Compliance check information (or decision) from ACT
-        :param spc_compliance: Compliance check information (or decision) from Security and Privacy Component
-        :return:
-        """
-        pass
 
     def get_consent_data(self):
         all_consent  = self.select_query_gdb(additionalData="consent_for_compliance")
@@ -73,9 +60,36 @@ class ComplianceEngine(QueryEngine, DateHelper):
                 msg["consent_id"] = cid
                 self.store(msg)
 
+    def compliance_check_act(self):
+        consent_datas = self.get_consent_data()
+        for consent_data in consent_datas["results"]["bindings"]:
+            data_processing_list=  [self.decrypt_data(self.remove_uris(litem))
+                 for litem in consent_data["DataProcessing"]["value"].split(",")]
+            purpose = self.decrypt_data(self.remove_uris(consent_data["Purpose"]["value"]))
+
+
+            isAboutData = [self.decrypt_data(self.remove_uris(litem))
+                 for litem in consent_data["Data"]["value"].split(",")]
+            toCheckData = [{v.split("-")[0]: ast.literal_eval(v.split("-")[1])} for v in isAboutData]
+            print(toCheckData, data_processing_list, purpose)
+
+
+
+
+    def joint_compliance(self, act_compliance, spc_compliance):
+        """
+        :param act_compliance: Compliance check information (or decision) from ACT
+        :param spc_compliance: Compliance check information (or decision) from Security and Privacy Component
+        :return:
+        """
+        pass
 
 
 
 if __name__ == '__main__':
     ce = ComplianceEngine()
-    ce.check_consent_expiry()
+    ce.compliance_check_act()
+
+
+
+
