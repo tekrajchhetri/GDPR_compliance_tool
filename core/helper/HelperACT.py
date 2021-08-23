@@ -62,8 +62,7 @@ class HelperACT:
                     "consent_by_consentID": self.consent_by_consentID,
                     "all_details_by_dataprovider":self.all_details_by_dataprovider,
                     "audit_by_consentid":self.audit_by_consentid,
-
-
+                    "all_consent_for_compliance":self.all_consent_for_compliance,
                    }
         return mapfunc[name]
 
@@ -108,6 +107,9 @@ class HelperACT:
 
         if additionalData=="audit_by_consentid" and consentID is not None:
             return dict({"map": "audit_by_consentid", "arg": consentID})
+
+        if additionalData == "consent_for_compliance":
+            return dict({"map": "all_consent_for_compliance"})
 
     def select_query_gdb(self, consentProvidedBy=None, purpose=None, dataProcessing=None, dataController=None,
                     dataRequester=None, additionalData=None,consentID=None):
@@ -173,11 +175,14 @@ class HelperACT:
                 if k == "ConsentID":
                     continue
                 elif (k == "DataProcessing"):
-                    pass
                     list_of_consents.append({k: [self.decrypt_data(self.remove_uris(litem)) for litem in value[k]["value"].split(",")]})
                 else:
                     list_of_consents.append({k: self.decrypt_data(self.remove_uris(value[k]["value"]))})
             resp_to_make[self.remove_uris(value["ConsentID"]["value"])] = list_of_consents
         return resp_to_make
+
+
+    def remove_xst_date(self, date_xst_str):
+        return date_xst_str[1: len(date_xst_str) - 1].split("^^")[0]
     
     
