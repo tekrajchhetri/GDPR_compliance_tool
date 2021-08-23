@@ -202,10 +202,29 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
         return query
 
 
+    def all_consent_for_compliance(self):
+        query = textwrap.dedent("""{0} 
+                       SELECT ?ConsentID (group_concat(?forDataProcessing;separator=', ') as ?DataProcessing)  ?DataProvider  ?Purpose ?Data ?Duration ?DataRequester ?DataController ?GrantedAtTime   ?Medium ?State ?City ?Country  
+                        WHERE {{
+                         ?ConsentID a <http://ontologies.atb-bremen.de/smashHitCore#ConsentID>.
+                         ?ConsentID :isProvidedBy ?DataProvider.
+                         ?ConsentID :inMedium ?Medium.
+                         ?ConsentID dpv:hasPurpose ?Purpose.
+                         ?ConsentID :requestedBy ?DataRequester.
+                         ?ConsentID :isAboutData ?Data.
+                         ?ConsentID :forDataProcessing ?forDataProcessing.
+                         ?ConsentID :hasExpiry ?Duration.
+                         ?ConsentID :hasDataController ?DataController.
+                         ?ConsentID :GrantedAtTime ?GrantedAtTime. 
+                         ?ConsentID :atCity ?City.
+                         ?ConsentID :atCountry ?Country.
+                         ?ConsentID :atState ?State. 
+                         FILTER NOT EXISTS {{ ?ConsentID :RevokedAtTime ?RevokedAtTime.}}
+                         FILTER(?ConsentID = :TEST1109111)
+                       }} GROUP BY ?ConsentID ?DataProvider ?Purpose ?Data ?Duration ?DataRequester ?DataController ?GrantedAtTime   ?Medium ?State ?City ?Country  
+                   """).format(self.prefix())
 
-
-
-
+        return query
 
 
 
