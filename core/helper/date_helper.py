@@ -5,8 +5,11 @@
 # @Web     : http://tekrajchhetri.com/
 # @File    : date_helper.py
 # @Software: PyCharm
+import datetime
 import re
 from dateutil.parser import parse
+import pytz
+
 
 class DateHelper:
 
@@ -48,5 +51,9 @@ class DateHelper:
         """
         datestr = str(datestr) if not self.is_str(datestr) else datestr
         return parse(datestr).tzname() == "UTC"
+
+    def has_expired(self, expirydate):
+        utc = pytz.UTC
+        return utc.localize(datetime.datetime.utcnow()) > parse(expirydate)
 
 
