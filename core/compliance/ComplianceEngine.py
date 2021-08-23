@@ -6,11 +6,13 @@
 # @File    : ComplianceEngine.py
 # @Software: PyCharm
 from core.query_processor.QueryProcessor import QueryEngine
-import dask
-
-class ComplianceEngine(QueryEngine):
+from  core.helper.date_helper import DateHelper
+import json
+import requests
+class ComplianceEngine(QueryEngine, DateHelper):
     def __init__(self):
         super().__init__()
+        self.TRIGGER_URL_NOTIFY = "http://127.0.0.1:5056/notify"
 
     def broken_consent(self, consentID, reason_for_logging):
         if len(reason_for_logging.strip()) < 2:
@@ -42,6 +44,7 @@ class ComplianceEngine(QueryEngine):
     def compliance_check_spc(self):
         pass
 
+
     def joint_compliance(self, act_compliance, spc_compliance):
         """
         :param act_compliance: Compliance check information (or decision) from ACT
@@ -51,18 +54,28 @@ class ComplianceEngine(QueryEngine):
         pass
 
     def get_consent_data(self):
-        pass
+        all_consent  = self.select_query_gdb(additionalData="consent_for_compliance")
+        return json.loads(all_consent)
 
-    def process_data_for_expiry_check(self, data):
-        pass
+
 
     def check_consent_expiry(self):
-        pass
+        consent_datas = self.get_consent_data()
+        for consent_data in consent_datas["results"]["bindings"]:
+            cid = self.remove_uris(consent_data["ConsentID"]["value"])
+            exp_date = self.remove_xst_date(self.decrypt_data(
+                               self.remove_uris(consent_data["Duration"]["value"])))
+            if(self.has_expired(exp_date)):
+                header = {"Content-Type": "application/json"}
+                data = json.dumps({"CID":cid,"status":"Expired"})
+                r = requests.post(self.TRIGGER_URL_NOTIFY, data=data, headers=header)
+                msg = json.loads(r.text)
+                msg["consent_id"] = cid
+                self.store(msg)
 
-    def parallelise(self):
-        consent_data = self.get_consent_data()
-        for i in range(len(consent_data)):
-            processdata = dask.delayed(self.get_consent_data)(consent_data[i]).compute()
-            check_consent_expiry = dask.delayed(self.check_consent_expiry)(processdata[0],processdata[1],processdata[2]).compute()
 
 
+
+if __name__ == '__main__':
+    ce = ComplianceEngine()
+    ce.check_consent_expiry()
