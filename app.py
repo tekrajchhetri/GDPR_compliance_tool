@@ -31,6 +31,8 @@ from resources.audit import AuditConsent
 from resources.audit import AuditDataProvider
 from resources.user import JWTUserRegister
 from resources.user import JWTUserLogin
+from resources.compliance import CompliancebyConsent
+from resources.compliance import CompliancebyDataProvider
 
 api = Api(app)
 app.config.update({
@@ -53,6 +55,12 @@ docs.register(Revoke)
 #Compliance
 api.add_resource(BrokenConsent,"/consent/broken-chain")
 docs.register(BrokenConsent)
+
+api.add_resource(CompliancebyConsent,"/compliance/<string:consent_id>/consent")
+docs.register(CompliancebyConsent)
+
+api.add_resource(CompliancebyDataProvider,"/compliance/<string:data_provider_id>/consent")
+docs.register(CompliancebyDataProvider)
 #LUH Interaction
 api.add_resource(QueryAllConsentID,"/query/bulk-consent-id")
 docs.register(QueryAllConsentID)
