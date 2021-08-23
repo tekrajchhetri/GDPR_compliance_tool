@@ -67,7 +67,7 @@ class HelperACT:
         return mapfunc[name]
 
     def list_to_query(self, data, whatfor, EncryptObj):
-        """ Convert list to query
+        """ Convert list to query for data processing
         :input: list
         :returns: SPARQL query string
         """
@@ -75,6 +75,19 @@ class HelperACT:
         for vlaue in data:
             strs = ":"+whatfor+" :" + EncryptObj.encrypt_aes(vlaue) + ";\n"
             querydata = strs + querydata
+        return querydata
+
+    def list_to_query_isaboutdata(self, data, whatfor, EncryptObj):
+        """ Convert list to query for data processing
+        :input: list
+        :returns: SPARQL query string
+        """
+        querydata = ""
+        for key in data:
+            for value in data[key]:
+                formatted_dat = "{}-{}".format(key, value)
+                strs = ":" + whatfor + " :" + EncryptObj.encrypt_aes(formatted_dat) + ";\n"
+                querydata = strs + querydata
         return querydata
 
 
@@ -176,6 +189,8 @@ class HelperACT:
                     continue
                 elif (k == "DataProcessing"):
                     list_of_consents.append({k: [self.decrypt_data(self.remove_uris(litem)) for litem in value[k]["value"].split(",")]})
+                elif (k == "Data"):
+                    list_of_consents.append({k:[self.decrypt_data(self.remove_uris(litem)) for litem in value[k]["value"].split(",")]})
                 else:
                     list_of_consents.append({k: self.decrypt_data(self.remove_uris(value[k]["value"]))})
             resp_to_make[self.remove_uris(value["ConsentID"]["value"])] = list_of_consents
