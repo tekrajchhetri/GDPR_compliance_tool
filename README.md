@@ -11,14 +11,8 @@ This is a fake API for testing. It listens to /notify and returns reveived with 
 ```bash
 pip install python
 ```
-
-## Usage
-
-```python
-import math
-
-```
-## Contributors
+ 
+## Contributor
 - Tek Raj Chhetri  
  
 
