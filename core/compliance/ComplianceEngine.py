@@ -44,8 +44,6 @@ class ComplianceEngine(QueryEngine, DateHelper):
         all_consent  = self.select_query_gdb(additionalData="consent_for_compliance")
         return json.loads(all_consent)
 
-
-
     def check_consent_expiry(self):
         consent_datas = self.get_consent_data()
         for consent_data in consent_datas["results"]["bindings"]:
@@ -55,14 +53,21 @@ class ComplianceEngine(QueryEngine, DateHelper):
             if(self.has_expired(exp_date)):
                 header = {"Content-Type": "application/json"}
                 data = json.dumps({"CID":cid,"status":"Expired"})
+                #revoke the consent
+                self.broken_consent(consentID=cid,reason_for_logging="Consent expired")
                 r = requests.post(self.TRIGGER_URL_NOTIFY, data=data, headers=header)
                 msg = json.loads(r.text)
                 msg["consent_id"] = cid
                 self.store(msg)
 
+
     def compliance_check_act(self):
         consent_datas = self.get_consent_data()
         for consent_data in consent_datas["results"]["bindings"]:
+            cid = self.remove_uris(consent_data["ConsentID"]["value"])
+            dpid = self.decrypt_data(self.remove_uris(consent_data["DataProvider"]["value"]))
+            data_requester = self.decrypt_data(self.remove_uris(consent_data["DataRequester"]["value"]))
+            data_controller = self.decrypt_data(self.remove_uris(consent_data["DataController"]["value"]))
             data_processing_list=  [self.decrypt_data(self.remove_uris(litem))
                  for litem in consent_data["DataProcessing"]["value"].split(",")]
             purpose = self.decrypt_data(self.remove_uris(consent_data["Purpose"]["value"]))
@@ -71,7 +76,10 @@ class ComplianceEngine(QueryEngine, DateHelper):
             isAboutData = [self.decrypt_data(self.remove_uris(litem))
                  for litem in consent_data["Data"]["value"].split(",")]
             toCheckData = [{v.split("-")[0]: ast.literal_eval(v.split("-")[1])} for v in isAboutData]
-            print(toCheckData, data_processing_list, purpose)
+            consent_data = {"data":toCheckData,"dataprocessing": data_processing_list, "purpose":purpose }
+
+
+
 
 
 
@@ -88,7 +96,7 @@ class ComplianceEngine(QueryEngine, DateHelper):
 
 if __name__ == '__main__':
     ce = ComplianceEngine()
-    ce.compliance_check_act()
+    ce.check_consent_expiry()
 
 
 
