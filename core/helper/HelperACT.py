@@ -7,9 +7,15 @@
 # @Software: PyCharm
 import json
 from SPARQLWrapper import  JSON
-
+import spacy
+from fuzzywuzzy import fuzz
+from operator import itemgetter
 from core.security.Cryptography import  Decrypt
 class HelperACT:
+
+    def load_spacy_model(self):
+        nlp = spacy.load('en_core_web_lg')
+        return nlp
 
     def for_processing(resource_dict):
         """ Convert nested array of inputs into a single array
@@ -156,7 +162,94 @@ class HelperACT:
                 return True
 
         return False
-    
+
+    def preprocess(self, word):
+        return word.strip().lower()
+
+
+    def tokenize(self, word):
+        """ Perform the word lemitization
+        :param word: string that is to be tokenized
+        :return: lemmatized word
+        """
+        nlp = self.load_spacy_model()
+        word = self.preprocess(word=word)
+        doc = nlp(word)
+        return [token.lemma_ for token in doc][0]
+
+    def match(self, x, y):
+        """ Fuzzy string matching
+        :param x: input string from consent
+        :param y: input string from data controller/processor
+        :return: boolean
+        """
+        ratio =  fuzz.token_set_ratio(x, y)
+        return True if ratio >= 95 else False
+
+    def has_valid_purpose(self, purpose_from_consent, current_processing_purpose_by_controller):
+        """ checks the validatity of purpose in accordance with given consent
+        :param purpose_from_consent:  purpose that was consented to
+        :param current_processing_purpose_by_controller:  purpose current DP/DC is using data for
+        :return: boolean
+        """
+        return self.match(self.tokenize(purpose_from_consent),
+                          self.tokenize(current_processing_purpose_by_controller)
+                          )
+
+    def calculate_length(self, x):
+        if type(x) == list:
+            return len(x)
+        else:
+            return 0
+
+    def get_keys(self, dictitems):
+        return list(map(itemgetter(0), dictitems.items()))[0]
+
+    def matcher_helper(self, consented,fromControllerOrProcessor):
+        """ checks for match using fuzzy logic
+        :param consented: list items from consent
+        :param fromControllerOrProcessor:  list items from controller or processor
+        :return: boolean
+        """
+        consented = sorted(
+            [self.tokenize(word_for_tokenized_lemma) for word_for_tokenized_lemma in consented])
+        fromControllerOrProcessor = sorted(
+            [self.tokenize(word_for_tokenized_lemma) for word_for_tokenized_lemma in fromControllerOrProcessor])
+
+        if self.calculate_length(fromControllerOrProcessor) == self.calculate_length(consented):
+            condition_status = []
+            for i in range(len(consented)):
+                condition_status.append(self.match(consented[i], fromControllerOrProcessor[i]))
+            return False if False in condition_status else True
+
+        elif self.calculate_length(fromControllerOrProcessor) < self.calculate_length(consented):
+            intersected = sorted(list(set(fromControllerOrProcessor).intersection(consented)))
+            if self.calculate_length(intersected) != self.calculate_length(fromControllerOrProcessor):
+                return False
+
+            condition_status = []
+
+            for i in range(len(fromControllerOrProcessor)):
+                condition_status.append(self.match(fromControllerOrProcessor[i], intersected[i]))
+            return False if False in condition_status else True
+
+        return False
+
+
+    def has_processing_rights(self, consent_for_processing, current_processing_by_controller):
+
+        if  self.calculate_length(current_processing_by_controller) > self.calculate_length(consent_for_processing):
+            return False
+
+        return self.matcher_helper(consent_for_processing, current_processing_by_controller)
+
+    def is_doing_valid_processing(self, consented_data_for_processing, current_data_being_used_or_processed):
+        head_consented_data = [self.get_keys(dictItems) for dictItems in consented_data_for_processing]
+        head_processed_data = [self.get_keys(dictItems) for dictItems in current_data_being_used_or_processed]
+
+        if self.calculate_length(head_processed_data) > self.calculate_length(head_consented_data):
+            return False
+
     def decrypt_data(self, data):
         """Decrypt data
         :param data: single value encrypted data
@@ -199,5 +292,4 @@ class HelperACT:
 
     def remove_xst_date(self, date_xst_str):
         return date_xst_str[1: len(date_xst_str) - 1].split("^^")[0]
-    
     
