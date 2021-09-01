@@ -11,6 +11,9 @@ import spacy
 from fuzzywuzzy import fuzz
 from operator import itemgetter
 from core.security.Cryptography import  Decrypt
+from nltk.stem.porter import PorterStemmer
+from collections import ChainMap
+
 class HelperACT:
 
     def load_spacy_model(self):
@@ -152,8 +155,6 @@ class HelperACT:
         :return: bool
         """
         consent = json.loads(self.select_query_gdb(consentID=consentID, additionalData="check_consent"))
-
-
         if (self.consent_exists(consent)):
             hasGrantedStatus = json.loads(self.select_query_gdb(consentID=consentID,
                                                                 additionalData="check_consent_granted"))
@@ -165,7 +166,6 @@ class HelperACT:
 
     def preprocess(self, word):
         return word.strip().lower()
-
 
     def tokenize(self, word):
         """ Perform the word lemitization
@@ -205,6 +205,12 @@ class HelperACT:
     def get_keys(self, dictitems):
         return list(map(itemgetter(0), dictitems.items()))[0]
 
+    def stem_word(self, word):
+        ps = PorterStemmer()
+        return ps.stem(word)
+        
+        
+
     def matcher_helper(self, consented,fromControllerOrProcessor):
         """ checks for match using fuzzy logic
         :param consented: list items from consent
@@ -223,14 +229,19 @@ class HelperACT:
             return False if False in condition_status else True
 
         elif self.calculate_length(fromControllerOrProcessor) < self.calculate_length(consented):
-            intersected = sorted(list(set(fromControllerOrProcessor).intersection(consented)))
-            if self.calculate_length(intersected) != self.calculate_length(fromControllerOrProcessor):
-                return False
 
             condition_status = []
 
-            for i in range(len(fromControllerOrProcessor)):
-                condition_status.append(self.match(fromControllerOrProcessor[i], intersected[i]))
+            for valuefromController in fromControllerOrProcessor:
+                subConditionList = []
+                tocheckStr = self.stem_word(valuefromController)
+                for valueFromConsent in consented:
+                    subConditionList.append(self.match(tocheckStr, self.stem_word(valueFromConsent)))
+                if True in subConditionList:
+                    condition_status.append(True)
+                else:
+                    condition_status.append(False)
+
             return False if False in condition_status else True
 
         return False
@@ -240,15 +251,44 @@ class HelperACT:
 
         if  self.calculate_length(current_processing_by_controller) > self.calculate_length(consent_for_processing):
             return False
-
         return self.matcher_helper(consent_for_processing, current_processing_by_controller)
 
-    def is_doing_valid_processing(self, consented_data_for_processing, current_data_being_used_or_processed):
-        head_consented_data = [self.get_keys(dictItems) for dictItems in consented_data_for_processing]
-        head_processed_data = [self.get_keys(dictItems) for dictItems in current_data_being_used_or_processed]
+    def list_of_dict_to_dict(self, listOfDictToConvert):
+        """ convert list of dictionaries to dictionary
+        :param listOfDictToConvert: List of dictionaries Sample input format
+        [{'mobilecat': {'data': ['m', 'd']}}, {'SensorDataCategory': {'data': ['GPS', 'speed']}}]
+        :return: dictionary
+        Sample output {'SensorDataCategory': {'data': ['GPS', 'speed']}, 'mobilecat': {'data': ['m', 'd']}}
+        """
+        return dict(ChainMap(*listOfDictToConvert))
+
+    def is_doing_valid_data_processing(self, consented_data_for_processing, current_data_being_used_or_processed):
+        consented_data_for_processing = self.list_of_dict_to_dict(consented_data_for_processing)
+        current_data_being_used_or_processed = self.list_of_dict_to_dict(current_data_being_used_or_processed)
+        head_consented_data = list(consented_data_for_processing.keys())
+        head_processed_data = list(current_data_being_used_or_processed.keys())
 
         if self.calculate_length(head_processed_data) > self.calculate_length(head_consented_data):
             return False
+        else:
+            status = self.matcher_helper(head_consented_data, head_processed_data)
+            if status:
+                isValidlist = []
+
+                for keys in head_processed_data:
+                    processed_data_to_check = current_data_being_used_or_processed[keys]["data"]
+                    consented_data_to_check = consented_data_for_processing[keys]["data"]
+
+                    if self.calculate_length(processed_data_to_check) \
+                            >  self.calculate_length(consented_data_to_check):
+                        return False
+                    else:
+                        isValidlist.append(self.matcher_helper(consented_data_to_check, processed_data_to_check))
+
+                return False if False in isValidlist else True
+
+            else:
+                return False
 
     def decrypt_data(self, data):
         """Decrypt data
@@ -292,4 +332,3 @@ class HelperACT:
 
     def remove_xst_date(self, date_xst_str):
         return date_xst_str[1: len(date_xst_str) - 1].split("^^")[0]
-    
