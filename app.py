@@ -59,7 +59,7 @@ docs.register(BrokenConsent)
 api.add_resource(CompliancebyConsent,"/compliance/<string:consent_id>/consent")
 docs.register(CompliancebyConsent)
 
-api.add_resource(CompliancebyDataProvider,"/compliance/<string:data_provider_id>/consent")
+api.add_resource(CompliancebyDataProvider,"/compliance/<string:data_provider_id>/data-provider")
 docs.register(CompliancebyDataProvider)
 #LUH Interaction
 api.add_resource(QueryAllConsentID,"/query/bulk-consent-id")
