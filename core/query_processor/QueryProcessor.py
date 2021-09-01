@@ -229,8 +229,7 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
                          ?ConsentID :atCity ?City.
                          ?ConsentID :atCountry ?Country.
                          ?ConsentID :atState ?State. 
-                         FILTER NOT EXISTS {{ ?ConsentID :RevokedAtTime ?RevokedAtTime.}}
-                         FILTER(?ConsentID = :TEST110911134541145455)
+                         FILTER NOT EXISTS {{ ?ConsentID :RevokedAtTime ?RevokedAtTime.}} 
                        }} GROUP BY ?ConsentID ?DataProvider ?Purpose ?Duration ?DataRequester ?DataController
                         ?GrantedAtTime   ?Medium ?State ?City ?Country  
                    """).format(self.prefix())
@@ -289,7 +288,7 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
                                FILTER(?DataProvider = :{1})
                              }} GROUP BY ?ConsentID ?DataProvider ?Purpose ?Duration ?DataRequester ?DataController
                               ?GrantedAtTime   ?Medium ?State ?City ?Country  
-                         """).format(self.prefix(), dataprovider)
+                         """).format(self.prefix(), self.encobj.encrypt_aes(dataprovider))
 
         return query
 
