@@ -14,7 +14,7 @@ class Cron():
 
     def automated_compliance(self):
         #call list of automated compliance check
-        pass
+        self.ce.compliance_check_act(level="all")
 
 
 
