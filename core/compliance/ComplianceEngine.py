@@ -14,7 +14,7 @@ class ComplianceEngine(QueryEngine, DateHelper):
     def __init__(self):
         super().__init__()
         self.TRIGGER_URL_NOTIFY = "http://127.0.0.1:5056/notify" #dummy test URL to be replaced
-
+        self.TRIGGER_URL_CONTROLLER = "http://127.0.0.1:5056/controller"  # dummy test URL to be replaced
     def broken_consent(self, consentID, reason_for_logging):
         if len(reason_for_logging.strip()) < 2:
             return self.dataformatnotmatch()
@@ -40,32 +40,52 @@ class ComplianceEngine(QueryEngine, DateHelper):
             return self.processing_fail_message()
 
 
-    def get_consent_data(self):
-        all_consent  = self.select_query_gdb(additionalData="consent_for_compliance")
-        return json.loads(all_consent)
+    def get_consent_data(self, level="all",consentID=None,consentProvidedBy=None):
+        if level =="all":
+            all_consent  = self.select_query_gdb(additionalData="consent_for_compliance")
+            return json.loads(all_consent)
+        elif level =="consent":
+            all_consent  = self.select_query_gdb(additionalData="consent_for_compliance_consent",
+                                                 consentID=consentID)
+            return json.loads(all_consent)
+        elif level =="dataprovider":
+            print("in")
+            all_consent  = self.select_query_gdb(additionalData="consent_for_compliance_dataprovider",
+                                                 consentProvidedBy=consentProvidedBy)
+            return json.loads(all_consent)
 
-    def check_consent_expiry(self):
-        consent_datas = self.get_consent_data()
-        for consent_data in consent_datas["results"]["bindings"]:
-            cid = self.remove_uris(consent_data["ConsentID"]["value"])
-            exp_date = self.remove_xst_date(self.decrypt_data(
-                               self.remove_uris(consent_data["Duration"]["value"])))
-            if(self.has_expired(exp_date)):
-                header = {"Content-Type": "application/json"}
-                data = json.dumps({"CID":cid,"status":"Expired"})
-                #revoke the consent
-                self.broken_consent(consentID=cid,reason_for_logging="Consent expired")
-                r = requests.post(self.TRIGGER_URL_NOTIFY, data=data, headers=header)
-                msg = json.loads(r.text)
-                msg["consent_id"] = cid
-                self.store(msg)
+    def notify(self, data):
+        header = {"Content-Type": "application/json"}
+        r = requests.post(self.TRIGGER_URL_NOTIFY, data=json.dumps(data), headers=header)
+        msg = json.loads(r.text)
+        self.store(msg)
+
+    def check_consent_expiry(self, exp_date):
+        return  self.has_expired(exp_date)
+
+    def get_processing_details_from_controller(self, whoseInfoDict):
+        header = {"Content-Type": "application/json"}
+        r = requests.post(self.TRIGGER_URL_CONTROLLER, data=json.dumps(whoseInfoDict), headers=header)
+        msg = json.loads(r.text)
+        return msg
 
 
-    def compliance_check_act(self):
-        consent_datas = self.get_consent_data()
+    def compliance_check_act(self, level="all",consentID=None,consentProvidedBy=None):
+        howTriggered = None
+        if level == "all":
+            howTriggered = "automated"
+        else:
+            howTriggered = "user"
+
+
+        responseList=[]
+
+        consent_datas = self.get_consent_data(level=level, consentID=consentID, consentProvidedBy=consentProvidedBy)
         for consent_data in consent_datas["results"]["bindings"]:
             cid = self.remove_uris(consent_data["ConsentID"]["value"])
             dpid = self.decrypt_data(self.remove_uris(consent_data["DataProvider"]["value"]))
+            exp_date = self.remove_xst_date(self.decrypt_data(
+                self.remove_uris(consent_data["Duration"]["value"])))
             data_requester = self.decrypt_data(self.remove_uris(consent_data["DataRequester"]["value"]))
             data_controller = self.decrypt_data(self.remove_uris(consent_data["DataController"]["value"]))
             data_processing_list=  [self.decrypt_data(self.remove_uris(litem))
@@ -76,27 +96,76 @@ class ComplianceEngine(QueryEngine, DateHelper):
             isAboutData = [self.decrypt_data(self.remove_uris(litem))
                  for litem in consent_data["Data"]["value"].split(",")]
             toCheckData = [{v.split("-")[0]: ast.literal_eval(v.split("-")[1])} for v in isAboutData]
+
             consent_data = {"data":toCheckData,"dataprocessing": data_processing_list, "purpose":purpose }
 
+            for_requesting_info_from_dc_dp = {"ConsentID":cid, "data_requester_id":data_requester,
+                                              "data_controller_id":data_controller, "data_provider_id":dpid}
+            fromControllerDetails = self.get_processing_details_from_controller(for_requesting_info_from_dc_dp)
+            # [{'mobilecat': {'data': ['m', 'd']}}, {'SensorDataCategory': {'data': ['GPS', 'speed']}}]
+            compliance_result = {}
+            shouldNotify = False
+            if not self.has_expired(expirydate=exp_date):
+                #consent is valid and active so make further check
+                if self.has_valid_purpose(purpose, fromControllerDetails["purpose"]):
+                    if self.has_processing_rights(data_processing_list, fromControllerDetails["dataprocessing"]):
+                        if self.is_doing_valid_data_processing(toCheckData, fromControllerDetails["data"]):
+                            #all_good so ask for compliance from privacy and security
+                            if self.joint_compliance():
+                                shouldNotify = False
+                            else:
+                                compliance_result[
+                                    "joint_compliance"] = "Failed to comply from security and privacy"
+                                shouldNotify = True
+
+                        else:
+                            compliance_result[
+                                "data"] = "Data (access) is different form what was consented"
+                            shouldNotify = True
+
+                    else:
+                        compliance_result[
+                            "dataprocessing"] = "Dataprocessing is different than what was consented"
+                        shouldNotify = True
+
+                else:
+                    #purpose is invalid
+                    compliance_result[
+                        "purpose"] = "Data is used for different purpose {} than the requested in consent {}"\
+                        .format(fromControllerDetails["purpose"],purpose)
+                    shouldNotify = True
+            else:
+                # revoke the consent
+                self.broken_consent(consentID=cid, reason_for_logging="Consent expired")
+                compliance_result["consent_expired"] = "Consent has expired so consent has been automatically revoked"
+                #consent has expired
+                shouldNotify = True
+
+
+            if shouldNotify:
+                compliance_status = {"consent_info":for_requesting_info_from_dc_dp, "compliance_status":compliance_result}
+                responseList.append(compliance_status)
+            else:
+                compliance_status = {"consent_info": for_requesting_info_from_dc_dp,
+                                             "compliance_status": "Everything is good and compliant"}
+                responseList.append(compliance_status)
+
+
+        if howTriggered == "automated":
+            self.notify({"compliance_check":responseList})
+
+        else:
+            message_resp = self.compliance_message()
+            message_resp["message"] =  {"compliance_check":responseList}
+            return message_resp
 
 
 
+    def joint_compliance(self):
+        return True
 
 
 
-    def joint_compliance(self, act_compliance, spc_compliance):
-        """
-        :param act_compliance: Compliance check information (or decision) from ACT
-        :param spc_compliance: Compliance check information (or decision) from Security and Privacy Component
-        :return:
-        """
-        pass
-
-
-
-if __name__ == '__main__':
-    ce = ComplianceEngine()
-    ce.check_consent_expiry()
 
 
 
