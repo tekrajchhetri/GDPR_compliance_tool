@@ -72,6 +72,8 @@ class HelperACT:
                     "all_details_by_dataprovider":self.all_details_by_dataprovider,
                     "audit_by_consentid":self.audit_by_consentid,
                     "all_consent_for_compliance":self.all_consent_for_compliance,
+                    "all_consent_for_compliance_cid":self.all_consent_for_compliance_cid,
+                    "all_consent_for_compliance_dataprovider": self.all_consent_for_compliance_dataprovider,
                    }
         return mapfunc[name]
 
@@ -132,6 +134,14 @@ class HelperACT:
 
         if additionalData == "consent_for_compliance":
             return dict({"map": "all_consent_for_compliance"})
+
+        if additionalData == "consent_for_compliance_consent":
+            return dict({"map": "all_consent_for_compliance_cid", "arg": consentID})
+
+        if additionalData == "consent_for_compliance_dataprovider":
+            return dict({"map": "all_consent_for_compliance_dataprovider", "arg": consentProvidedBy})
+
+
 
     def select_query_gdb(self, consentProvidedBy=None, purpose=None, dataProcessing=None, dataController=None,
                     dataRequester=None, additionalData=None,consentID=None):
@@ -198,7 +208,7 @@ class HelperACT:
         """ checks the validatity of purpose in accordance with given consent
         :param purpose_from_consent:  purpose that was consented to
         :param current_processing_purpose_by_controller:  purpose current DP/DC is using data for
-        :return: boolean
+        :return: boolean 0 True:Valid
         """
         return self.match(self.tokenize(purpose_from_consent),
                           self.tokenize(current_processing_purpose_by_controller)
