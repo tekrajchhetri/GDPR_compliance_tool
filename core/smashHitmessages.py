@@ -85,6 +85,15 @@ class smashHitmessages(TokenGenerator):
 
         return revoke_consent
 
+    def compliance_message(self):
+        compliance_message = {"act_status_code": 9000,
+                           "decision": "COMPLIANCE_STATUS",
+                           "decision_token": self.token_generator(),
+                           "timestamp": self.decision_timestamp()
+                           }
+
+        return compliance_message
+
     def processing_fail_message(self):
         revoke_consent = {"act_status_code": 8200,
                            "decision": "FAILED",
