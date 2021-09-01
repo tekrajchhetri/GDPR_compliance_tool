@@ -178,7 +178,15 @@ class HelperACT:
         return [token.lemma_ for token in doc][0]
 
     def match(self, x, y):
-        """ Fuzzy string matching
+        """ Fuzzy string matching, calculates the Levenshtein distance of two strings x, y of length |x|, |y|
+
+        lev(x,y) = |x| if |y| = 0,
+                   |y| if |x| = 0,
+                   leiv(tail(x), tail(y)) if x[0] = y[0],
+                   otherwise calculate the following
+                   1 + min { lev(tail(x),y),
+                             lev(x,tail(y)),
+                             lev(tail(x), tail(y))
         :param x: input string from consent
         :param y: input string from data controller/processor
         :return: boolean
