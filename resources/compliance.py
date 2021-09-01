@@ -42,7 +42,9 @@ class CompliancebyConsent(MethodResource, Resource):
     @doc(description='Check compliance', tags=['Compliance'])
     @marshal_with(ComplianceReturnSchema)
     def get(self, consent_id):
-        pass
+        ce = ComplianceEngine()
+        response = ce.compliance_check_act(level="consent", consentID=consent_id)
+        return response
 
 class CompliancebyDataProvider(MethodResource, Resource):
     """Checks compliance for all the active consent particular to data provider
@@ -50,8 +52,12 @@ class CompliancebyDataProvider(MethodResource, Resource):
     # @ccc_required(fresh=True)
     @doc(description='Check compliance', tags=['Compliance'])
     @marshal_with(ComplianceReturnSchema)
-    def get(self, consent_id):
-        pass
+    def get(self, data_provider_id):
+        ce = ComplianceEngine()
+        print(data_provider_id)
+        response = ce.compliance_check_act(level="dataprovider", consentProvidedBy=data_provider_id)
+        return response
+
 
 
 
