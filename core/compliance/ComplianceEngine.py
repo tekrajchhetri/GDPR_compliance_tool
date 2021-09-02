@@ -71,7 +71,6 @@ class ComplianceEngine(QueryEngine, DateHelper):
 
 
     def compliance_check_act(self, level="all",consentID=None,consentProvidedBy=None):
-        howTriggered = None
         if level == "all":
             howTriggered = "automated"
         else:
@@ -88,16 +87,15 @@ class ComplianceEngine(QueryEngine, DateHelper):
                 self.remove_uris(consent_data["Duration"]["value"])))
             data_requester = self.decrypt_data(self.remove_uris(consent_data["DataRequester"]["value"]))
             data_controller = self.decrypt_data(self.remove_uris(consent_data["DataController"]["value"]))
-            data_processing_list=  [self.decrypt_data(self.remove_uris(litem))
+            data_processing_list = [self.decrypt_data(self.remove_uris(litem))
                  for litem in consent_data["DataProcessing"]["value"].split(",")]
             purpose = self.decrypt_data(self.remove_uris(consent_data["Purpose"]["value"]))
-
 
             isAboutData = [self.decrypt_data(self.remove_uris(litem))
                  for litem in consent_data["Data"]["value"].split(",")]
             toCheckData = [{v.split("-")[0]: ast.literal_eval(v.split("-")[1])} for v in isAboutData]
 
-            consent_data = {"data":toCheckData,"dataprocessing": data_processing_list, "purpose":purpose }
+            consent_data = {"data": toCheckData, "dataprocessing": data_processing_list, "purpose": purpose}
 
             for_requesting_info_from_dc_dp = {"ConsentID":cid, "data_requester_id":data_requester,
                                               "data_controller_id":data_controller, "data_provider_id":dpid}
@@ -117,17 +115,14 @@ class ComplianceEngine(QueryEngine, DateHelper):
                                 compliance_result[
                                     "joint_compliance"] = "Failed to comply from security and privacy"
                                 shouldNotify = True
-
                         else:
                             compliance_result[
                                 "data"] = "Data (access) is different form what was consented"
                             shouldNotify = True
-
                     else:
                         compliance_result[
                             "dataprocessing"] = "Dataprocessing is different than what was consented"
                         shouldNotify = True
-
                 else:
                     #purpose is invalid
                     compliance_result[
