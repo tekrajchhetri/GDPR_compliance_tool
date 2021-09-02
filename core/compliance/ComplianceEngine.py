@@ -69,16 +69,12 @@ class ComplianceEngine(QueryEngine, DateHelper):
         msg = json.loads(r.text)
         return msg
 
+    def get_trigger_type(self, level="all"):
+        return "automated" if level == "all" else "user"
 
     def compliance_check_act(self, level="all",consentID=None,consentProvidedBy=None):
-        if level == "all":
-            howTriggered = "automated"
-        else:
-            howTriggered = "user"
-
-
+        howTriggered = self.get_trigger_type(level=level)
         responseList=[]
-
         consent_datas = self.get_consent_data(level=level, consentID=consentID, consentProvidedBy=consentProvidedBy)
         for consent_data in consent_datas["results"]["bindings"]:
             cid = self.remove_uris(consent_data["ConsentID"]["value"])
@@ -145,7 +141,6 @@ class ComplianceEngine(QueryEngine, DateHelper):
                                              "compliance_status": "Everything is good and compliant"}
                 responseList.append(compliance_status)
 
-
         if howTriggered == "automated":
             self.notify({"compliance_check":responseList})
 
@@ -158,10 +153,3 @@ class ComplianceEngine(QueryEngine, DateHelper):
 
     def joint_compliance(self):
         return True
-
-
-
-
-
-
-
