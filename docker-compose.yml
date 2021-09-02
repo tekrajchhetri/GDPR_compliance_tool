@@ -24,7 +24,7 @@ services:
       labels:
         ofelia.job-run.datecron.image: "parser"
         ofelia.job-run.datecron.schedule: "@every 5s"
-        ofelia.job-run.datecron.command: "python3 /app/core/Cron.py"
+        ofelia.job-run.datecron.command: "python3 /app/core/cron/Cron.py"
   parser:
     image: parser
     build: .

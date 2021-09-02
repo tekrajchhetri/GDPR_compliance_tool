@@ -9,6 +9,7 @@ from flask_apispec.views import MethodResource
 from marshmallow import Schema, fields
 from flask_apispec import marshal_with, doc, use_kwargs
 from core.audit.Audit import  Audit
+from  core.security.JWTDecorator import ccc_required
 import json
 
 class ReturnSchemaaudit(Schema):
@@ -20,6 +21,7 @@ class ReturnSchemaaudit(Schema):
 
 class AuditConsent(MethodResource, Resource):
     @doc(description='AuditConsent.', tags=['Audit'])
+    @ccc_required(fresh=True)
     @marshal_with(ReturnSchemaaudit)
     def get(self, consent_id, level_of_details):
         auditInstance = Audit()
@@ -32,6 +34,7 @@ class AuditConsent(MethodResource, Resource):
 
 class  AuditDataProvider(MethodResource, Resource):
     @doc(description="Audit consent by data provider",tags=['Audit'])
+    @ccc_required(fresh=True)
     @marshal_with(ReturnSchemaaudit)
     def get(self, data_provider_id, level_of_details):
         auditInstance = Audit()

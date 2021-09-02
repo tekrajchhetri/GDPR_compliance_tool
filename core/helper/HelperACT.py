@@ -7,9 +7,18 @@
 # @Software: PyCharm
 import json
 from SPARQLWrapper import  JSON
-
+import spacy
+from fuzzywuzzy import fuzz
+from operator import itemgetter
 from core.security.Cryptography import  Decrypt
+from nltk.stem.porter import PorterStemmer
+from collections import ChainMap
+
 class HelperACT:
+
+    def load_spacy_model(self):
+        nlp = spacy.load('en_core_web_lg')
+        return nlp
 
     def for_processing(resource_dict):
         """ Convert nested array of inputs into a single array
@@ -62,13 +71,14 @@ class HelperACT:
                     "consent_by_consentID": self.consent_by_consentID,
                     "all_details_by_dataprovider":self.all_details_by_dataprovider,
                     "audit_by_consentid":self.audit_by_consentid,
-
-
+                    "all_consent_for_compliance":self.all_consent_for_compliance,
+                    "all_consent_for_compliance_cid":self.all_consent_for_compliance_cid,
+                    "all_consent_for_compliance_dataprovider": self.all_consent_for_compliance_dataprovider,
                    }
         return mapfunc[name]
 
     def list_to_query(self, data, whatfor, EncryptObj):
-        """ Convert list to query
+        """ Convert list to query for data processing
         :input: list
         :returns: SPARQL query string
         """
@@ -76,6 +86,19 @@ class HelperACT:
         for vlaue in data:
             strs = ":"+whatfor+" :" + EncryptObj.encrypt_aes(vlaue) + ";\n"
             querydata = strs + querydata
+        return querydata
+
+    def list_to_query_isaboutdata(self, data, whatfor, EncryptObj):
+        """ Convert list to query for data processing
+        :input: list
+        :returns: SPARQL query string
+        """
+        querydata = ""
+        for key in data:
+            for value in data[key]:
+                formatted_dat = "{}-{}".format(key, value)
+                strs = ":" + whatfor + " :" + EncryptObj.encrypt_aes(formatted_dat) + ";\n"
+                querydata = strs + querydata
         return querydata
 
 
@@ -109,6 +132,17 @@ class HelperACT:
         if additionalData=="audit_by_consentid" and consentID is not None:
             return dict({"map": "audit_by_consentid", "arg": consentID})
 
+        if additionalData == "consent_for_compliance":
+            return dict({"map": "all_consent_for_compliance"})
+
+        if additionalData == "consent_for_compliance_consent":
+            return dict({"map": "all_consent_for_compliance_cid", "arg": consentID})
+
+        if additionalData == "consent_for_compliance_dataprovider":
+            return dict({"map": "all_consent_for_compliance_dataprovider", "arg": consentProvidedBy})
+
+
+
     def select_query_gdb(self, consentProvidedBy=None, purpose=None, dataProcessing=None, dataController=None,
                     dataRequester=None, additionalData=None,consentID=None):
         sparql_inits = self.init_sparql(self.HOST_URI, self.get_username(), self.get_password())
@@ -131,8 +165,6 @@ class HelperACT:
         :return: bool
         """
         consent = json.loads(self.select_query_gdb(consentID=consentID, additionalData="check_consent"))
-
-
         if (self.consent_exists(consent)):
             hasGrantedStatus = json.loads(self.select_query_gdb(consentID=consentID,
                                                                 additionalData="check_consent_granted"))
@@ -141,7 +173,141 @@ class HelperACT:
                 return True
 
         return False
-    
+
+    def preprocess(self, word):
+        return word.strip().lower()
+
+    def tokenize(self, word):
+        """ Perform the word lemitization
+        :param word: string that is to be tokenized
+        :return: lemmatized word
+        """
+        nlp = self.load_spacy_model()
+        word = self.preprocess(word=word)
+        doc = nlp(word)
+        return [token.lemma_ for token in doc][0]
+
+    def match(self, x, y):
+        """ Fuzzy string matching, calculates the Levenshtein distance of two strings x, y of length |x|, |y|
+
+        lev(x,y) = |x| if |y| = 0,
+                   |y| if |x| = 0,
+                   leiv(tail(x), tail(y)) if x[0] = y[0],
+                   otherwise calculate the following
+                   1 + min { lev(tail(x),y),
+                             lev(x,tail(y)),
+                             lev(tail(x), tail(y))
+        :param x: input string from consent
+        :param y: input string from data controller/processor
+        :return: boolean
+        """
+        ratio =  fuzz.token_set_ratio(x, y)
+        return True if ratio >= 95 else False
+
+    def has_valid_purpose(self, purpose_from_consent, current_processing_purpose_by_controller):
+        """ checks the validatity of purpose in accordance with given consent
+        :param purpose_from_consent:  purpose that was consented to
+        :param current_processing_purpose_by_controller:  purpose current DP/DC is using data for
+        :return: boolean 0 True:Valid
+        """
+        return self.match(self.tokenize(purpose_from_consent),
+                          self.tokenize(current_processing_purpose_by_controller)
+                          )
+
+    def calculate_length(self, x):
+        if type(x) == list:
+            return len(x)
+        else:
+            return 0
+
+    def get_keys(self, dictitems):
+        return list(map(itemgetter(0), dictitems.items()))[0]
+
+    def stem_word(self, word):
+        ps = PorterStemmer()
+        return ps.stem(word)
+        
+        
+
+    def matcher_helper(self, consented,fromControllerOrProcessor):
+        """ checks for match using fuzzy logic
+        :param consented: list items from consent
+        :param fromControllerOrProcessor:  list items from controller or processor
+        :return: boolean
+        """
+        consented = sorted(
+            [self.tokenize(word_for_tokenized_lemma) for word_for_tokenized_lemma in consented])
+        fromControllerOrProcessor = sorted(
+            [self.tokenize(word_for_tokenized_lemma) for word_for_tokenized_lemma in fromControllerOrProcessor])
+
+        if self.calculate_length(fromControllerOrProcessor) == self.calculate_length(consented):
+            condition_status = []
+            for i in range(len(consented)):
+                condition_status.append(self.match(consented[i], fromControllerOrProcessor[i]))
+            return False if False in condition_status else True
+
+        elif self.calculate_length(fromControllerOrProcessor) < self.calculate_length(consented):
+
+            condition_status = []
+
+            for valuefromController in fromControllerOrProcessor:
+                subConditionList = []
+                tocheckStr = self.stem_word(valuefromController)
+                for valueFromConsent in consented:
+                    subConditionList.append(self.match(tocheckStr, self.stem_word(valueFromConsent)))
+                if True in subConditionList:
+                    condition_status.append(True)
+                else:
+                    condition_status.append(False)
+
+            return False if False in condition_status else True
+
+        return False
+
+
+    def has_processing_rights(self, consent_for_processing, current_processing_by_controller):
+
+        if  self.calculate_length(current_processing_by_controller) > self.calculate_length(consent_for_processing):
+            return False
+        return self.matcher_helper(consent_for_processing, current_processing_by_controller)
+
+    def list_of_dict_to_dict(self, listOfDictToConvert):
+        """ convert list of dictionaries to dictionary
+        :param listOfDictToConvert: List of dictionaries Sample input format
+        [{'mobilecat': {'data': ['m', 'd']}}, {'SensorDataCategory': {'data': ['GPS', 'speed']}}]
+        :return: dictionary
+        Sample output {'SensorDataCategory': {'data': ['GPS', 'speed']}, 'mobilecat': {'data': ['m', 'd']}}
+        """
+        return dict(ChainMap(*listOfDictToConvert))
+
+    def is_doing_valid_data_processing(self, consented_data_for_processing, current_data_being_used_or_processed):
+        consented_data_for_processing = self.list_of_dict_to_dict(consented_data_for_processing)
+        current_data_being_used_or_processed = self.list_of_dict_to_dict(current_data_being_used_or_processed)
+        head_consented_data = list(consented_data_for_processing.keys())
+        head_processed_data = list(current_data_being_used_or_processed.keys())
+
+        if self.calculate_length(head_processed_data) > self.calculate_length(head_consented_data):
+            return False
+        else:
+            status = self.matcher_helper(head_consented_data, head_processed_data)
+            if status:
+                isValidlist = []
+
+                for keys in head_processed_data:
+                    processed_data_to_check = current_data_being_used_or_processed[keys]["data"]
+                    consented_data_to_check = consented_data_for_processing[keys]["data"]
+
+                    if self.calculate_length(processed_data_to_check) \
+                            >  self.calculate_length(consented_data_to_check):
+                        return False
+                    else:
+                        isValidlist.append(self.matcher_helper(consented_data_to_check, processed_data_to_check))
+
+                return False if False in isValidlist else True
+
+            else:
+                return False
+
     def decrypt_data(self, data):
         """Decrypt data
         :param data: single value encrypted data
@@ -174,9 +340,13 @@ class HelperACT:
                     continue
                 elif (k == "DataProcessing"):
                     list_of_consents.append({k: [self.decrypt_data(self.remove_uris(litem)) for litem in value[k]["value"].split(",")]})
+                elif (k == "Data"):
+                    list_of_consents.append({k:[self.decrypt_data(self.remove_uris(litem)) for litem in value[k]["value"].split(",")]})
                 else:
                     list_of_consents.append({k: self.decrypt_data(self.remove_uris(value[k]["value"]))})
             resp_to_make[self.remove_uris(value["ConsentID"]["value"])] = list_of_consents
         return resp_to_make
-    
-    
+
+
+    def remove_xst_date(self, date_xst_str):
+        return date_xst_str[1: len(date_xst_str) - 1].split("^^")[0]
