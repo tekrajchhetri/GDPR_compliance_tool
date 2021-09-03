@@ -13,8 +13,8 @@ import ast
 class ComplianceEngine(QueryEngine, DateHelper):
     def __init__(self):
         super().__init__()
-        self.TRIGGER_URL_NOTIFY = "http://127.0.0.1:5056/notify" #dummy test URL to be replaced
-        self.TRIGGER_URL_CONTROLLER = "http://127.0.0.1:5056/controller"  # dummy test URL to be replaced
+        self.TRIGGER_URL_NOTIFY = "https://tektestapi.herokuapp.com/notify" #dummy test URL to be replaced
+        self.TRIGGER_URL_CONTROLLER = "https://tektestapi.herokuapp.com/controller"  # dummy test URL to be replaced
     def broken_consent(self, consentID, reason_for_logging):
         if len(reason_for_logging.strip()) < 2:
             return self.dataformatnotmatch()
