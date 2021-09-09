@@ -12,7 +12,7 @@ from core.storage.Functions import Functions
 class  SPARQL(smashHitmessages, Functions):
     def __init__(self):
         super().__init__()
-        self.HOST_URI = "https://smashhitactool.sti2.at/repositories/EarlyPrototypeKG"
+        self.HOST_URI = "https://smashhitactool.sti2.at/repositories/EarlyPrototypeKG_COPY_TEK"
 
     def init_sparql(self, hostname, userid, password):
         sparql = SPARQLWrapper(hostname)
@@ -20,7 +20,7 @@ class  SPARQL(smashHitmessages, Functions):
         return sparql
 
     def post_sparql(self,userid, password, query, consent_id_for_logging, type="insert", reason_for_logging=""):
-        hostname = "https://smashhitactool.sti2.at/repositories/EarlyPrototypeKG/statements"
+        hostname = "https://smashhitactool.sti2.at/repositories/EarlyPrototypeKG_COPY_TEK/statements"
 
         sparql = SPARQLWrapper(hostname)
         sparql.setHTTPAuth(BASIC)
