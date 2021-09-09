@@ -10,11 +10,14 @@ from  core.helper.date_helper import DateHelper
 import json
 import requests
 import ast
+from core.storage.Functions import Functions
+from core.smashHitmessages import smashHitmessages
+import datetime
 class ComplianceEngine(QueryEngine, DateHelper):
     def __init__(self):
         super().__init__()
-        self.TRIGGER_URL_NOTIFY = "http://127.0.0.1:5056/notify" #dummy test URL to be replaced
-        self.TRIGGER_URL_CONTROLLER = "http://127.0.0.1:5056/controller"  # dummy test URL to be replaced
+        self.TRIGGER_URL_NOTIFY = "https://tektestapi.herokuapp.com/notify" #dummy test URL to be replaced
+        self.TRIGGER_URL_CONTROLLER = "https://tektestapi.herokuapp.com/controller"  # dummy test URL to be replaced
     def broken_consent(self, consentID, reason_for_logging):
         if len(reason_for_logging.strip()) < 2:
             return self.dataformatnotmatch()
@@ -152,4 +155,32 @@ class ComplianceEngine(QueryEngine, DateHelper):
 
 
     def joint_compliance(self):
-        return True
+        return True 
+      
+class ComplianceObligationNotification(smashHitmessages, Functions):
+    def __int__(self):
+        super(ComplianceObligationNotification, self).__int__()
+
+    def store_compliance_obligation_notification_status(self, received_info):
+        toReturn_Message = self.compliance_obligation_notification_message()
+        received_info_msg = {
+            "compliance_action_request": received_info["compliance_action_request"],
+            "compliance_obligation_status": received_info["compliance_obligation_status"],
+            "consent_id": received_info["consent_id"],
+            "decision_token": received_info["decision_token"],
+            "timestamp": str(datetime.datetime.utcnow())
+        }
+        data = {"received_info":received_info_msg, "acknowledge_message":toReturn_Message}
+        record_success = self.store(data)
+        if "SUCCESS" in record_success:
+            return toReturn_Message
+        else:
+            message = self.insert_fail()
+            message["message"] = "ERROR OCCURED, TRY AGAIN"
+            return message
+
+
+
+
+
+ 

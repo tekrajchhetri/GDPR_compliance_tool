@@ -17,7 +17,7 @@ from collections import ChainMap
 class HelperACT:
 
     def load_spacy_model(self):
-        nlp = spacy.load('en_core_web_lg')
+        nlp = spacy.load('en_core_web_md')
         return nlp
 
     def for_processing(resource_dict):
