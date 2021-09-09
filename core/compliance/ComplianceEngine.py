@@ -155,8 +155,8 @@ class ComplianceEngine(QueryEngine, DateHelper):
 
 
     def joint_compliance(self):
-        return True
-
+        return True 
+      
 class ComplianceObligationNotification(smashHitmessages, Functions):
     def __int__(self):
         super(ComplianceObligationNotification, self).__int__()
@@ -183,5 +183,4 @@ class ComplianceObligationNotification(smashHitmessages, Functions):
 
 
 
-
-
+ 
