@@ -33,7 +33,7 @@ from resources.user import JWTUserRegister
 from resources.user import JWTUserLogin
 from resources.compliance import CompliancebyConsent
 from resources.compliance import CompliancebyDataProvider
-from resources.compliance import DataEraseComplianceObligation
+from resources.compliance import ComplianceObligation
 
 api = Api(app)
 app.config.update({
@@ -73,8 +73,8 @@ docs.register(AuditConsent)
 api.add_resource(AuditDataProvider, "/audit/<string:data_provider_id>/<string:level_of_details>/data-provider")
 docs.register(AuditDataProvider)
 #compliance obligation action
-api.add_resource(DataEraseComplianceObligation, "/compliance/obligation")
-docs.register(DataEraseComplianceObligation)
+api.add_resource(ComplianceObligation, "/compliance/obligation")
+docs.register(ComplianceObligation)
 #JWTLogin
 api.add_resource(JWTUserLogin, "/jwt/login/")
 docs.register(JWTUserLogin)
@@ -85,11 +85,6 @@ docs.register(JWTUserRegister)
 
 #default
 api.add_resource(Test,"/")
-
-
-
-
-
 
 
 if __name__ == '__main__':
