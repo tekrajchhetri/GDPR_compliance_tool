@@ -16,6 +16,10 @@ Automated Contracting Tool, a component of smashHit. smashHit is a Horizon 2020 
 - [OpenFaaS](https://www.openfaas.com/)
 - [mongoDB](https://www.mongodb.com/)
 - [Flask-JWT-Extended](https://flask-jwt-extended.readthedocs.io/en)
+- [Spacy](https://spacy.io)
+- [NLTK](http://www.nltk.org)
+- [FuzzyWuzzy](https://github.com/seatgeek/fuzzywuzzy)
+
 
 ## Cluster Information
 - Tier: M0 Sandbox (General)
@@ -55,8 +59,7 @@ import math
 
 ```
 ## Contributors
-- Tek Raj Chhetri 
-- Anelia Kurteva 
+- Tek Raj Chhetri  
 
 
 ## Project
