@@ -1,16 +1,20 @@
 version: '3'
 services:
   tekactool:
-    container_name: tekactool
-    hostname: tekactool
+    image: tekrajchhetri/tekactool
     restart: always
-    build: ./
-    volumes:
-      - ./:/app
+    build:
+      context: ./
+      dockerfile: Dockerfile
     environment:
       - PYTHONBUFFERED=1
+    volumes:
+      - ./:/app
     ports:
       - "5001:5001"
+
+
+
   ofelia:
       image: mcuadros/ofelia:latest
       depends_on:
@@ -23,8 +27,12 @@ services:
         - /var/run/docker.sock:/var/run/docker.sock:ro
       labels:
         ofelia.job-run.datecron.image: "parser"
-        ofelia.job-run.datecron.schedule: "@every 5s"
+        ofelia.job-run.datecron.schedule: "@every 600s"
         ofelia.job-run.datecron.command: "python3 /app/core/cron/Cron.py"
+
+
   parser:
     image: parser
-    build: .
+    build:
+      context: ./
+
