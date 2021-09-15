@@ -1,0 +1,20 @@
+# horizontal-scale-pod.yaml
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: tekactool
+spec:
+  minReplicas: 3
+  maxReplicas: 5 # 10000 #
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: tekacttool
+
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 95
