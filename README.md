@@ -32,6 +32,11 @@ Run the command below from the root directory for deployement and access via [ht
 bash docker_run.sh
 
 ```
+## API
+
+![image](https://user-images.githubusercontent.com/52251022/144920140-4011ede4-919a-46e7-9581-73695953a57d.png)
+
+
 ## Todo
 - [ ] Implement revoke endpoint functionalities 
 - [ ] Implement broken consent endpoint functionalities 
