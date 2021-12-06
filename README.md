@@ -37,13 +37,6 @@ bash docker_run.sh
 ![image](https://user-images.githubusercontent.com/52251022/144920140-4011ede4-919a-46e7-9581-73695953a57d.png)
 
 
-## Todo
-- [ ] Implement revoke endpoint functionalities 
-- [ ] Implement broken consent endpoint functionalities 
-- [ ] Implement Kafka message broker
-- [x] Add endpoint boilerplate code for revoke and broken consent 
-- [x] Implement serverless functions for recording and querying ACT decisions
-- [x] Test serverless functions  
 ## Deployment in Remote Server
 
 ## FaaS
