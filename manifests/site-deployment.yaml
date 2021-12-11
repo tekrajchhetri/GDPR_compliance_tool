@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tekacttool
+  labels:
+    app: tekactool
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: tekactool
+  template:
+    metadata:
+      labels:
+        app: tekactool
+    spec:
+      containers:
+      - name: tekactool
+        image: tekrajchhetri/tekactool:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5001
+
+
+
+
+
