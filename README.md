@@ -63,4 +63,4 @@ import math
 -  [smashHit](https://www.smashhit.eu/) 
 
 ## License
-[GNU General Public License v3.0](https://github.com/tekrajchhetri/automatic_contracting/blob/main/LICENSE)
+[MIT](https://github.com/tekrajchhetri/GDPR_compliance_tool/blob/main/LICENSE)
