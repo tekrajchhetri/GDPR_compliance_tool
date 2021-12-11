@@ -49,14 +49,10 @@ bash docker_run.sh
 ![image](https://user-images.githubusercontent.com/52251022/120082109-68899400-c0c1-11eb-99cc-d4b23f80c89f.png)
 
 
-## Usage
-
-```python
-import math
-
-```
-## Contributors
-- Tek Raj Chhetri  
+## Developer
+- Tek Raj Chhetri 
+- Web: [https://tekrajchhetri.com](https://tekrajchhetri.com)
+- Twitter: [TekRaj_14](https://twitter.com/TekRaj_14) 
 
 
 ## Project
