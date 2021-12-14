@@ -6,8 +6,6 @@
 # @File    : QueryProcessor.py
 # @Software: PyCharm
 
-
-
 from core.Credentials import Credentials
 from core.storage.SPARQL import SPARQL
 from core.helper.HelperACT import HelperACT
@@ -20,7 +18,8 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
         super().__init__()
 
     def prefix(self):
-        prefix = textwrap.dedent("""PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
+        prefix = textwrap.dedent("""
+            PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
             PREFIX gconsent: <https://w3id.org/GConsent#>
             PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
             PREFIX dc: <http://purl.org/dc/elements/1.1/>
@@ -89,22 +88,29 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
 
     def consentID_by_consentprovider_ID(self, consentprovider_ID):
         """
-        Get consent ID by consent provider ID( or data provider or data subject)
-        :param consentID_by_consentprovider_ID: Unique ID mapped to data subjectr
+        Get consent ID by consent provider ID(
+        or data provider or data subject)
+        :param consentprovider_ID: Unique ID mapped to data subject
         :return: consentID
         """
         query = textwrap.dedent("""{0}
                 SELECT ?ConsentID   
                  WHERE {{ 
-                 ?ConsentID a <http://ontologies.atb-bremen.de/smashHitCore#ConsentID>.
+                 ?ConsentID a 
+                 <http://ontologies.atb-bremen.de/smashHitCore#ConsentID>.
                   ?ConsentID :isProvidedBy :{1}.
-                  ?ConsentID :GrantedAtTime ?GrantedAtTime.
-                   FILTER NOT EXISTS {{ ?ConsentID :RevokedAtTime ?RevokedAtTime.}}
-                }}""").format(self.prefix(), self.encobj.encrypt_aes(consentprovider_ID))
+                  # ?ConsentID :GrantedAtTime ?GrantedAtTime.
+                   FILTER NOT EXISTS 
+                   {{ ?ConsentID :RevokedAtTime ?RevokedAtTime.}}
+                }}""").format(self.prefix(),
+                              self.encobj.encrypt_aes(consentprovider_ID)
+                              )
 
         return query
 
     def consent_by_consentID(self, consentID):
+        """Get consent based on consent id
+        """
         query = textwrap.dedent("""{0}
               SELECT ?ConsentID
               WHERE {{ 
