@@ -61,8 +61,8 @@ class HelperACT:
 
     def function_map(self, name):
         """ Map to actual function
-        :param name: name which function to map
-        :return: function name
+        :param name: input key based on which function is mapped
+        :return: mapped function name
         """
         mapfunc = {
                    "bulk_consentid": self.bulk_consentID,
@@ -73,13 +73,15 @@ class HelperACT:
                     "audit_by_consentid":self.audit_by_consentid,
                     "all_consent_for_compliance":self.all_consent_for_compliance,
                     "all_consent_for_compliance_cid":self.all_consent_for_compliance_cid,
-                    "all_consent_for_compliance_dataprovider": self.all_consent_for_compliance_dataprovider,
+                    "all_consent_for_compliance_dataprovider":
+                        self.all_consent_for_compliance_dataprovider,
                    }
         return mapfunc[name]
 
     def list_to_query(self, data, whatfor, EncryptObj):
-        """ Convert list to query for data processing
-        :input: list
+        """ Convert list of data processing information to SPARQL query strings
+        :input: data<list>
+        :input: whatfor<string> - SPARQL property
         :returns: SPARQL query string
         """
         querydata = ""
@@ -89,7 +91,7 @@ class HelperACT:
         return querydata
 
     def list_to_query_isaboutdata(self, data, whatfor, EncryptObj):
-        """ Convert list to query for data processing
+        """ Convert list of data usage information to SPARQL query strings
         :input: list
         :returns: SPARQL query string
         """
@@ -143,8 +145,8 @@ class HelperACT:
 
 
 
-    def select_query_gdb(self, consentProvidedBy=None, purpose=None, dataProcessing=None, dataController=None,
-                    dataRequester=None, additionalData=None,consentID=None):
+    def select_query_gdb(self, consentProvidedBy=None, purpose=None, dataProcessing=None,
+                         dataController=None,dataRequester=None, additionalData=None,consentID=None):
         sparql_inits = self.init_sparql(self.HOST_URI, self.get_username(), self.get_password())
         which_query_return = self.which_query(consentProvidedBy, purpose, dataProcessing, dataController,
                     dataRequester, additionalData, consentID)
@@ -251,14 +253,9 @@ class HelperACT:
             condition_status = []
 
             for valuefromController in fromControllerOrProcessor:
-                subConditionList = []
                 tocheckStr = self.stem_word(valuefromController)
                 for valueFromConsent in consented:
-                    subConditionList.append(self.match(tocheckStr, self.stem_word(valueFromConsent)))
-                if True in subConditionList:
-                    condition_status.append(True)
-                else:
-                    condition_status.append(False)
+                    condition_status.append(self.match(tocheckStr, self.stem_word(valueFromConsent)))
 
             return False if False in condition_status else True
 
@@ -274,7 +271,7 @@ class HelperACT:
     def list_of_dict_to_dict(self, listOfDictToConvert):
         """ convert list of dictionaries to dictionary
         :param listOfDictToConvert: List of dictionaries Sample input format
-        [{'mobilecat': {'data': ['m', 'd']}}, {'SensorDataCategory': {'data': ['GPS', 'speed']}}]
+        [{'mobilecat': {'data': ['x', 'y']}}, {'SensorDataCategory': {'data': ['GPS', 'speed']}}]
         :return: dictionary
         Sample output {'SensorDataCategory': {'data': ['GPS', 'speed']}, 'mobilecat': {'data': ['m', 'd']}}
         """
