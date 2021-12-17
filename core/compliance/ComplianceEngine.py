@@ -155,6 +155,7 @@ class ComplianceEngine(QueryEngine, DateHelper):
 
 
     def joint_compliance(self):
+        #update code - privacy link cleanup
         return True 
       
 class ComplianceObligationNotification(smashHitmessages, Functions):
