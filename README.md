@@ -4,7 +4,7 @@ GDPR Compliance Tool is a core component of smashHit. smashHit is a Horizon 2020
 ## System Architecture
 ![arch-act-paper-2](https://user-images.githubusercontent.com/52251022/148185833-d4e245e2-837f-4336-862d-aff42fc1235c.png)
 ## Privacy and Security 
-The tool's security and privacy component is written in Prolog and extends the [Next Generation Access Control (NGAC)](https://standards.incits.org/apps/group_public/project/details.php?project_id=2328) framework, which is a framework for attribute-based access control. The security and privacy component's source code can be accessed via the link below.
+The tool's security and privacy component is implemented in Prolog by Rance DeLong from [Open group](https://www.opengroup.org) and extends the [Next Generation Access Control (NGAC)](https://standards.incits.org/apps/group_public/project/details.php?project_id=2328) framework, which is a framework for attribute-based access control. The security and privacy component's source code can be accessed via the link below.
  
 - https://github.com/tog-rtd/SmashHit.git
 
