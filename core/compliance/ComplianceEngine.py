@@ -155,9 +155,11 @@ class ComplianceEngine(QueryEngine, DateHelper):
 
 
     def joint_compliance(self):
-        #update code - privacy link cleanup
-        return True 
-      
+        # call security and privacy with privacy setting specifics to your need
+        # https://github.com/tog-rtd/SmashHit.git
+        pass
+
+
 class ComplianceObligationNotification(smashHitmessages, Functions):
     def __int__(self):
         super(ComplianceObligationNotification, self).__int__()
