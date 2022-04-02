@@ -1,6 +1,9 @@
 # GDPR Compliance Tool
 GDPR Compliance Tool is a core component of smashHit. smashHit is a Horizon 2020 project with the primary objective of creating a secure and trustworthy data-sharing platform with a focus on consent management in a distributed environment such as the automotiveindustry, insurance and smart cities following GDPR.
 
+# Publication
+This work is part of "*Data Protection by Design Tool for Automated GDPR Compliance Verification Based on Semantically Modeled Informed Consent*". Therefore, if you use any code from this or [https://github.com/tog-rtd/SmashHit.git](https://github.com/tog-rtd/SmashHit.git) repository, please cite our work.
+
 ## System Architecture
 ![updated_act-paper-2-tek](https://user-images.githubusercontent.com/52251022/156544074-12c0934a-47a8-4133-8910-196e1afe088b.jpg)
 
