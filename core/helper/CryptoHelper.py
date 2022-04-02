@@ -41,7 +41,7 @@ class  CryptoHelper:
         """Helper function for directory name
         :return: String, directory name
         """
-        return "sec_public_private_key"
+        return "key_sec_public_private_key"
 
     def get_file_name(self):
         """
