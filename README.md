@@ -61,6 +61,10 @@ Run the command below from the root directory for deployement and access via [ht
 bash docker_run.sh
 
 ```
+## More Instructions
+
+Please check [https://tekrajchhetri.com/opensource/gdpr_tool/](https://tekrajchhetri.com/opensource/gdpr_tool/) for instructions and additional details.
+
 ## API
 
 ![image](https://user-images.githubusercontent.com/52251022/144920140-4011ede4-919a-46e7-9581-73695953a57d.png)
