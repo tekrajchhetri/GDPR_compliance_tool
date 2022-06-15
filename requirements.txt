@@ -3,7 +3,7 @@ Flask-RESTful==0.3.8
 uwsgi==2.0.19.1
 flask_apispec==0.11.0
 SPARQLWrapper==1.8.5
-pyjwt[crypto]==2.1.0
+pyjwt[crypto]==2.4.0
 pymongo==3.11.4
 pymongo[tls,srv]
 requests==2.25.1
