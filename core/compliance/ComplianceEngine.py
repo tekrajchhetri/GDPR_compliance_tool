@@ -52,7 +52,6 @@ class ComplianceEngine(QueryEngine, DateHelper):
                                                  consentID=consentID)
             return json.loads(all_consent)
         elif level =="dataprovider":
-            print("in")
             all_consent  = self.select_query_gdb(additionalData="consent_for_compliance_dataprovider",
                                                  consentProvidedBy=consentProvidedBy)
             return json.loads(all_consent)

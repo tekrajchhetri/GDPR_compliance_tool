@@ -20,6 +20,17 @@ class Audit:
             to_match_cid.append(consent_id["ConsentID"]["value"].split("#")[1])
         return to_match_cid
 
+    def get_consent_information(self, consentID):
+        result = self.qe.select_query_gdb(consentID=consentID, consentProvidedBy=None, purpose=None, dataProcessing=None,
+                                   dataController=None, dataRequester=None, additionalData="ConsentDetails")
+        jsonformatdata = json.loads(result)
+        processed_data = self.qe.process_consent_data(jsonformatdata)
+        audit_success_message = self.qe.audit_success()
+        formatted_decision = {"consent_id": consentID,
+                              "consent_data": processed_data}
+        audit_success_message["message"] = formatted_decision
+        return audit_success_message
+
 
     def audit_all_consent_by_dp(self, data_provider_id,level_of_details):
         """ Fetch all the details about the consent, decision for auditing purpose
