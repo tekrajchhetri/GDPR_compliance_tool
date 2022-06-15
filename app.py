@@ -11,7 +11,7 @@ import os
 from flask import Flask
 from flask_restful import Api
 from resources.Test import Test
-from resources.query import QueryConsentIDByConsentProviderID, QueryAllConsentID
+
 from flask_jwt_extended import JWTManager
 from datetime import timedelta
 
@@ -34,6 +34,9 @@ from resources.user import JWTUserLogin
 from resources.compliance import CompliancebyConsent
 from resources.compliance import CompliancebyDataProvider
 from resources.compliance import ComplianceObligation
+from resources.query import QueryConsentIDByConsentProviderID
+from resources.query import QueryAllConsentID
+from resources.audit import QuerySingleConsentStatusByConsentID
 
 api = Api(app)
 app.config.update({
@@ -62,6 +65,9 @@ docs.register(CompliancebyConsent)
 
 api.add_resource(CompliancebyDataProvider,"/compliance/<string:data_provider_id>/data-provider")
 docs.register(CompliancebyDataProvider)
+#amar
+api.add_resource(QuerySingleConsentStatusByConsentID,"/query/<string:consent_id>/consent")
+docs.register(QuerySingleConsentStatusByConsentID)
 #LUH Interaction
 api.add_resource(QueryAllConsentID,"/query/bulk-consent-id")
 docs.register(QueryAllConsentID)

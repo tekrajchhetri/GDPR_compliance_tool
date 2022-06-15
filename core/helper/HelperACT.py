@@ -73,6 +73,7 @@ class HelperACT:
                     "audit_by_consentid":self.audit_by_consentid,
                     "all_consent_for_compliance":self.all_consent_for_compliance,
                     "all_consent_for_compliance_cid":self.all_consent_for_compliance_cid,
+                    "check_ConsentDetails":self.check_ConsentDetails,
                     "all_consent_for_compliance_dataprovider":
                         self.all_consent_for_compliance_dataprovider,
                    }
@@ -121,6 +122,12 @@ class HelperACT:
 
         if additionalData == "consentID" and consentProvidedBy is not None:
             return dict({"map": "consentID_by_consentprovider_ID", "arg": consentProvidedBy})
+
+        if additionalData == "" and consentProvidedBy is not None:
+            return dict({"map": "ConsentDetails", "arg": consentProvidedBy})
+
+        if additionalData == "ConsentDetails" and consentID is not None:
+            return dict({"map": "check_ConsentDetails", "arg": consentID})
 
         if additionalData == "check_consent_granted" and consentID is not None:
             return dict({"map": "granted_consent_by_consentID", "arg": consentID})

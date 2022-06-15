@@ -52,14 +52,14 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
             {4}
             :GrantedAtTime :{5};
             {6}
-            :hasExpiry :{7};
+            :hasExpirationDate :{7};
             :atCountry :{8};
             :atCity :{9};
             :atState :{10};
             :requestedBy :{11};
             :hasDataController :{12};
             :isProvidedBy :{13};
-            :status :{14}.
+            :hasConsentStatus :{14}.
                    }}       
                
           """).format(self.prefix(),
@@ -120,12 +120,26 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
                 }}""").format(self.prefix(), consentID)
         return query
 
+    def check_ConsentDetails(self, consentID):
+        """Get consent based on consent id
+        """
+        query = textwrap.dedent("""{0}
+              SELECT ?ConsentID ?status ?DataProvider ?DataProcessorController
+              WHERE {{ 
+              ?ConsentID a <http://ontologies.atb-bremen.de/smashHitCore#ConsentID>.
+                ?ConsentID :hasConsentStatus ?status.
+                ?ConsentID :isProvidedBy ?DataProvider.
+                ?ConsentID :hasDataController ?DataProcessorController.
+               FILTER(?ConsentID = :{1})
+                }}""").format(self.prefix(), consentID)
+        return query
+
     def granted_consent_by_consentID(self, consentID):
         query = textwrap.dedent("""{0}
               SELECT ?status
               WHERE {{ 
               ?ConsentID a <http://ontologies.atb-bremen.de/smashHitCore#ConsentID>.
-              ?ConsentID :status ?status.
+              ?ConsentID :hasConsentStatus ?status.
               FILTER(?ConsentID = :{1})
         }}""").format(self.prefix(), consentID)
 
@@ -135,8 +149,8 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
         revokedTime = '\'{}^^xsd:dateTime\''.format(self.decision_timestamp())
         encRevoked = self.encobj.encrypt_aes(revokedTime)
         query = textwrap.dedent("""{0} 
-            DELETE {{?ConsentID :status :{1}.}}
-            INSERT {{?ConsentID :status :{2}.
+            DELETE {{?ConsentID :hasConsentStatus :{1}.}}
+            INSERT {{?ConsentID :hasConsentStatus :{2}.
             ?ConsentID :RevokedAtTime :{3}.
             }}
              WHERE {{
@@ -165,7 +179,7 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
                ?ConsentID :requestedBy ?DataRequester.
                ?ConsentID :isAboutData ?Data.
                ?ConsentID :forDataProcessing ?forDataProcessing.
-               ?ConsentID :hasExpiry ?Duration.
+               ?ConsentID :hasExpirationDate ?Duration.
                ?ConsentID :hasDataController ?DataController.
                ?ConsentID :GrantedAtTime ?GrantedAtTime. 
                ?ConsentID :atCity ?City.
@@ -179,7 +193,6 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
              }} GROUP BY ?ConsentID ?DataProvider ?Purpose  ?Duration ?DataRequester 
              ?DataController ?GrantedAtTime   ?Medium ?State ?City ?Country ?RevokedAtTime
          """).format(self.prefix(), self.encobj.encrypt_aes(consentprovider_ID))
-
         return query
 
 
@@ -197,7 +210,7 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
                   ?ConsentID :requestedBy ?DataRequester.
                   ?ConsentID :isAboutData ?Data.
                   ?ConsentID :forDataProcessing ?forDataProcessing.
-                  ?ConsentID :hasExpiry ?Duration.
+                  ?ConsentID :hasExpirationDate ?Duration.
                   ?ConsentID :hasDataController ?DataController.
                   ?ConsentID :GrantedAtTime ?GrantedAtTime. 
                   ?ConsentID :atCity ?City.
@@ -211,7 +224,6 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
                 }} GROUP BY ?ConsentID ?DataProvider ?Purpose  ?Duration ?DataRequester ?DataController 
                 ?GrantedAtTime   ?Medium ?State ?City ?Country ?RevokedAtTime
             """).format(self.prefix(), consentID)
-
         return query
 
 
@@ -229,7 +241,7 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
                          ?ConsentID :requestedBy ?DataRequester.
                          ?ConsentID :isAboutData ?Data.
                          ?ConsentID :forDataProcessing ?forDataProcessing.
-                         ?ConsentID :hasExpiry ?Duration.
+                         ?ConsentID :hasExpirationDate ?Duration.
                          ?ConsentID :hasDataController ?DataController.
                          ?ConsentID :GrantedAtTime ?GrantedAtTime. 
                          ?ConsentID :atCity ?City.
@@ -256,7 +268,7 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
                          ?ConsentID :requestedBy ?DataRequester.
                          ?ConsentID :isAboutData ?Data.
                          ?ConsentID :forDataProcessing ?forDataProcessing.
-                         ?ConsentID :hasExpiry ?Duration.
+                         ?ConsentID :hasExpirationDate ?Duration.
                          ?ConsentID :hasDataController ?DataController.
                          ?ConsentID :GrantedAtTime ?GrantedAtTime. 
                          ?ConsentID :atCity ?City.
@@ -284,7 +296,7 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
                                ?ConsentID :requestedBy ?DataRequester.
                                ?ConsentID :isAboutData ?Data.
                                ?ConsentID :forDataProcessing ?forDataProcessing.
-                               ?ConsentID :hasExpiry ?Duration.
+                               ?ConsentID :hasExpirationDate ?Duration.
                                ?ConsentID :hasDataController ?DataController.
                                ?ConsentID :GrantedAtTime ?GrantedAtTime. 
                                ?ConsentID :atCity ?City.
