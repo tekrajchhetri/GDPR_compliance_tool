@@ -9,7 +9,7 @@ from flask_apispec.views import MethodResource
 from marshmallow import Schema, fields
 from flask_apispec import marshal_with, doc, use_kwargs
 from core.audit.Audit import  Audit
-from  core.security.JWTDecorator import ccc_required, access_to_all
+from  core.security.JWTDecorator import ccc_required, access_to_all,spm_required
 import json
 
 class ReturnSchemaaudit(Schema):
@@ -46,13 +46,12 @@ class  AuditDataProvider(MethodResource, Resource):
 
 
 class QuerySingleConsentStatusByConsentID(MethodResource, Resource):
-    @access_to_all()
+    @spm_required()
     @doc(description='Get consent details (ID, status) by consent ID.', tags=['Query'])
     @marshal_with(ReturnSchemaaudit)
     def get(self, consent_id):
         auditInstance = Audit()
         response =  auditInstance.get_consent_information(consent_id)
-        print(response)
         return response
 
 
