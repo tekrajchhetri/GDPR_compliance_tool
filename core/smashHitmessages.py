@@ -123,3 +123,14 @@ class smashHitmessages(TokenGenerator):
 
         return revoke_consent
 
+    # this error means something has changed in the code, leading to the occurance of error
+    def token_expired(self):
+        error = {"act_status_code": 8910,
+                           "decision": "FAILED",
+                            "message": "Token Expired / No Token Present",
+                           "decision_token": self.token_generator(),
+                           "timestamp": self.decision_timestamp()
+                           }
+
+        return error
+
