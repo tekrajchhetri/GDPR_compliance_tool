@@ -18,7 +18,7 @@ class KeyGeneration(CryptoHelper):
         super.__int__(self)
 
     def initKey(self):
-        return RSA.generate(4096)
+        return RSA.generate(2048)
 
     def write_into_file_after_cond_check(self, type,directory, encrypted_data):
 
@@ -39,7 +39,7 @@ class KeyGeneration(CryptoHelper):
         secKey = []
         directory = self.get_directory_name()
         encryptObj = Encrypt()
-        for i in range(3):
+        for i in range(1):
             secKey.append(encryptObj.encrypt_rsa(self.generate_random__sec_key(32)))
 
         self.write_into_file_after_cond_check(type="secret", directory=directory, encrypted_data= secKey)
@@ -48,7 +48,7 @@ class KeyGeneration(CryptoHelper):
         secP = []
         directory = self.get_directory_name()
         encryptObj = Encrypt()
-        for i in range(3):
+        for i in range(1):
             P = self.generate_random__sec_keyP()
             secP.append(encryptObj.encrypt_rsa(P.to_bytes(16, "big")))
 
@@ -58,7 +58,7 @@ class KeyGeneration(CryptoHelper):
         ivKey = []
         directory = self.get_directory_name()
         encryptObj = Encrypt()
-        for i in range(3):
+        for i in range(1):
             ivKey.append(encryptObj.encrypt_rsa(self.generate_random__sec_key(16)))
         self.write_into_file_after_cond_check(type="four", directory=directory, encrypted_data= ivKey)
 
@@ -124,7 +124,7 @@ class Decrypt(KeyObject):
         secret = ch.read_pickle_file(secretf)
         fourf = ch.get_full_file_path_name(type="four")
         iv = ch.read_pickle_file(fourf)
-        for i in [2,1,0]:
+        for i in [0]:
             cipher_aes = AES.new(dec.decrypt_rsa(secret[i]), AES.MODE_EAX, dec.decrypt_rsa(iv[i]))
             chipertext= cipher_aes.decrypt(chipertext)
         return chipertext.strip()

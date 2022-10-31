@@ -15,10 +15,13 @@ class  ConsentValidation(QueryEngine):
     def post_data(self, validated_data):
         requestedBy = None
         hasDataController = None
+        hasDataProcessor = None
         for agent in validated_data["Agents"]:
             if agent["role"] == "controller":
                 hasDataController = agent["id"]
-            elif agent["role"] == "requester":
+            if agent["role"] == "processor":
+                hasDataProcessor = agent["id"]
+            if agent["role"] == "requester":
                 #data
                 requestedBy = agent["id"]
         fordataprocessing = validated_data["DataProcessing"]
@@ -54,6 +57,7 @@ class  ConsentValidation(QueryEngine):
 
                                    query=self.insert_query(requestedBy= requestedBy,
                                                      hasDataController = hasDataController,
+                                                     hasDataProcessor=hasDataProcessor,
                                                      fordataprocessing = fordataprocessing,
                                                      GrantedAtTime = GrantedAtTime,
                                                      inMedium = inMedium,
@@ -69,4 +73,5 @@ class  ConsentValidation(QueryEngine):
                                    consent_id_for_logging=consentID
 
                                    )
+
         return respone

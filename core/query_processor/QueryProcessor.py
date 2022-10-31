@@ -40,7 +40,7 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
 
 
 
-    def insert_query(self, requestedBy,hasDataController, fordataprocessing, GrantedAtTime, inMedium, purpose,
+    def insert_query(self, requestedBy,hasDataController,hasDataProcessor, fordataprocessing, GrantedAtTime, inMedium, purpose,
                      isAboutData, city, consentID, country, state, dataprovider, expirationtime):
 
         granted = "GRANTED"
@@ -59,7 +59,8 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
             :requestedBy :{11};
             :hasDataController :{12};
             :isProvidedBy :{13};
-            :hasConsentStatus :{14}.
+            :hasConsentStatus :{14};
+            :hasDataProcessor :{15}.
                    }}       
                
           """).format(self.prefix(),
@@ -76,7 +77,8 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
                       self.encrypt_data(requestedBy),
                       self.encrypt_data(hasDataController),
                       self.encrypt_data(dataprovider),
-                      self.encrypt_data(granted))
+                      self.encrypt_data(granted),
+                     self.encrypt_data(hasDataProcessor))
         return insquery
 
     def encrypt_data(self, data):
@@ -124,12 +126,13 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
         """Get consent based on consent id
         """
         query = textwrap.dedent("""{0}
-              SELECT ?ConsentID ?status ?DataProvider ?DataProcessorController
+              SELECT ?ConsentID ?status ?DataProvider ?DataController ?DataProcessor
               WHERE {{ 
               ?ConsentID a <http://ontologies.atb-bremen.de/smashHitCore#ConsentID>.
                 ?ConsentID :hasConsentStatus ?status.
                 ?ConsentID :isProvidedBy ?DataProvider.
-                ?ConsentID :hasDataController ?DataProcessorController.
+                ?ConsentID :hasDataController ?DataController.
+                ?ConsentID :hasDataProcessor ?DataProcessor.
                FILTER(?ConsentID = :{1})
                 }}""").format(self.prefix(), consentID)
         return query
@@ -169,7 +172,7 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
         query = textwrap.dedent("""{0} 
              SELECT ?ConsentID (group_concat(DISTINCT ?forDataProcessing;separator=', ') as ?DataProcessing)  
              ?DataProvider  ?Purpose (group_concat(DISTINCT ?Data;separator=', ') as ?Data) 
-              ?Duration ?DataRequester ?DataController ?GrantedAtTime   
+              ?Duration ?DataRequester ?DataController ?DataProcessor ?GrantedAtTime   
              ?Medium ?State ?City ?Country ?RevokedAtTime
               WHERE {{
                ?ConsentID a <http://ontologies.atb-bremen.de/smashHitCore#ConsentID>.
@@ -181,6 +184,7 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
                ?ConsentID :forDataProcessing ?forDataProcessing.
                ?ConsentID :hasExpirationDate ?Duration.
                ?ConsentID :hasDataController ?DataController.
+                ?ConsentID :hasDataProcessor ?DataProcessor.
                ?ConsentID :GrantedAtTime ?GrantedAtTime. 
                ?ConsentID :atCity ?City.
                ?ConsentID :atCountry ?Country.
@@ -191,7 +195,7 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
                     FILTER(?DataProvider = :{1})
 
              }} GROUP BY ?ConsentID ?DataProvider ?Purpose  ?Duration ?DataRequester 
-             ?DataController ?GrantedAtTime   ?Medium ?State ?City ?Country ?RevokedAtTime
+             ?DataController ?DataProcessor ?GrantedAtTime   ?Medium ?State ?City ?Country ?RevokedAtTime
          """).format(self.prefix(), self.encobj.encrypt_aes(consentprovider_ID))
         return query
 
@@ -200,7 +204,7 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
         query = textwrap.dedent("""{0} 
                 SELECT ?ConsentID (group_concat(DISTINCT ?forDataProcessing;separator=', ') as ?DataProcessing)  ?DataProvider 
                  ?Purpose (group_concat(DISTINCT ?Data;separator=', ') as ?Data) 
-                 ?Duration ?DataRequester ?DataController ?GrantedAtTime  
+                 ?Duration ?DataRequester ?DataController  ?DataProcessor ?GrantedAtTime  
                   ?Medium ?State ?City ?Country ?RevokedAtTime
                  WHERE {{
                   ?ConsentID a <http://ontologies.atb-bremen.de/smashHitCore#ConsentID>.
@@ -212,6 +216,7 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
                   ?ConsentID :forDataProcessing ?forDataProcessing.
                   ?ConsentID :hasExpirationDate ?Duration.
                   ?ConsentID :hasDataController ?DataController.
+                  ?ConsentID :hasDataProcessor ?DataProcessor.
                   ?ConsentID :GrantedAtTime ?GrantedAtTime. 
                   ?ConsentID :atCity ?City.
                   ?ConsentID :atCountry ?Country.
@@ -221,7 +226,7 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
                     }}
                        FILTER(?ConsentID = :{1})
     
-                }} GROUP BY ?ConsentID ?DataProvider ?Purpose  ?Duration ?DataRequester ?DataController 
+                }} GROUP BY ?ConsentID ?DataProvider ?Purpose  ?Duration ?DataRequester ?DataController ?DataProcessor
                 ?GrantedAtTime   ?Medium ?State ?City ?Country ?RevokedAtTime
             """).format(self.prefix(), consentID)
         return query
@@ -231,7 +236,7 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
         query = textwrap.dedent("""{0} 
                        SELECT ?ConsentID (group_concat(DISTINCT ?forDataProcessing;separator=', ') as ?DataProcessing)  
                        ?DataProvider  ?Purpose (group_concat(DISTINCT ?Data;separator=', ') as ?Data) ?Duration ?DataRequester 
-                       ?DataController ?GrantedAtTime  
+                       ?DataController ?DataProcessor ?GrantedAtTime  
                         ?Medium ?State ?City ?Country  
                         WHERE {{
                          ?ConsentID a <http://ontologies.atb-bremen.de/smashHitCore#ConsentID>.
@@ -243,12 +248,13 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
                          ?ConsentID :forDataProcessing ?forDataProcessing.
                          ?ConsentID :hasExpirationDate ?Duration.
                          ?ConsentID :hasDataController ?DataController.
+                         ?ConsentID :hasDataProcessor ?DataProcessor.
                          ?ConsentID :GrantedAtTime ?GrantedAtTime. 
                          ?ConsentID :atCity ?City.
                          ?ConsentID :atCountry ?Country.
                          ?ConsentID :atState ?State. 
                          FILTER NOT EXISTS {{ ?ConsentID :RevokedAtTime ?RevokedAtTime.}} 
-                       }} GROUP BY ?ConsentID ?DataProvider ?Purpose ?Duration ?DataRequester ?DataController
+                       }} GROUP BY ?ConsentID ?DataProvider ?Purpose ?Duration ?DataRequester ?DataController ?DataProcessor
                         ?GrantedAtTime   ?Medium ?State ?City ?Country  
                    """).format(self.prefix())
 
@@ -258,7 +264,7 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
         query = textwrap.dedent("""{0} 
                        SELECT ?ConsentID (group_concat(DISTINCT ?forDataProcessing;separator=', ') as ?DataProcessing)  
                        ?DataProvider  ?Purpose (group_concat(DISTINCT ?Data;separator=', ') as ?Data) ?Duration ?DataRequester 
-                       ?DataController ?GrantedAtTime  
+                       ?DataController ?DataProcessor ?GrantedAtTime  
                         ?Medium ?State ?City ?Country  
                         WHERE {{
                          ?ConsentID a <http://ontologies.atb-bremen.de/smashHitCore#ConsentID>.
@@ -270,6 +276,7 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
                          ?ConsentID :forDataProcessing ?forDataProcessing.
                          ?ConsentID :hasExpirationDate ?Duration.
                          ?ConsentID :hasDataController ?DataController.
+                         ?ConsentID :hasDataProcessor ?DataProcessor.
                          ?ConsentID :GrantedAtTime ?GrantedAtTime. 
                          ?ConsentID :atCity ?City.
                          ?ConsentID :atCountry ?Country.
@@ -277,7 +284,7 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
                          FILTER NOT EXISTS {{ ?ConsentID :RevokedAtTime ?RevokedAtTime.}}
                          FILTER(?ConsentID = :{1})
                        }} GROUP BY ?ConsentID ?DataProvider ?Purpose ?Duration ?DataRequester ?DataController
-                        ?GrantedAtTime   ?Medium ?State ?City ?Country  
+                        ?DataProcessor ?GrantedAtTime   ?Medium ?State ?City ?Country  
                    """).format(self.prefix(), cid)
 
         return query
@@ -286,7 +293,7 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
         query = textwrap.dedent("""{0} 
                              SELECT ?ConsentID (group_concat(DISTINCT ?forDataProcessing;separator=', ') as ?DataProcessing)  
                              ?DataProvider  ?Purpose (group_concat(DISTINCT ?Data;separator=', ') as ?Data) ?Duration ?DataRequester 
-                             ?DataController ?GrantedAtTime  
+                             ?DataController ?DataProcessor ?GrantedAtTime  
                               ?Medium ?State ?City ?Country  
                               WHERE {{
                                ?ConsentID a <http://ontologies.atb-bremen.de/smashHitCore#ConsentID>.
@@ -298,6 +305,7 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
                                ?ConsentID :forDataProcessing ?forDataProcessing.
                                ?ConsentID :hasExpirationDate ?Duration.
                                ?ConsentID :hasDataController ?DataController.
+                               ?ConsentID :hasDataProcessor ?DataProcessor.
                                ?ConsentID :GrantedAtTime ?GrantedAtTime. 
                                ?ConsentID :atCity ?City.
                                ?ConsentID :atCountry ?Country.
@@ -305,7 +313,7 @@ class QueryEngine (Credentials, SPARQL, smashHitmessages, HelperACT):
                                FILTER NOT EXISTS {{ ?ConsentID :RevokedAtTime ?RevokedAtTime.}}
                                FILTER(?DataProvider = :{1})
                              }} GROUP BY ?ConsentID ?DataProvider ?Purpose ?Duration ?DataRequester ?DataController
-                              ?GrantedAtTime   ?Medium ?State ?City ?Country  
+                              ?DataProcessor ?GrantedAtTime   ?Medium ?State ?City ?Country  
                          """).format(self.prefix(), self.encobj.encrypt_aes(dataprovider))
 
         return query
