@@ -7,6 +7,7 @@
 # @Software: PyCharm
 from core.helper.date_helper import DateHelper
 from core.query_processor.QueryProcessor import QueryEngine
+from core.low_level.NGAC import NGAC
 class  ConsentValidation(QueryEngine):
 
     def __init__(self):
@@ -73,5 +74,26 @@ class  ConsentValidation(QueryEngine):
                                    consent_id_for_logging=consentID
 
                                    )
+
+        if respone["act_status_code"]==7100:
+            ngacInst = NGAC()
+            status = ngacInst.updateNGAC(requestedBy= requestedBy,
+                                                     hasDataController = hasDataController,
+                                                     hasDataProcessor=hasDataProcessor,
+                                                     fordataprocessing = fordataprocessing,
+                                                     GrantedAtTime = GrantedAtTime,
+                                                     inMedium = inMedium,
+                                                     purpose=purpose,
+                                                     isAboutData = isAboutData,
+                                                     city = city,
+                                                     consentID=consentID,
+                                                     country=country,
+                                                     state=state,
+                                                    dataprovider= dataprovider,
+                                                     expirationtime=expirationtime)
+
+
+            if status == 'fail':
+                respone["message"]="Consent created some NGAC update failed"
 
         return respone
