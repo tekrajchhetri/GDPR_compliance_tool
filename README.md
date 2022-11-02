@@ -1,5 +1,31 @@
 # GDPR Compliance Tool
-GDPR Compliance Tool is a core component of smashHit. smashHit is a Horizon 2020 project with the primary objective of creating a secure and trustworthy data-sharing platform with a focus on consent management in a distributed environment such as the automotiveindustry, insurance and smart cities following GDPR.
+**Abstract:** The enforcement of the GDPR in May 2018 has led to a paradigm shift in data protection. Organizations face significant challenges, such as demonstrating compliance (or auditability) and automated compliance verification due to the complex and dynamic nature of consent, as well as the scale at which compliance verification must be performed. Furthermore, the GDPR’s promotion of data protection by design and industrial interoperability requirements has created new technical challenges, as they require significant changes in the design and implementation of systems that handle personal data. We present a scalable data protection by design tool for automated compliance verification and auditability based on informed consent that is modeled with a knowledge graph. Automated compliance verification is made possible by implementing a regulation-to-code process that translates GDPR regulations into well-defined technical and organizational measures and, ultimately, software code. We demonstrate the effectiveness of the tool in the insurance and smart cities domains. We highlight ways in which our tool can be adapted to other domains.
+
+**Keywords:** GDPR; privacy; compliance verification; informed consent; standard data protection model; data sharing; data protection by design; knowledge graph; distributed systems
+
+**URL:** https://www.mdpi.com/1424-8220/22/7/2763 
+
+# Publication
+This work is part of "*Data Protection by Design Tool for Automated GDPR Compliance Verification Based on Semantically Modeled Informed Consent*". Therefore, if you use any code from this or [https://github.com/tog-rtd/SmashHit.git](https://github.com/tog-rtd/SmashHit.git) repository, please cite our work.
+
+```
+@Article{s22072763,
+AUTHOR = {Chhetri, Tek Raj and Kurteva, Anelia and DeLong, Rance J. and Hilscher, Rainer and Korte, Kai and Fensel, Anna},
+TITLE = {Data Protection by Design Tool for Automated GDPR Compliance Verification Based on Semantically Modeled Informed Consent},
+JOURNAL = {Sensors},
+VOLUME = {22},
+YEAR = {2022},
+NUMBER = {7},
+ARTICLE-NUMBER = {2763},
+URL = {https://www.mdpi.com/1424-8220/22/7/2763},
+ISSN = {1424-8220},
+ABSTRACT = {The enforcement of the GDPR in May 2018 has led to a paradigm shift in data protection. Organizations face significant challenges, such as demonstrating compliance (or auditability) and automated compliance verification due to the complex and dynamic nature of consent, as well as the scale at which compliance verification must be performed. Furthermore, the GDPR&rsquo;s promotion of data protection by design and industrial interoperability requirements has created new technical challenges, as they require significant changes in the design and implementation of systems that handle personal data. We present a scalable data protection by design tool for automated compliance verification and auditability based on informed consent that is modeled with a knowledge graph. Automated compliance verification is made possible by implementing a regulation-to-code process that translates GDPR regulations into well-defined technical and organizational measures and, ultimately, software code. We demonstrate the effectiveness of the tool in the insurance and smart cities domains. We highlight ways in which our tool can be adapted to other domains.},
+DOI = {10.3390/s22072763}
+}
+```
+
+
+
 
 ## System Architecture
 ![updated_act-paper-2-tek](https://user-images.githubusercontent.com/52251022/156544074-12c0934a-47a8-4133-8910-196e1afe088b.jpg)
@@ -39,6 +65,10 @@ Run the command below from the root directory for deployement and access via [ht
 bash docker_run.sh
 
 ```
+## More Instructions
+
+Please check [https://tekrajchhetri.com/opensource/gdpr_tool/](https://tekrajchhetri.com/opensource/gdpr_tool/) for instructions and additional details.
+
 ## API
 
 ![image](https://user-images.githubusercontent.com/52251022/144920140-4011ede4-919a-46e7-9581-73695953a57d.png)
