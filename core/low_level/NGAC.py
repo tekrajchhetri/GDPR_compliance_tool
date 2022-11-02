@@ -79,8 +79,7 @@ class NGAC:
         conn = aiohttp.TCPConnector(limit=None, ttl_dns_cache=300)
         session = aiohttp.ClientSession(connector=conn)
 
-        conc_req = 3
-        now = time.time()
+        conc_req = 4
         results = await self.gather_with_concurrency(conc_req, *[
             self.addControllerNGAC(session=session, _controller_id=hasDataController, _privacy_policy=yourprivacypoicy),
             self.addProcessorNGAC(session=session, _processor_id=hasDataProcessor, _data_controller=hasDataController,
@@ -89,22 +88,10 @@ class NGAC:
                                     _privacy_preference=yourprivacy_preference,
                                     _data_items=your_data_items)
             ])
-        time_taken = time.time() - now
 
         await session.close()
 
         if 'failure' in results:
-            return "fail", time_taken
+            return "fail"
         else:
-            return 'success', time_taken
-
-
-# if __name__ == '__main__':
-#     test = NGAC()
-#     r = asyncio.run(test.updateNGAC(hasDataProcessor="XXX", hasDataController="YYYY",
-#                                  requestedBy=None, fordataprocessing=None, GrantedAtTime=None, inMedium=None,
-#                                  purpose=None,
-#                                  isAboutData=None, city=None, consentID=None, country=None, state=None,
-#                                  dataprovider=None, expirationtime=None))
-#     print(r)
-
+            return 'success'
