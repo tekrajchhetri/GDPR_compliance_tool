@@ -8,6 +8,7 @@
 from core.helper.date_helper import DateHelper
 from core.query_processor.QueryProcessor import QueryEngine
 from core.low_level.NGAC import NGAC
+import asyncio
 class  ConsentValidation(QueryEngine):
 
     def __init__(self):
@@ -77,7 +78,7 @@ class  ConsentValidation(QueryEngine):
 
         if respone["act_status_code"]==7100:
             ngacInst = NGAC()
-            status = ngacInst.updateNGAC(requestedBy= requestedBy,
+            status = asyncio.run(ngacInst.updateNGAC(requestedBy= requestedBy,
                                                      hasDataController = hasDataController,
                                                      hasDataProcessor=hasDataProcessor,
                                                      fordataprocessing = fordataprocessing,
@@ -90,7 +91,7 @@ class  ConsentValidation(QueryEngine):
                                                      country=country,
                                                      state=state,
                                                     dataprovider= dataprovider,
-                                                     expirationtime=expirationtime)
+                                                     expirationtime=expirationtime))
 
 
             if status == 'fail':
