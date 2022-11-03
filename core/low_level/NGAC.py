@@ -100,7 +100,6 @@ class NGAC:
             "consent_id": consent_id,
         }
         _r = requests.post(_URL, data=payload)
-        print(_r.text)
         return json.loads(_r.text)['respStatus']
 
     def check_access_permission(self, purpose, hasDataProcessor, dataprovider, hasDataController, fordataprocessing,
@@ -119,10 +118,8 @@ class NGAC:
             "object": f"pdi({dataprovider})[{dataprovider}]"
         }
 
-        print(payload)
         _URLacess = 'ENDPOINT/access'
         _r = requests.get(_URLacess, params=payload)
-        print(_r.text)
         try:
             return json.loads(_r.text)['respMessage']
         except Exception as ex:
