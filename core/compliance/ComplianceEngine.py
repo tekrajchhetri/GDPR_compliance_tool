@@ -13,6 +13,7 @@ import ast
 from core.storage.Functions import Functions
 from core.smashHitmessages import smashHitmessages
 import datetime
+from core.low_level.NGAC import NGAC
 class ComplianceEngine(QueryEngine, DateHelper):
     def __init__(self):
         super().__init__()
@@ -27,6 +28,11 @@ class ComplianceEngine(QueryEngine, DateHelper):
                                        consent_id_for_logging=consentID, reason_for_logging= reason_for_logging,
                                        type="broken_consent"
                                        )
+            updateRevokations = NGAC().updateRevokation(token="admin_token",
+                                                        _privacy_preference=NGAC().getpolicy("admin_token"),
+                                                        consent_id=consentID
+                                                        )
+
             return respone
         else:
             return self.processing_fail_message()
@@ -38,6 +44,11 @@ class ComplianceEngine(QueryEngine, DateHelper):
             respone = self.post_sparql(userid=self.get_username(), password=self.get_password(),
                                        query=self.revoke_broken_consent_query(consentID=consentID),
                                        consent_id_for_logging=consentID, type="revoke")
+            updateRevokations = NGAC().updateRevokation(token="admin_token",
+                                                        _privacy_preference=NGAC().getpolicy("admin_token"),
+                                                        consent_id=consentID
+                                                        )
+
             return respone
         else:
             return self.processing_fail_message()
@@ -85,6 +96,7 @@ class ComplianceEngine(QueryEngine, DateHelper):
                 self.remove_uris(consent_data["Duration"]["value"])))
             data_requester = self.decrypt_data(self.remove_uris(consent_data["DataRequester"]["value"]))
             data_controller = self.decrypt_data(self.remove_uris(consent_data["DataController"]["value"]))
+            data_processor = self.decrypt_data(self.remove_uris(consent_data["DataProcessor"]["value"]))
             data_processing_list = [self.decrypt_data(self.remove_uris(litem))
                  for litem in consent_data["DataProcessing"]["value"].split(",")]
             purpose = self.decrypt_data(self.remove_uris(consent_data["Purpose"]["value"]))
@@ -92,11 +104,12 @@ class ComplianceEngine(QueryEngine, DateHelper):
             isAboutData = [self.decrypt_data(self.remove_uris(litem))
                  for litem in consent_data["Data"]["value"].split(",")]
             toCheckData = [{v.split("-")[0]: ast.literal_eval(v.split("-")[1])} for v in isAboutData]
-
             consent_data = {"data": toCheckData, "dataprocessing": data_processing_list, "purpose": purpose}
-
-            for_requesting_info_from_dc_dp = {"ConsentID":cid, "data_requester_id":data_requester,
-                                              "data_controller_id":data_controller, "data_provider_id":dpid}
+            for_requesting_info_from_dc_dp = {"ConsentID":cid,
+                                              "data_requester_id":data_requester,
+                                              "data_controller_id":data_controller,
+                                              "data_processor_id":data_processor,
+                                              "data_provider_id":dpid}
             fromControllerDetails = self.get_processing_details_from_controller(for_requesting_info_from_dc_dp)
             # [{'mobilecat': {'data': ['m', 'd']}}, {'SensorDataCategory': {'data': ['GPS', 'speed']}}]
             compliance_result = {}
@@ -107,7 +120,12 @@ class ComplianceEngine(QueryEngine, DateHelper):
                     if self.has_processing_rights(data_processing_list, fromControllerDetails["dataprocessing"]):
                         if self.is_doing_valid_data_processing(toCheckData, fromControllerDetails["data"]):
                             #all_good so ask for compliance from privacy and security
-                            if self.joint_compliance():
+                            if self.joint_compliance(fordataprocessing=data_processing_list,
+                                                     dataprovider=dpid,
+                                                     purpose=purpose,
+                                                     hasDataController=data_controller,
+                                                     hasDataProcessor=data_processor
+                                                     ):
                                 shouldNotify = False
                             else:
                                 compliance_result[
@@ -153,10 +171,16 @@ class ComplianceEngine(QueryEngine, DateHelper):
 
 
 
-    def joint_compliance(self):
+    def joint_compliance(self, fordataprocessing, dataprovider, purpose, hasDataController, hasDataProcessor):
         # call security and privacy with privacy setting specifics to your need
         # https://github.com/tog-rtd/SmashHit.git
-        pass
+        result =  NGAC().check_access_permission(fordataprocessing=fordataprocessing,
+                                              dataprovider=dataprovider,
+                                              purpose=purpose,
+                                              hasDataController=hasDataController,
+                                              hasDataProcessor=hasDataProcessor)
+
+        return True if result=="success" else False
 
 
 class ComplianceObligationNotification(smashHitmessages, Functions):
