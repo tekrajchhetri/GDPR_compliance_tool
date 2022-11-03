@@ -10,7 +10,7 @@ import json
 import time
 import aiohttp
 import asyncio
-
+import requests
 
 class NGAC:
 
@@ -51,7 +51,7 @@ class NGAC:
             return json.loads(data)['respStatus']
 
     async def addDataSubjectNGAC(self, token, session, _data_subject_id, _privacy_preference, _data_items):
-        _URL = "REST_ENDPOINT"
+        _URL = "ENDPOINT"
 
         payload = {
             "token": token,
@@ -91,15 +91,59 @@ class NGAC:
             data = await resp.text()
             return json.loads(data)['respStatus']
 
+    def updateRevokation(self, token, _privacy_preference, consent_id):
+        _URL = "REST_ENDPOINT"
+
+        payload = {
+            "token": token,
+            "policy": _privacy_preference,
+            "consent_id": consent_id,
+        }
+        _r = requests.post(_URL, data=payload)
+        print(_r.text)
+        return json.loads(_r.text)['respStatus']
+
+    def check_access_permission(self, purpose, hasDataProcessor, dataprovider, hasDataController, fordataprocessing,
+                                token="TOKEN"):
+
+        _URLP = f'ENDPOINT/getpol?token={token}'
+        _rP = requests.get(_URLP)
+        _privacy_preference = json.loads(_rP.text)['respBody'] if len(
+            json.loads(_rP.text)['respBody']) > 4 else 'dplp_min'
+
+        payload = {
+            "user": f"dp[{hasDataProcessor}][{hasDataController}]",
+            "ar": str([f"dpo[{hasDataProcessor}][{hasDataController}]_{x}" for x in fordataprocessing]),
+            "purpose": f"p({purpose})",
+            "policy": _privacy_preference,
+            "object": f"pdi({dataprovider})[{dataprovider}]"
+        }
+
+        print(payload)
+        _URLacess = 'ENDPOINT/access'
+        _r = requests.get(_URLacess, params=payload)
+        print(_r.text)
+        try:
+            return json.loads(_r.text)['respMessage']
+        except Exception as ex:
+            pass
+
+    def getpolicy(self, yourtoken):
+        _URLP = f'ENDPOINT/getpol?token={yourtoken}'
+        _rP = requests.get(_URLP)
+        yourprivacypoicy = json.loads(_rP.text)['respBody'] if len(json.loads(_rP.text)['respBody']) > 4 else 'dplp_min'
+        return yourprivacypoicy
+
     async def updateNGAC(self, requestedBy, hasDataController, hasDataProcessor, fordataprocessing, GrantedAtTime,
                          inMedium, purpose,
                          isAboutData, city, consentID, country, state, dataprovider, expirationtime):
 
-        yourprivacypoicy = "XXX"
-        yourtoken = "XXX"
-        yourprivacy_preference = "XXX"
-        your_data_items = "XXX"
-        yourconstraint = "XXX"
+        yourtoken = "XXXXXXXXXXXXXX"
+        yourprivacypoicy = self.getpolicy(yourtoken)
+        yourprivacy_preference = "XXXXXXXXXXXXXX"
+        your_data_items = "XXXXXXXXXXXXXX"
+        yourapplication = "XXXXXXXXXXXXXX"
+        yourconstraint = "XXXXXXXXXXXXXX"
 
         conn = aiohttp.TCPConnector(limit=None, ttl_dns_cache=300)
         session = aiohttp.ClientSession(connector=conn)
