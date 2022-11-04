@@ -17,7 +17,7 @@ class JWTUser(JWTHelper, smashHitmessages):
         super().__init__()
 
     def register_user(self, username, password,confirm_password, organization):
-        organizationCheck_role = self.organisation_map(organization.upper())
+        organizationCheck_role = self.organisation_map(organization)
         if organizationCheck_role != 0:
             user = User.query.filter_by(username=username).first()
             if user:
@@ -32,7 +32,7 @@ class JWTUser(JWTHelper, smashHitmessages):
 
             newuser = User(username=username,
                            password=generate_password_hash(password, method='sha256'),
-                           organization=organization.upper(),
+                           organization=organization,
                            role=organizationCheck_role,
                            status=1
                            )
