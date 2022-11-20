@@ -8,7 +8,7 @@
 
 from flask_restful import Resource, request
 from flask_apispec.views import MethodResource
-from marshmallow import Schema, fields,ValidationError
+from marshmallow import Schema, fields, ValidationError
 from flask_apispec import marshal_with, doc, use_kwargs
 from core.storage.JWTUser import JWTUser
 
@@ -27,15 +27,18 @@ class ReturnSchemaJWT(Schema):
     message = fields.String(optional=True)
     timestamp = fields.String(required=True)
 
+
 class LoginSchema(Schema):
     username = fields.Str()
     password = fields.Str()
 
+
 class LoginReturnSchema(Schema):
-    access_token=fields.Str()
+    access_token = fields.Str()
+
 
 class JWTUserRegister(MethodResource, Resource):
-    @doc(description='User.', tags=['USER'])
+    @doc(description="User.", tags=["USER"])
     @use_kwargs(UserSchema)
     @marshal_with(ReturnSchemaJWT)
     def post(self, **kwargs):
@@ -47,15 +50,17 @@ class JWTUserRegister(MethodResource, Resource):
             return {"error": str(e)}, 400
 
         jwt_user_inst = JWTUser()
-        response = jwt_user_inst.register_user(username=validated_data["username"], password=validated_data["password"],
-                          confirm_password=validated_data["confirm_password"],
-                          organization=validated_data["organizational_identifier"])
+        response = jwt_user_inst.register_user(
+            username=validated_data["username"],
+            password=validated_data["password"],
+            confirm_password=validated_data["confirm_password"],
+            organization=validated_data["organizational_identifier"],
+        )
         return response
 
 
-
 class JWTUserLogin(MethodResource, Resource):
-    @doc(description='User.', tags=['USER'])
+    @doc(description="User.", tags=["USER"])
     @use_kwargs(LoginSchema)
     @marshal_with(LoginReturnSchema)
     def post(self, **kwargs):
@@ -67,6 +72,7 @@ class JWTUserLogin(MethodResource, Resource):
             return {"error": str(e)}, 400
 
         jwt_user_inst = JWTUser()
-        response = jwt_user_inst.login_user(username=validated_data["username"],password=validated_data["password"])
+        response = jwt_user_inst.login_user(
+            username=validated_data["username"], password=validated_data["password"]
+        )
         return response
-

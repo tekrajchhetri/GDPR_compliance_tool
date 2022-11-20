@@ -14,6 +14,8 @@ from core.storage.JWTUser import JWTUser
 
 sm = smashHitmessages()
 jwtuser = JWTUser()
+
+
 def luh_required(optional=False, fresh=False, refresh=False, locations=None):
     def wrapper(fn):
         @wraps(fn)
@@ -32,6 +34,8 @@ def luh_required(optional=False, fresh=False, refresh=False, locations=None):
         return decorator
 
     return wrapper
+
+
 # internal act
 def spm_required(optional=False, fresh=False, refresh=False, locations=None):
     def wrapper(fn):
@@ -52,6 +56,7 @@ def spm_required(optional=False, fresh=False, refresh=False, locations=None):
         return decorator
 
     return wrapper
+
 
 # this is for ATOS
 def ccc_required(optional=False, fresh=False, refresh=False, locations=None):

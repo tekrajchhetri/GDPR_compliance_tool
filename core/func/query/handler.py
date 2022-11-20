@@ -8,7 +8,8 @@
 
 import pymongo
 import os, json, sys
-from bson.json_util import dumps,loads
+from bson.json_util import dumps, loads
+
 
 def is_json(input):
     """Checks if the input is a json
@@ -35,12 +36,15 @@ def handle(req):
         if is_json(req):
             req = json.loads(req)
             client = pymongo.MongoClient(
-                    "mongodb+srv://prototype-app-user:7eGjHckJauX7xsCJ@tek-mongo-research-clus.8brvl.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-                    maxPoolSize=400)
+                "URL",
+                maxPoolSize=400,
+            )
             database = client["consent_create_response"]
             collection = database["consent_create_response"]
             if req["query_type"] == "all":
-                result = collection.find({'consent_id': {'$in': req["consent_id_list"]}})
+                result = collection.find(
+                    {"consent_id": {"$in": req["consent_id_list"]}}
+                )
                 return dumps(list(result), indent=2)
         else:
             response["status"] = "FAIL"
@@ -50,7 +54,4 @@ def handle(req):
         response["status"] = "FAIL"
         response["message"] = "Invalid request method"
 
-
-
     return response
-
