@@ -8,16 +8,18 @@
 
 import unittest
 from core.security.Cryptography import Encrypt, Decrypt
+
+
 class SecurityTesting(unittest.TestCase):
     def setUp(self):
         self.e = Encrypt()
         self.d = Decrypt()
         testText = "A quick brown fox jumps over the lazy dog"
-        self.enc =  self.e.encrypt_aes(testText)
+        self.enc = self.e.encrypt_aes(testText)
 
     def test_enc_equal(self):
         testTexts = "A quick brown fox jumps over the lazy dog"
-        self.assertEqual(self.e.encrypt_aes(testTexts),self.enc)
+        self.assertEqual(self.e.encrypt_aes(testTexts), self.enc)
 
     def test_long_text_enc(self):
         long_text = """Conveying or northward offending admitting perfectly my. Colonel gravity get thought fat smiling add but. Wonder twenty hunted and put income set desire expect. Am cottage calling my is mistake cousins talking up. Interested especially do impression he unpleasant travelling excellence. All few our knew time done draw ask. 
@@ -42,7 +44,11 @@ class SecurityTesting(unittest.TestCase):
                     
                     """
         long_text_enc = self.e.encrypt_aes(long_text)
-        newlist = [long_text,"Incommode he depending do frankness remainder", "northward offending admitting perfectly my"]
+        newlist = [
+            long_text,
+            "Incommode he depending do frankness remainder",
+            "northward offending admitting perfectly my",
+        ]
 
         for i in newlist:
             self.assertEqual(self.e.encrypt_aes(i), long_text_enc)
@@ -52,8 +58,10 @@ class SecurityTesting(unittest.TestCase):
 
         long_text_enc = self.e.encrypt_aes(long_text.strip())
 
-        self.assertEqual(str(self.d.decrypt_aes(long_text_enc).decode("utf-8")), long_text.strip())
+        self.assertEqual(
+            str(self.d.decrypt_aes(long_text_enc).decode("utf-8")), long_text.strip()
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main(verbosity=2)

@@ -6,24 +6,24 @@
 # @File    : HelperACT.py
 # @Software: PyCharm
 import json
-from SPARQLWrapper import  JSON
+from SPARQLWrapper import JSON
 import spacy
 from fuzzywuzzy import fuzz
 from operator import itemgetter
-from core.security.Cryptography import  Decrypt
+from core.security.Cryptography import Decrypt
 from nltk.stem.porter import PorterStemmer
 from collections import ChainMap
 
-class HelperACT:
 
+class HelperACT:
     def load_spacy_model(self):
-        nlp = spacy.load('en_core_web_md')
+        nlp = spacy.load("en_core_web_md")
         return nlp
 
     def for_processing(resource_dict):
-        """ Convert nested array of inputs into a single array
-            :input: resource dict
-            :returns: list of data processings
+        """Convert nested array of inputs into a single array
+        :input: resource dict
+        :returns: list of data processings
         """
         isAboutData = []
         for processing in resource_dict:
@@ -47,52 +47,52 @@ class HelperACT:
     def has_status_granted(self, consent):
         try:
             decobj = Decrypt()
-            consent_fetched = consent["results"]["bindings"][0]["status"]["value"].split("#")[1]
-            consent_fetched = bytes(consent_fetched,"utf-8")
+            consent_fetched = consent["results"]["bindings"][0]["status"][
+                "value"
+            ].split("#")[1]
+            consent_fetched = bytes(consent_fetched, "utf-8")
             isgranted = decobj.decrypt_aes(consent_fetched).decode("utf-8")
             return "granted" in str(isgranted).lower()
         except:
             return False
-
 
     def check_all_none(self, list_of_elements):
         toCheck = None
         return all([elem == toCheck for elem in list_of_elements])
 
     def function_map(self, name):
-        """ Map to actual function
+        """Map to actual function
         :param name: input key based on which function is mapped
         :return: mapped function name
         """
         mapfunc = {
-                   "bulk_consentid": self.bulk_consentID,
-                   "consentID_by_consentprovider_ID": self.consentID_by_consentprovider_ID,
-                    "granted_consent_by_consentID": self.granted_consent_by_consentID,
-                    "consent_by_consentID": self.consent_by_consentID,
-                    "all_details_by_dataprovider":self.all_details_by_dataprovider,
-                    "audit_by_consentid":self.audit_by_consentid,
-                    "all_consent_for_compliance":self.all_consent_for_compliance,
-                    "all_consent_for_compliance_cid":self.all_consent_for_compliance_cid,
-                    "check_ConsentDetails":self.check_ConsentDetails,
-                    "all_consent_for_compliance_dataprovider":
-                        self.all_consent_for_compliance_dataprovider,
-                   }
+            "bulk_consentid": self.bulk_consentID,
+            "consentID_by_consentprovider_ID": self.consentID_by_consentprovider_ID,
+            "granted_consent_by_consentID": self.granted_consent_by_consentID,
+            "consent_by_consentID": self.consent_by_consentID,
+            "all_details_by_dataprovider": self.all_details_by_dataprovider,
+            "audit_by_consentid": self.audit_by_consentid,
+            "all_consent_for_compliance": self.all_consent_for_compliance,
+            "all_consent_for_compliance_cid": self.all_consent_for_compliance_cid,
+            "check_ConsentDetails": self.check_ConsentDetails,
+            "all_consent_for_compliance_dataprovider": self.all_consent_for_compliance_dataprovider,
+        }
         return mapfunc[name]
 
     def list_to_query(self, data, whatfor, EncryptObj):
-        """ Convert list of data processing information to SPARQL query strings
+        """Convert list of data processing information to SPARQL query strings
         :input: data<list>
         :input: whatfor<string> - SPARQL property
         :returns: SPARQL query string
         """
         querydata = ""
         for vlaue in data:
-            strs = ":"+whatfor+" :" + EncryptObj.encrypt_aes(vlaue) + ";\n"
+            strs = ":" + whatfor + " :" + EncryptObj.encrypt_aes(vlaue) + ";\n"
             querydata = strs + querydata
         return querydata
 
     def list_to_query_isaboutdata(self, data, whatfor, EncryptObj):
-        """ Convert list of data usage information to SPARQL query strings
+        """Convert list of data usage information to SPARQL query strings
         :input: list
         :returns: SPARQL query string
         """
@@ -100,14 +100,23 @@ class HelperACT:
         for key in data:
             for value in data[key]:
                 formatted_dat = "{}-{}".format(key, value)
-                strs = ":" + whatfor + " :" + EncryptObj.encrypt_aes(formatted_dat) + ";\n"
+                strs = (
+                    ":" + whatfor + " :" + EncryptObj.encrypt_aes(formatted_dat) + ";\n"
+                )
                 querydata = strs + querydata
         return querydata
 
-
-    def which_query(self, consentProvidedBy=None, purpose=None, dataProcessing=None, dataController=None,
-                    dataRequester=None, additionalData=None, consentID=None):
-        """ Define mapping to appropriate function for query generation based on input
+    def which_query(
+        self,
+        consentProvidedBy=None,
+        purpose=None,
+        dataProcessing=None,
+        dataController=None,
+        dataRequester=None,
+        additionalData=None,
+        consentID=None,
+    ):
+        """Define mapping to appropriate function for query generation based on input
         :param consentProvidedBy:
         :param purpose:
         :param dataProcessing:
@@ -117,11 +126,13 @@ class HelperACT:
         :param consentID:
         :return: <dict>
         """
-        if additionalData=="bconsentID":
+        if additionalData == "bconsentID":
             return dict({"map": "bulk_consentid"})
 
         if additionalData == "consentID" and consentProvidedBy is not None:
-            return dict({"map": "consentID_by_consentprovider_ID", "arg": consentProvidedBy})
+            return dict(
+                {"map": "consentID_by_consentprovider_ID", "arg": consentProvidedBy}
+            )
 
         if additionalData == "" and consentProvidedBy is not None:
             return dict({"map": "ConsentDetails", "arg": consentProvidedBy})
@@ -135,10 +146,15 @@ class HelperACT:
         if additionalData == "check_consent" and consentID is not None:
             return dict({"map": "consent_by_consentID", "arg": consentID})
 
-        if additionalData=="audit_by_consentprovider" and consentProvidedBy is not None:
-            return dict({"map": "all_details_by_dataprovider", "arg": consentProvidedBy})
+        if (
+            additionalData == "audit_by_consentprovider"
+            and consentProvidedBy is not None
+        ):
+            return dict(
+                {"map": "all_details_by_dataprovider", "arg": consentProvidedBy}
+            )
 
-        if additionalData=="audit_by_consentid" and consentID is not None:
+        if additionalData == "audit_by_consentid" and consentID is not None:
             return dict({"map": "audit_by_consentid", "arg": consentID})
 
         if additionalData == "consent_for_compliance":
@@ -148,23 +164,44 @@ class HelperACT:
             return dict({"map": "all_consent_for_compliance_cid", "arg": consentID})
 
         if additionalData == "consent_for_compliance_dataprovider":
-            return dict({"map": "all_consent_for_compliance_dataprovider", "arg": consentProvidedBy})
+            return dict(
+                {
+                    "map": "all_consent_for_compliance_dataprovider",
+                    "arg": consentProvidedBy,
+                }
+            )
 
-
-
-    def select_query_gdb(self, consentProvidedBy=None, purpose=None, dataProcessing=None,
-                         dataController=None,dataRequester=None, additionalData=None,consentID=None):
-        sparql_inits = self.init_sparql(self.HOST_URI, self.get_username(), self.get_password())
-        which_query_return = self.which_query(consentProvidedBy, purpose, dataProcessing, dataController,
-                    dataRequester, additionalData, consentID)
-        if("arg" in which_query_return.keys()):
-            sparql_inits.setQuery(self.function_map(which_query_return["map"])(which_query_return["arg"]))
+    def select_query_gdb(
+        self,
+        consentProvidedBy=None,
+        purpose=None,
+        dataProcessing=None,
+        dataController=None,
+        dataRequester=None,
+        additionalData=None,
+        consentID=None,
+    ):
+        sparql_inits = self.init_sparql(
+            self.HOST_URI, self.get_username(), self.get_password()
+        )
+        which_query_return = self.which_query(
+            consentProvidedBy,
+            purpose,
+            dataProcessing,
+            dataController,
+            dataRequester,
+            additionalData,
+            consentID,
+        )
+        if "arg" in which_query_return.keys():
+            sparql_inits.setQuery(
+                self.function_map(which_query_return["map"])(which_query_return["arg"])
+            )
         else:
             sparql_inits.setQuery(self.function_map(which_query_return["map"])())
         sparql_inits.setReturnFormat(JSON)
         results = sparql_inits.query().convert()
         return json.dumps(results)
-
 
     def check_active_granted_consent(self, consentID):
         """Performs the following tasks.
@@ -173,12 +210,17 @@ class HelperACT:
         :param consentID: consent id
         :return: bool
         """
-        consent = json.loads(self.select_query_gdb(consentID=consentID, additionalData="check_consent"))
-        if (self.consent_exists(consent)):
-            hasGrantedStatus = json.loads(self.select_query_gdb(consentID=consentID,
-                                                                additionalData="check_consent_granted"))
+        consent = json.loads(
+            self.select_query_gdb(consentID=consentID, additionalData="check_consent")
+        )
+        if self.consent_exists(consent):
+            hasGrantedStatus = json.loads(
+                self.select_query_gdb(
+                    consentID=consentID, additionalData="check_consent_granted"
+                )
+            )
 
-            if (self.has_status_granted(hasGrantedStatus)):
+            if self.has_status_granted(hasGrantedStatus):
                 return True
 
         return False
@@ -187,7 +229,7 @@ class HelperACT:
         return word.strip().lower()
 
     def tokenize(self, word):
-        """ Perform the word lemitization
+        """Perform the word lemitization
         :param word: string that is to be tokenized
         :return: lemmatized word
         """
@@ -197,7 +239,7 @@ class HelperACT:
         return [token.lemma_ for token in doc][0]
 
     def match(self, x, y):
-        """ Fuzzy string matching, calculates the Levenshtein distance of two strings x, y of length |x|, |y|
+        """Fuzzy string matching, calculates the Levenshtein distance of two strings x, y of length |x|, |y|
 
         lev(x,y) = |x| if |y| = 0,
                    |y| if |x| = 0,
@@ -210,18 +252,21 @@ class HelperACT:
         :param y: input string from data controller/processor
         :return: boolean
         """
-        ratio =  fuzz.token_set_ratio(x, y)
+        ratio = fuzz.token_set_ratio(x, y)
         return True if ratio >= 95 else False
 
-    def has_valid_purpose(self, purpose_from_consent, current_processing_purpose_by_controller):
-        """ checks the validatity of purpose in accordance with given consent
+    def has_valid_purpose(
+        self, purpose_from_consent, current_processing_purpose_by_controller
+    ):
+        """checks the validatity of purpose in accordance with given consent
         :param purpose_from_consent:  purpose that was consented to
         :param current_processing_purpose_by_controller:  purpose current DP/DC is using data for
         :return: boolean 0 True:Valid
         """
-        return self.match(self.tokenize(purpose_from_consent),
-                          self.tokenize(current_processing_purpose_by_controller)
-                          )
+        return self.match(
+            self.tokenize(purpose_from_consent),
+            self.tokenize(current_processing_purpose_by_controller),
+        )
 
     def calculate_length(self, x):
         if type(x) == list:
@@ -235,48 +280,67 @@ class HelperACT:
     def stem_word(self, word):
         ps = PorterStemmer()
         return ps.stem(word)
-        
-        
 
-    def matcher_helper(self, consented,fromControllerOrProcessor):
-        """ checks for match using fuzzy logic
+    def matcher_helper(self, consented, fromControllerOrProcessor):
+        """checks for match using fuzzy logic
         :param consented: list items from consent
         :param fromControllerOrProcessor:  list items from controller or processor
         :return: boolean
         """
         consented = sorted(
-            [self.tokenize(word_for_tokenized_lemma) for word_for_tokenized_lemma in consented])
+            [
+                self.tokenize(word_for_tokenized_lemma)
+                for word_for_tokenized_lemma in consented
+            ]
+        )
         fromControllerOrProcessor = sorted(
-            [self.tokenize(word_for_tokenized_lemma) for word_for_tokenized_lemma in fromControllerOrProcessor])
+            [
+                self.tokenize(word_for_tokenized_lemma)
+                for word_for_tokenized_lemma in fromControllerOrProcessor
+            ]
+        )
 
-        if self.calculate_length(fromControllerOrProcessor) == self.calculate_length(consented):
+        if self.calculate_length(fromControllerOrProcessor) == self.calculate_length(
+            consented
+        ):
             condition_status = []
             for i in range(len(consented)):
-                condition_status.append(self.match(consented[i], fromControllerOrProcessor[i]))
+                condition_status.append(
+                    self.match(consented[i], fromControllerOrProcessor[i])
+                )
             return False if False in condition_status else True
 
-        elif self.calculate_length(fromControllerOrProcessor) < self.calculate_length(consented):
+        elif self.calculate_length(fromControllerOrProcessor) < self.calculate_length(
+            consented
+        ):
 
             condition_status = []
 
             for valuefromController in fromControllerOrProcessor:
                 tocheckStr = self.stem_word(valuefromController)
                 for valueFromConsent in consented:
-                    condition_status.append(self.match(tocheckStr, self.stem_word(valueFromConsent)))
+                    condition_status.append(
+                        self.match(tocheckStr, self.stem_word(valueFromConsent))
+                    )
 
             return False if False in condition_status else True
 
         return False
 
+    def has_processing_rights(
+        self, consent_for_processing, current_processing_by_controller
+    ):
 
-    def has_processing_rights(self, consent_for_processing, current_processing_by_controller):
-
-        if  self.calculate_length(current_processing_by_controller) > self.calculate_length(consent_for_processing):
+        if self.calculate_length(
+            current_processing_by_controller
+        ) > self.calculate_length(consent_for_processing):
             return False
-        return self.matcher_helper(consent_for_processing, current_processing_by_controller)
+        return self.matcher_helper(
+            consent_for_processing, current_processing_by_controller
+        )
 
     def list_of_dict_to_dict(self, listOfDictToConvert):
-        """ convert list of dictionaries to dictionary
+        """convert list of dictionaries to dictionary
         :param listOfDictToConvert: List of dictionaries Sample input format
         [{'mobilecat': {'data': ['x', 'y']}}, {'SensorDataCategory': {'data': ['GPS', 'speed']}}]
         :return: dictionary
@@ -284,13 +348,21 @@ class HelperACT:
         """
         return dict(ChainMap(*listOfDictToConvert))
 
-    def is_doing_valid_data_processing(self, consented_data_for_processing, current_data_being_used_or_processed):
-        consented_data_for_processing = self.list_of_dict_to_dict(consented_data_for_processing)
-        current_data_being_used_or_processed = self.list_of_dict_to_dict(current_data_being_used_or_processed)
+    def is_doing_valid_data_processing(
+        self, consented_data_for_processing, current_data_being_used_or_processed
+    ):
+        consented_data_for_processing = self.list_of_dict_to_dict(
+            consented_data_for_processing
+        )
+        current_data_being_used_or_processed = self.list_of_dict_to_dict(
+            current_data_being_used_or_processed
+        )
         head_consented_data = list(consented_data_for_processing.keys())
         head_processed_data = list(current_data_being_used_or_processed.keys())
 
-        if self.calculate_length(head_processed_data) > self.calculate_length(head_consented_data):
+        if self.calculate_length(head_processed_data) > self.calculate_length(
+            head_consented_data
+        ):
             return False
         else:
             status = self.matcher_helper(head_consented_data, head_processed_data)
@@ -298,14 +370,23 @@ class HelperACT:
                 isValidlist = []
 
                 for keys in head_processed_data:
-                    processed_data_to_check = current_data_being_used_or_processed[keys]["data"]
-                    consented_data_to_check = consented_data_for_processing[keys]["data"]
+                    processed_data_to_check = current_data_being_used_or_processed[
+                        keys
+                    ]["data"]
+                    consented_data_to_check = consented_data_for_processing[keys][
+                        "data"
+                    ]
 
-                    if self.calculate_length(processed_data_to_check) \
-                            >  self.calculate_length(consented_data_to_check):
+                    if self.calculate_length(
+                        processed_data_to_check
+                    ) > self.calculate_length(consented_data_to_check):
                         return False
                     else:
-                        isValidlist.append(self.matcher_helper(consented_data_to_check, processed_data_to_check))
+                        isValidlist.append(
+                            self.matcher_helper(
+                                consented_data_to_check, processed_data_to_check
+                            )
+                        )
 
                 return False if False in isValidlist else True
 
@@ -324,14 +405,14 @@ class HelperACT:
             return dec.decrypt_aes(data).decode("utf-8")
 
     def remove_uris(self, data):
-        """ return plain text data without URI's
+        """return plain text data without URI's
         :param data: semantic data
         :return: data without semantic
         """
-        return data.split('#')[1]
+        return data.split("#")[1]
 
     def process_consent_data(self, data):
-        """ process encrypted consent data
+        """process encrypted consent data
         :param data: consent data retrieved from GraphDB
         :return: decrypted consent in JSON format
         """
@@ -342,15 +423,32 @@ class HelperACT:
                 # skip consent ID as it causes error
                 if k == "ConsentID":
                     continue
-                elif (k == "DataProcessing"):
-                    list_of_consents.append({k: [self.decrypt_data(self.remove_uris(litem)) for litem in value[k]["value"].split(",")]})
-                elif (k == "Data"):
-                    list_of_consents.append({k:[self.decrypt_data(self.remove_uris(litem)) for litem in value[k]["value"].split(",")]})
+                elif k == "DataProcessing":
+                    list_of_consents.append(
+                        {
+                            k: [
+                                self.decrypt_data(self.remove_uris(litem))
+                                for litem in value[k]["value"].split(",")
+                            ]
+                        }
+                    )
+                elif k == "Data":
+                    list_of_consents.append(
+                        {
+                            k: [
+                                self.decrypt_data(self.remove_uris(litem))
+                                for litem in value[k]["value"].split(",")
+                            ]
+                        }
+                    )
                 else:
-                    list_of_consents.append({k: self.decrypt_data(self.remove_uris(value[k]["value"]))})
-            resp_to_make[self.remove_uris(value["ConsentID"]["value"])] = list_of_consents
+                    list_of_consents.append(
+                        {k: self.decrypt_data(self.remove_uris(value[k]["value"]))}
+                    )
+            resp_to_make[
+                self.remove_uris(value["ConsentID"]["value"])
+            ] = list_of_consents
         return resp_to_make
 
-
     def remove_xst_date(self, date_xst_str):
-        return date_xst_str[1: len(date_xst_str) - 1].split("^^")[0]
+        return date_xst_str[1 : len(date_xst_str) - 1].split("^^")[0]

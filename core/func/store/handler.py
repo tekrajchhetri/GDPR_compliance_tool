@@ -9,6 +9,7 @@
 import pymongo
 import os, json, sys
 
+
 def is_json(input):
     """Checks if the input is a json
     :param input:
@@ -29,13 +30,14 @@ def handle(req):
         req (str): request body
     """
     method = os.getenv("Http_Method")
-    response = {"status":"","message":""}
+    response = {"status": "", "message": ""}
 
     if method in ["POST", "PUT"]:
         if is_json(req):
             req = json.loads(req)
             client = pymongo.MongoClient(
-                "mongodb+srv://prototype-app-user:7eGjHckJauX7xsCJ@tek-mongo-research-clus.8brvl.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+                "mongodb+srv://prototype-app-user:7eGjHckJauX7xsCJ@tek-mongo-research-clus.8brvl.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+            )
             database = client["consent_create_response"]
             collection = database["consent_create_response"]
             insert = collection.insert_one(req)
@@ -55,4 +57,3 @@ def handle(req):
         response["message"] = "Invalid request method"
 
     return response
-

@@ -9,9 +9,12 @@
 import datetime
 import hashlib
 
+
 class TokenGenerator:
     def decision_timestamp(self):
         return datetime.datetime.utcnow().timestamp()
 
     def token_generator(self):
-        return hashlib.sha512(str(datetime.datetime.timestamp(datetime.datetime.now())).encode("utf-8")).hexdigest()
+        return hashlib.sha512(
+            str(datetime.datetime.timestamp(datetime.datetime.now())).encode("utf-8")
+        ).hexdigest()
