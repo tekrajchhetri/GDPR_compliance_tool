@@ -78,7 +78,7 @@ class  ConsentValidation(QueryEngine):
 
         if respone["act_status_code"]==7100:
             ngacInst = NGAC()
-            status = asyncio.run(ngacInst.updateNGAC(requestedBy= requestedBy,
+            status = ngacInst.updateNGAC(requestedBy= requestedBy,
                                                      hasDataController = hasDataController,
                                                      hasDataProcessor=hasDataProcessor,
                                                      fordataprocessing = fordataprocessing,
@@ -91,7 +91,7 @@ class  ConsentValidation(QueryEngine):
                                                      country=country,
                                                      state=state,
                                                     dataprovider= dataprovider,
-                                                     expirationtime=expirationtime))
+                                                     expirationtime=expirationtime)
 
 
             if status == 'fail':
