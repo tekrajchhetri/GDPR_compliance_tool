@@ -77,24 +77,23 @@ class ConsentValidation(QueryEngine):
 
         if respone["act_status_code"] == 7100:
             ngacInst = NGAC()
-            status = asyncio.run(
-                ngacInst.updateNGAC(
-                    requestedBy=requestedBy,
-                    hasDataController=hasDataController,
-                    hasDataProcessor=hasDataProcessor,
-                    fordataprocessing=fordataprocessing,
-                    GrantedAtTime=GrantedAtTime,
-                    inMedium=inMedium,
-                    purpose=purpose,
-                    isAboutData=isAboutData,
-                    city=city,
-                    consentID=consentID,
-                    country=country,
-                    state=state,
-                    dataprovider=dataprovider,
-                    expirationtime=expirationtime,
-                )
-            )
+
+            status = ngacInst.updateNGAC(requestedBy= requestedBy,
+                                                     hasDataController = hasDataController,
+                                                     hasDataProcessor=hasDataProcessor,
+                                                     fordataprocessing = fordataprocessing,
+                                                     GrantedAtTime = GrantedAtTime,
+                                                     inMedium = inMedium,
+                                                     purpose=purpose,
+                                                     isAboutData = isAboutData,
+                                                     city = city,
+                                                     consentID=consentID,
+                                                     country=country,
+                                                     state=state,
+                                                    dataprovider= dataprovider,
+                                                     expirationtime=expirationtime)
+
+
 
             if status == "fail":
                 respone["message"] = "Consent created some NGAC update failed"

@@ -17,8 +17,10 @@ class JWTUser(JWTHelper, smashHitmessages):
     def __init__(self):
         super().__init__()
 
+
     def register_user(self, username, password, confirm_password, organization):
         organizationCheck_role = self.organisation_map(organization.upper())
+
         if organizationCheck_role != 0:
             user = User.query.filter_by(username=username).first()
             if user:
@@ -31,13 +33,6 @@ class JWTUser(JWTHelper, smashHitmessages):
                 msg["message"] = "Password and Confirm password mismatch"
                 return msg
 
-            newuser = User(
-                username=username,
-                password=generate_password_hash(password, method="sha256"),
-                organization=organization.upper(),
-                role=organizationCheck_role,
-                status=1,
-            )
             newuser.save_to_db()
             newmsg = self.insert_success()
             newmsg["decision"] = "USER_REGISTERED"
