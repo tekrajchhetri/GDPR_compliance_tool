@@ -17,16 +17,16 @@ from datetime import timedelta
 
 app = Flask(__name__)
 jwt = JWTManager(app)
-app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280b1245'
+app.config["SECRET_KEY"] = "SECRETKEY"
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(seconds=70)
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///act_database.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///act_database.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 from apispec import APISpec
 from flask_apispec.extension import FlaskApiSpec
 from apispec.ext.marshmallow import MarshmallowPlugin
-from resources.consent import  ConsentCreate
-from resources.consent import  Revoke
-from resources.consent import  BrokenConsent
+from resources.consent import ConsentCreate
+from resources.consent import Revoke
+from resources.consent import BrokenConsent
 from resources.audit import AuditConsent
 from resources.audit import AuditDataProvider
 from resources.user import JWTUserRegister
@@ -39,61 +39,74 @@ from resources.query import QueryAllConsentID
 from resources.audit import QuerySingleConsentStatusByConsentID
 
 api = Api(app)
-app.config.update({
-    'APISPEC_SPEC': APISpec(
-        title='Automatic Contracting API Specification',
-        version='v01',
-        plugins=[MarshmallowPlugin()],
-        openapi_version='2.0.0'
-    ),
-    # 'APISPEC_SWAGGER_URL': '/swagger/',  # URI to access API Doc JSON
-    'APISPEC_SWAGGER_UI_URL': '/swagger-ui/'  # URI to access UI of API Doc
-})
+app.config.update(
+    {
+        "APISPEC_SPEC": APISpec(
+            title="Automatic Contracting API Specification",
+            version="v01",
+            plugins=[MarshmallowPlugin()],
+            openapi_version="2.0.0",
+        ),
+        # 'APISPEC_SWAGGER_URL': '/swagger/',  # URI to access API Doc JSON
+        "APISPEC_SWAGGER_UI_URL": "/swagger-ui/",  # URI to access UI of API Doc
+    }
+)
 docs = FlaskApiSpec(app)
-#Consent
-api.add_resource(ConsentCreate,"/consent/create")
+# Consent
+api.add_resource(ConsentCreate, "/consent/create")
 docs.register(ConsentCreate)
-api.add_resource(Revoke,"/consent/<string:consent_id>/revoke")
+api.add_resource(Revoke, "/consent/<string:consent_id>/revoke")
 docs.register(Revoke)
 
-#Compliance
-api.add_resource(BrokenConsent,"/consent/broken-chain")
+# Compliance
+api.add_resource(BrokenConsent, "/consent/broken-chain")
 docs.register(BrokenConsent)
 
-api.add_resource(CompliancebyConsent,"/compliance/<string:consent_id>/consent")
+api.add_resource(CompliancebyConsent, "/compliance/<string:consent_id>/consent")
 docs.register(CompliancebyConsent)
 
-api.add_resource(CompliancebyDataProvider,"/compliance/<string:data_provider_id>/data-provider")
+api.add_resource(
+    CompliancebyDataProvider, "/compliance/<string:data_provider_id>/data-provider"
+)
 docs.register(CompliancebyDataProvider)
-#amar
-api.add_resource(QuerySingleConsentStatusByConsentID,"/query/<string:consent_id>/consent")
+# amar
+api.add_resource(
+    QuerySingleConsentStatusByConsentID, "/query/<string:consent_id>/consent"
+)
 docs.register(QuerySingleConsentStatusByConsentID)
-#LUH Interaction
-api.add_resource(QueryAllConsentID,"/query/bulk-consent-id")
+# LUH Interaction
+api.add_resource(QueryAllConsentID, "/query/bulk-consent-id")
 docs.register(QueryAllConsentID)
-api.add_resource(QueryConsentIDByConsentProviderID,"/query/<string:consentprovider_id>/consentid")
+api.add_resource(
+    QueryConsentIDByConsentProviderID, "/query/<string:consentprovider_id>/consentid"
+)
 docs.register(QueryConsentIDByConsentProviderID)
-#audit
-api.add_resource(AuditConsent, "/audit/<string:consent_id>/<string:level_of_details>/consent")
+# audit
+api.add_resource(
+    AuditConsent, "/audit/<string:consent_id>/<string:level_of_details>/consent"
+)
 docs.register(AuditConsent)
-api.add_resource(AuditDataProvider, "/audit/<string:data_provider_id>/<string:level_of_details>/data-provider")
+api.add_resource(
+    AuditDataProvider,
+    "/audit/<string:data_provider_id>/<string:level_of_details>/data-provider",
+)
 docs.register(AuditDataProvider)
-#compliance obligation action
+# compliance obligation action
 api.add_resource(ComplianceObligation, "/compliance/obligation")
 docs.register(ComplianceObligation)
-#JWTLogin
+# JWTLogin
 api.add_resource(JWTUserLogin, "/jwt/login/")
 docs.register(JWTUserLogin)
 
-#register
+# register
 api.add_resource(JWTUserRegister, "/jwt/register/")
 docs.register(JWTUserRegister)
 
-#default
-api.add_resource(Test,"/")
+# default
+api.add_resource(Test, "/")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # from db import db
     # db.init_app(app)
     # with app.app_context():
