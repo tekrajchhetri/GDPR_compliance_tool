@@ -7,6 +7,7 @@
 # @Software: PyCharm
 import os
 
+
 class Credentials:
     def get_username(self):
         return os.environ.get("USERNAME")

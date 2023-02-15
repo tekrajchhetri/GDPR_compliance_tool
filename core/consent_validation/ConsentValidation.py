@@ -9,8 +9,9 @@ from core.helper.date_helper import DateHelper
 from core.query_processor.QueryProcessor import QueryEngine
 from core.low_level.NGAC import NGAC
 import asyncio
-class  ConsentValidation(QueryEngine):
 
+
+class ConsentValidation(QueryEngine):
     def __init__(self):
         super().__init__()
 
@@ -24,7 +25,7 @@ class  ConsentValidation(QueryEngine):
             if agent["role"] == "processor":
                 hasDataProcessor = agent["id"]
             if agent["role"] == "requester":
-                #data
+                # data
                 requestedBy = agent["id"]
         fordataprocessing = validated_data["DataProcessing"]
         GrantedAtTime = validated_data["GrantedAtTime"]
@@ -39,8 +40,7 @@ class  ConsentValidation(QueryEngine):
         if "expirationTime" in validated_data:
             expirationtime = validated_data["expirationTime"]
         else:
-            expirationtime=None
-
+            expirationtime = None
 
         dt = DateHelper()
         if expirationtime is not None and not dt.is_utc(expirationtime):
@@ -50,34 +50,34 @@ class  ConsentValidation(QueryEngine):
             return self.dataformatnotmatch()
 
         if expirationtime is not None:
-            expirationtime = '\'{}^^xsd:dateTime\''.format(expirationtime)
-        GrantedAtTime  = '\'{}^^xsd:dateTime\''.format(GrantedAtTime)
+            expirationtime = "'{}^^xsd:dateTime'".format(expirationtime)
+        GrantedAtTime = "'{}^^xsd:dateTime'".format(GrantedAtTime)
 
+        respone = self.post_sparql(
+            userid=self.get_username(),
+            password=self.get_password(),
+            query=self.insert_query(
+                requestedBy=requestedBy,
+                hasDataController=hasDataController,
+                hasDataProcessor=hasDataProcessor,
+                fordataprocessing=fordataprocessing,
+                GrantedAtTime=GrantedAtTime,
+                inMedium=inMedium,
+                purpose=purpose,
+                isAboutData=isAboutData,
+                city=city,
+                consentID=consentID,
+                country=country,
+                state=state,
+                dataprovider=dataprovider,
+                expirationtime=expirationtime,
+            ),
+            consent_id_for_logging=consentID,
+        )
 
-
-        respone = self.post_sparql(userid=self.get_username(), password=self.get_password(),
-
-                                   query=self.insert_query(requestedBy= requestedBy,
-                                                     hasDataController = hasDataController,
-                                                     hasDataProcessor=hasDataProcessor,
-                                                     fordataprocessing = fordataprocessing,
-                                                     GrantedAtTime = GrantedAtTime,
-                                                     inMedium = inMedium,
-                                                     purpose=purpose,
-                                                     isAboutData = isAboutData,
-                                                     city = city,
-                                                     consentID=consentID,
-                                                     country=country,
-                                                     state=state,
-                                                    dataprovider= dataprovider,
-                                                     expirationtime=expirationtime
-                                                    ),
-                                   consent_id_for_logging=consentID
-
-                                   )
-
-        if respone["act_status_code"]==7100:
+        if respone["act_status_code"] == 7100:
             ngacInst = NGAC()
+
             status = ngacInst.updateNGAC(requestedBy= requestedBy,
                                                      hasDataController = hasDataController,
                                                      hasDataProcessor=hasDataProcessor,
@@ -94,7 +94,8 @@ class  ConsentValidation(QueryEngine):
                                                      expirationtime=expirationtime)
 
 
-            if status == 'fail':
-                respone["message"]="Consent created some NGAC update failed"
+
+            if status == "fail":
+                respone["message"] = "Consent created some NGAC update failed"
 
         return respone

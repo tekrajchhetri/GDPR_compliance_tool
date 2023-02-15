@@ -8,8 +8,9 @@
 
 from core.compliance.ComplianceEngine import ComplianceEngine
 import unittest
-class TestComplianceEngine(unittest.TestCase):
 
+
+class TestComplianceEngine(unittest.TestCase):
     def setUp(self):
         self.cengine = ComplianceEngine()
 
@@ -35,6 +36,5 @@ class TestComplianceEngine(unittest.TestCase):
         self.assertEqual(expected_decision_id, from_ce["status_code"])
 
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main(verbosity=2)

@@ -17,11 +17,11 @@ import datetime
 
 from flask_restful import Resource, request
 from flask_apispec.views import MethodResource
-from marshmallow import Schema, fields,ValidationError
+from marshmallow import Schema, fields, ValidationError
 from flask_apispec import marshal_with, doc, use_kwargs
-from core.compliance.ComplianceEngine import  ComplianceEngine
-from core.compliance.ComplianceEngine import  ComplianceObligationNotification
-from  core.security.JWTDecorator import ccc_required
+from core.compliance.ComplianceEngine import ComplianceEngine
+from core.compliance.ComplianceEngine import ComplianceObligationNotification
+from core.security.JWTDecorator import ccc_required
 
 
 class ComplianceReturnSchema(Schema):
@@ -33,7 +33,7 @@ class ComplianceReturnSchema(Schema):
 
 
 class ComplianceObligationSchema(Schema):
-    """ JSON Schema for compliance obligation
+    """JSON Schema for compliance obligation
     This JSON Schema  has to be followed by the data controller or processor to inform the ACT that they have
     fulfilled the necessary requested compliance action.
 
@@ -42,34 +42,43 @@ class ComplianceObligationSchema(Schema):
             request, controller or processor has to delete data. And once they delete they can notify ACT following the
             JSON Schema specified below.
     """
+
     consent_id = fields.String(required=True)
     compliance_action_request = fields.String(required=True)
     compliance_obligation_status = fields.String(required=True)
     decision_token = fields.String(required=True)
+
+
 """
 Compliance rest endpoints
 """
+
+
 class CompliancebyConsent(MethodResource, Resource):
-    """Checks compliance for a single consent based on consent ID
-    """
+    """Checks compliance for a single consent based on consent ID"""
+
     # @ccc_required(fresh=True)
-    @doc(description='Check compliance', tags=['Compliance'])
+    @doc(description="Check compliance", tags=["Compliance"])
     @marshal_with(ComplianceReturnSchema)
     def get(self, consent_id):
         ce = ComplianceEngine()
         response = ce.compliance_check_act(level="consent", consentID=consent_id)
         return response
 
+
 class CompliancebyDataProvider(MethodResource, Resource):
-    """Checks compliance for all the active consent particular to data provider
-    """
+    """Checks compliance for all the active consent particular to data provider"""
+
     # @ccc_required(fresh=True)
-    @doc(description='Check compliance', tags=['Compliance'])
+    @doc(description="Check compliance", tags=["Compliance"])
     @marshal_with(ComplianceReturnSchema)
     def get(self, data_provider_id):
         ce = ComplianceEngine()
-        response = ce.compliance_check_act(level="dataprovider", consentProvidedBy=data_provider_id)
+        response = ce.compliance_check_act(
+            level="dataprovider", consentProvidedBy=data_provider_id
+        )
         return response
+
 
 class ComplianceObligation(MethodResource, Resource):
     @doc(description="Data erase compliance obligation", tags=["Compliance"])
@@ -88,8 +97,3 @@ class ComplianceObligation(MethodResource, Resource):
             validated_compliance_obligation_data
         )
         return store_notification
-
-
-
-
-
