@@ -213,10 +213,10 @@ class NGAC:
             except Exception as ex:
                 pass
         print(results)
-        if "failure" in results:
-            return "deny"
-        else:
+        if "grant" in results:
             return "grant"
+        else:
+            return "deny"
 
     def getpolicy(self, yourtoken):
         _URLP = f'YOURENDPOINT/paapi/getpol?token={yourtoken}'
