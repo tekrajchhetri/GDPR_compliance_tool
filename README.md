@@ -88,9 +88,8 @@ Please check [https://tekrajchhetri.com/opensource/gdpr_tool/](https://tekrajchh
 
 
 ## Developer
-- Tek Raj Chhetri 
-- Web: [https://tekrajchhetri.com](https://tekrajchhetri.com)
-- Twitter: [TekRaj_14](https://twitter.com/TekRaj_14) 
+- Tek Raj Chhetri
+- Web: [https://smashhit.eu/](https://smashhit.eu/) 
 
 
 ## Project
