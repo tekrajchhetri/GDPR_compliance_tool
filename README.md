@@ -86,6 +86,23 @@ Please check [https://tekrajchhetri.com/opensource/gdpr_tool/](https://tekrajchh
 
 ![image](https://user-images.githubusercontent.com/52251022/120082109-68899400-c0c1-11eb-99cc-d4b23f80c89f.png)
 
+## ACT and S&P interactions
+![image](https://user-images.githubusercontent.com/52251022/220625143-9623a2e2-4af1-4561-ad13-7093ac39b68a.png)
+
+Figure: Access check (single) without altering the data processing operation - “Collect”
+
+![image](https://user-images.githubusercontent.com/52251022/220625176-f168c6a3-eaad-4196-a54a-2fdfb3a83f5b.png)
+
+Figure: Access check (single) after altering the data processing operation - “Collect” to something different “test”
+
+![image](https://user-images.githubusercontent.com/52251022/220625212-dab10c72-7406-4593-a2c4-dba311a43116.png)
+
+Figure: Updating security and privacy upon consent revocation
+
+![image](https://user-images.githubusercontent.com/52251022/220625237-b0472c02-1c9b-407a-ab20-0d960b1b402e.png)
+
+Figure: Access check for multiple data processing operations
+
 
 ## Developer
 - Tek Raj Chhetri 
