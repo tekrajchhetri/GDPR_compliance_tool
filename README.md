@@ -158,6 +158,10 @@ This tool's distributed nature enables the installation of different components 
 		<img width="1050" alt="image" src="https://user-images.githubusercontent.com/52251022/221037627-d60c1fb6-10c6-4ed3-b613-e92f18c1f30b.png">
 
 		<img width="1050" alt="image" src="https://user-images.githubusercontent.com/52251022/221037665-8107fb0f-1b0d-44fc-b1d8-766c278148fb.png">
+		<img width="1050" alt="image" src="https://user-images.githubusercontent.com/52251022/221038999-aef35604-98e6-4687-9dc8-5611ea1940c3.png">
+		<img width="1050" alt="image" src="https://user-images.githubusercontent.com/52251022/221039953-de54486a-c2cf-4f2a-bea5-466ebbc39649.png">
+
+
 
 ## Debugging 
 - Sometimes you might get dependency error. This might be due to your system configuration so ensure that there's no conflict of the libraries.
