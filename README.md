@@ -140,9 +140,12 @@ This tool's distributed nature enables the installation of different components 
 
 
 
-	-  **Note**: Before the deployment of functions, do not forget to adjust the connection parameters depending on your installations.
+	-  After setting up the databases, deploying the serverless functions, and integrating components such as service layers, you should be able to observe logging information from various operations such as consent creation flowing into the MongoDB database.
+		<img width="1023" alt="image" src="https://user-images.githubusercontent.com/52251022/220883467-daa7494f-2e40-4a77-bbf3-abcc2d3dbb10.png">
+	
+	**Note**: Before the deployment of functions, do not forget to adjust the connection parameters depending on your installations.
 - 
-<img width="1023" alt="image" src="https://user-images.githubusercontent.com/52251022/220883467-daa7494f-2e40-4a77-bbf3-abcc2d3dbb10.png">
+
 
 ## Developer
 - Tek Raj Chhetri 
