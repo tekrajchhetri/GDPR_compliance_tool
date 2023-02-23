@@ -160,7 +160,7 @@ This tool's distributed nature enables the installation of different components 
 
 ## Debugging 
 - Sometimes you might get dependency error. This might be due to your system configuration so ensure that there's no conflict of the libraries.
-![dependency-error](https://user-images.githubusercontent.com/52251022/221036160-bdfb4eb0-f264-4c3c-aebf-ca27998e362d.png)
+![dependency-error-annotated](https://user-images.githubusercontent.com/52251022/221037253-34e61885-99af-4d8c-bb00-a115993ca37b.png)
 
 
 ## Developer
