@@ -155,8 +155,9 @@ This tool's distributed nature enables the installation of different components 
 
 
 	-  Upon successful deployment you should be able to perform the operations like consent creation and JWT login.
-		<img width="1050" alt="jwt-login" src="https://user-images.githubusercontent.com/52251022/221035359-acde1119-836f-4899-b0ee-7f74cefe9f72.png">
-		<img width="1050" alt="image" src="https://user-images.githubusercontent.com/52251022/221035795-689cdbb6-0415-462f-ab1c-2d664b75f25d.png">
+		<img width="1050" alt="image" src="https://user-images.githubusercontent.com/52251022/221037627-d60c1fb6-10c6-4ed3-b613-e92f18c1f30b.png">
+
+		<img width="1050" alt="image" src="https://user-images.githubusercontent.com/52251022/221037665-8107fb0f-1b0d-44fc-b1d8-766c278148fb.png">
 
 ## Debugging 
 - Sometimes you might get dependency error. This might be due to your system configuration so ensure that there's no conflict of the libraries.
