@@ -36,7 +36,7 @@ def handle(req):
         if is_json(req):
             req = json.loads(req)
             client = pymongo.MongoClient(
-                "mongodb+srv://prototype-app-user:7eGjHckJauX7xsCJ@tek-mongo-research-clus.8brvl.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+                #connection params
             )
             database = client["consent_create_response"]
             collection = database["consent_create_response"]
