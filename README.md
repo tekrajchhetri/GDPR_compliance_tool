@@ -161,6 +161,9 @@ This tool's distributed nature enables the installation of different components 
 		<img width="1050" alt="jwt-login" src="https://user-images.githubusercontent.com/52251022/221035359-acde1119-836f-4899-b0ee-7f74cefe9f72.png">
 		<img width="1050" alt="image" src="https://user-images.githubusercontent.com/52251022/221035795-689cdbb6-0415-462f-ab1c-2d664b75f25d.png">
 
+## Debugging 
+- Sometimes you might get dependency error. This might be due to your system configuration so ensure that there's no conflict of the libraries.
+![dependency-error](https://user-images.githubusercontent.com/52251022/221036160-bdfb4eb0-f264-4c3c-aebf-ca27998e362d.png)
 
 
 ## Developer
