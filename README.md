@@ -136,6 +136,8 @@ This tool's distributed nature enables the installation of different components 
 		<img width="1408" alt="openfaasui" src="https://user-images.githubusercontent.com/52251022/220880579-5bb4a369-c015-49df-b537-e58f5fb4c61f.png">
 
 		![deploynewfunc](https://user-images.githubusercontent.com/52251022/220880651-8fd8c134-aceb-44f6-82c1-7135e0b55440.png)
+		![image](https://user-images.githubusercontent.com/52251022/220886534-0ff8366b-d43e-4186-afc8-dc4356d94d10.png)
+
 
 
 	-  **Note**: Before the deployment of functions, do not forget to adjust the connection parameters depending on your installations.
