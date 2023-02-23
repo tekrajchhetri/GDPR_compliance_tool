@@ -105,8 +105,13 @@ Figure: Access check for multiple data processing operations
 
 ## Instructions
 This tool's distributed nature enables the installation of different components on multiple (or the same) servers. Anyone wishing to deploy and utilize these tools should follow the deployment steps outlined below.
-- First, ensure that MongoDB and GraphDB have been installed. MongoDB is used for logging and GraphDB for storing instances of knowledge graphs. 
-
+- First, ensure that MongoDB and GraphDB have been installed. MongoDB is used for logging and GraphDB for storing instances of knowledge graphs. You can use the links below for more information and download
+	- [GraphDB Download](https://www.ontotext.com/products/graphdb/download/)
+	- [GraphDB Installation & System Requirements](https://graphdb.ontotext.com/documentation/10.0/installation.html)
+	- [MongoDB Download](https://www.mongodb.com/try/download/community)
+	- After successful installation of GraphDB, you should have access to the GraphDB user interface (the same is the case with MongoDB).
+		<img width="1407" alt="image" src="https://user-images.githubusercontent.com/52251022/220882815-16e2c85f-79e2-4c9f-8648-12b0cc8db656.png">
+	
 	Note: You can use a database other than GraphDB, but you might have to make the adjustment in code.
 - Deploy the OpenFaaS serverless functions that are present in [core/func](https://github.com/tekrajchhetri/GDPR_compliance_tool/tree/master/core/func). Follow the steps below for the deployment of serverless functions.
 	- Install faasd 
@@ -133,8 +138,10 @@ This tool's distributed nature enables the installation of different components 
 		![deploynewfunc](https://user-images.githubusercontent.com/52251022/220880651-8fd8c134-aceb-44f6-82c1-7135e0b55440.png)
 
 
-	-  
+	-  **Note**: Before the deployment of functions, do not forget to adjust the connection parameters depending on your installations.
 - 
+<img width="1023" alt="image" src="https://user-images.githubusercontent.com/52251022/220883467-daa7494f-2e40-4a77-bbf3-abcc2d3dbb10.png">
+
 ## Developer
 - Tek Raj Chhetri 
 
