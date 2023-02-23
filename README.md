@@ -165,6 +165,7 @@ This tool's distributed nature enables the installation of different components 
 
 
 	- **Note**: In order for this to work, the cryptographic keys need to be present. You can call `generate_key()` function from `core/security/Cryptography.py` to generate the necessary keys, which are currently disabled, i.e., no call is made to `generate_key()`.
+- Please read our paper, which is freely accessible at [https://doi.org/10.3390/s22072763](https://doi.org/10.3390/s22072763), for additional information. 
 	
 
 ## Debugging 
