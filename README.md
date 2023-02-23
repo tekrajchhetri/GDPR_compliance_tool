@@ -149,7 +149,13 @@ This tool's distributed nature enables the installation of different components 
 		![image](https://user-images.githubusercontent.com/52251022/220625237-b0472c02-1c9b-407a-ab20-0d960b1b402e.png)
 
 		Figure: Access check for multiple data processing operations
-- 
+- Once you have deployed all other components, you can deploy the service layer component as well as  the scheduler. To be able to deploy the service layer and the scheduler, you first need to install Docker. You can install Docker by following the installation instructions at the link below: 
+	- [Docker Installation](https://docs.docker.com/engine/install/)
+	- After installing Docker, you can run the `docker_run.sh` file to deploy the service layer and the scheduler. 
+		<img width="1006" alt="image" src="https://user-images.githubusercontent.com/52251022/220895991-4bc9162c-4634-4a4f-8258-022ed402ff9d.png">
+
+	-  
+	
 
 ## Developer
 - Tek Raj Chhetri 
