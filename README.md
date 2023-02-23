@@ -160,6 +160,9 @@ This tool's distributed nature enables the installation of different components 
 		<img width="1050" alt="image" src="https://user-images.githubusercontent.com/52251022/221037665-8107fb0f-1b0d-44fc-b1d8-766c278148fb.png">
 		<img width="1050" alt="image" src="https://user-images.githubusercontent.com/52251022/221038999-aef35604-98e6-4687-9dc8-5611ea1940c3.png">
 		<img width="1050" alt="image" src="https://user-images.githubusercontent.com/52251022/221039953-de54486a-c2cf-4f2a-bea5-466ebbc39649.png">
+		<img width="999" alt="image" src="https://user-images.githubusercontent.com/52251022/221044772-3bace55b-ce1e-41b0-9bd2-0f3fc24e493b.png">
+		<img width="999" alt="image" src="https://user-images.githubusercontent.com/52251022/221045330-ceeff414-b82a-4b69-9ba5-4a6dd5062ce7.png">
+
 
 	- **Note**: In order for this to work, the cryptographic keys need to be present. You can call `generate_key()` function from `core/security/Cryptography.py` to generate the necessary keys, which are currently disabled, i.e., no call is made to `generate_key()`.
 	
