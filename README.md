@@ -103,7 +103,31 @@ Figure: Updating security and privacy upon consent revocation
 
 Figure: Access check for multiple data processing operations
 
+## Instructions
+This tool's distributed nature enables the installation of different components on multiple (or the same) servers. Anyone wishing to deploy and utilize these tools should follow the deployment steps outlined below.
+- First, ensure that MongoDB and GraphDB have been installed. MongoDB is used for logging and GraphDB for storing instances of knowledge graphs. 
 
+	Note: You can use a database other than GraphDB, but you might have to make the adjustment in code.
+- Deploy the OpenFaaS serverless functions that are present in [core/func](https://github.com/tekrajchhetri/GDPR_compliance_tool/tree/master/core/func). Follow the steps below for the deployment of serverless functions.
+	- Install faasd 
+		```sh
+            $ git clone https://github.com/openfaas/faasd --depth=1
+            $ cd faasd
+            $ ./hack/install.sh
+       ```
+	- Install OpenFaaS CLI
+		```sh 
+        $ curl -sSL https://cli.openfaas.com | sudo -E sh 
+        ```
+	- Deploy the serverless functions
+		```sh 
+        $ faas-cli up -f stack.yml 
+   ```
+	- For further deployment and installation instructions for OpenFaaS/OpenFaaS functions or serverless functions, refer to the links below.
+		- [Deployment](https://docs.openfaas.com/deployment/)
+		- [Deployment guide for Kubernetes](https://docs.openfaas.com/deployment/kubernetes/)
+		- [OpenFaaS](https://docs.openfaas.com/cli/install/)  
+- 
 ## Developer
 - Tek Raj Chhetri 
 
