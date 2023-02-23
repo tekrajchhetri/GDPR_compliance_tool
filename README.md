@@ -127,6 +127,13 @@ This tool's distributed nature enables the installation of different components 
 		- [Deployment](https://docs.openfaas.com/deployment/)
 		- [Deployment guide for Kubernetes](https://docs.openfaas.com/deployment/kubernetes/)
 		- [OpenFaaS](https://docs.openfaas.com/cli/install/)  
+	- After a successful installation, you should have access to the OpenFaaS user interface (UI), where you can see your deployed functions. You can also deploy new functions using the UI.
+		<img width="1408" alt="openfaasui" src="https://user-images.githubusercontent.com/52251022/220880579-5bb4a369-c015-49df-b537-e58f5fb4c61f.png">
+
+		![deploynewfunc](https://user-images.githubusercontent.com/52251022/220880651-8fd8c134-aceb-44f6-82c1-7135e0b55440.png)
+
+
+	-  
 - 
 ## Developer
 - Tek Raj Chhetri 
