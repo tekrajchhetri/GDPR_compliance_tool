@@ -157,11 +157,11 @@ This tool's distributed nature enables the installation of different components 
 	<img width="1370" alt="screen-api" src="https://user-images.githubusercontent.com/52251022/221034111-4bb4b288-3d52-4a29-b074-bbe45955bba9.png">
 
 
-	
-	<img width="1006" alt="image" src="https://user-images.githubusercontent.com/52251022/220895991-4bc9162c-4634-4a4f-8258-022ed402ff9d.png">
+	-  Upon successful deployment you should be able to perform the operations like consent creation and JWT login.
+		<img width="1050" alt="jwt-login" src="https://user-images.githubusercontent.com/52251022/221035359-acde1119-836f-4899-b0ee-7f74cefe9f72.png">
+		<img width="1050" alt="image" src="https://user-images.githubusercontent.com/52251022/221035795-689cdbb6-0415-462f-ab1c-2d664b75f25d.png">
 
-	-  
-	
+
 
 ## Developer
 - Tek Raj Chhetri 
