@@ -151,8 +151,14 @@ This tool's distributed nature enables the installation of different components 
 		Figure: Access check for multiple data processing operations
 - Once you have deployed all other components, you can deploy the service layer component as well as  the scheduler. To be able to deploy the service layer and the scheduler, you first need to install Docker. You can install Docker by following the installation instructions at the link below: 
 	- [Docker Installation](https://docs.docker.com/engine/install/)
-	- After installing Docker, you can run the `docker_run.sh` file to deploy the service layer and the scheduler. 
-		<img width="1006" alt="image" src="https://user-images.githubusercontent.com/52251022/220895991-4bc9162c-4634-4a4f-8258-022ed402ff9d.png">
+	- After installing Docker, you can run the `docker_run.sh` file to deploy the service layer and the scheduler. If everything goes well, you should see the URL to access the API (application programming interface) endpoints, and you should also be able to access the Swagger UI.
+	![docker-deployment](https://user-images.githubusercontent.com/52251022/221034060-5e5dce65-63d9-490a-a6bf-95439033cb3d.png)
+	
+	<img width="1370" alt="screen-api" src="https://user-images.githubusercontent.com/52251022/221034111-4bb4b288-3d52-4a29-b074-bbe45955bba9.png">
+
+
+	
+	<img width="1006" alt="image" src="https://user-images.githubusercontent.com/52251022/220895991-4bc9162c-4634-4a4f-8258-022ed402ff9d.png">
 
 	-  
 	
