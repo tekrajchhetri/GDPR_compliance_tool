@@ -121,8 +121,8 @@ This tool's distributed nature enables the installation of different components 
         ```
 	- Deploy the serverless functions
 		```sh 
-        $ faas-cli up -f stack.yml 
-   ```
+        		$ faas-cli up -f stack.yml 
+   		```
 	- For further deployment and installation instructions for OpenFaaS/OpenFaaS functions or serverless functions, refer to the links below.
 		- [Deployment](https://docs.openfaas.com/deployment/)
 		- [Deployment guide for Kubernetes](https://docs.openfaas.com/deployment/kubernetes/)
