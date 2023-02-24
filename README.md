@@ -54,34 +54,10 @@ The tool's security and privacy component is implemented in Prolog by Rance DeLo
 - [FuzzyWuzzy](https://github.com/seatgeek/fuzzywuzzy)
 
 
-## Cluster Information
-- Tier: M0 Sandbox (General)
-- Cluster: AWS / Frankfurt (eu-central-1)
-- Type: Replica Set - 3 nodes
-
-## Running Locally
-Run the command below from the root directory for deployement and access via [http://localhost:5001](http://localhost:5001). The Swagger API documentation can be accessed via [http://localhost:5001/swagger-ui/](http://localhost:5001/swagger-ui/).
-```bash
-bash docker_run.sh
-
-```
-
-## API
-
-![image](https://user-images.githubusercontent.com/52251022/144920140-4011ede4-919a-46e7-9581-73695953a57d.png)
 
 
-## Deployment in Remote Server
 
-## FaaS
-![image](https://user-images.githubusercontent.com/52251022/120083394-b3f37080-c0c8-11eb-8362-99063e0fc720.png)
-
-
-## Performance Monitor
-
-![image](https://user-images.githubusercontent.com/52251022/120082126-7b9c6400-c0c1-11eb-874a-d5c4eb34e813.png)
-
-![image](https://user-images.githubusercontent.com/52251022/120082109-68899400-c0c1-11eb-99cc-d4b23f80c89f.png)
+ 
 
 
 
@@ -172,6 +148,16 @@ This tool's distributed nature enables the installation of different components 
 - Sometimes you might get dependency error. This might be due to your system configuration so ensure that there's no conflict of the libraries.
 ![dependency-error-annotated](https://user-images.githubusercontent.com/52251022/221037253-34e61885-99af-4d8c-bb00-a115993ca37b.png)
 - For any other problems create an issue. 
+
+## Performance
+- ### MongoDB Cluster Information
+	- Tier: M0 Sandbox (General)
+	- Cluster: AWS / Frankfurt (eu-central-1)
+	- Type: Replica Set - 3 nodes
+		![image](https://user-images.githubusercontent.com/52251022/120082126-7b9c6400-c0c1-11eb-874a-d5c4eb34e813.png)
+
+		![image](https://user-images.githubusercontent.com/52251022/120082109-68899400-c0c1-11eb-99cc-d4b23f80c89f.png)
+- 
 
 
 ## Developer
