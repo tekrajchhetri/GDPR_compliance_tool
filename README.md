@@ -160,8 +160,9 @@ This tool's distributed nature enables the installation of different components 
 - 
 
 
-## Developer
-- Tek Raj Chhetri 
+## Contributors
+- **Consortium Partners**: Institute for Applied Systems Technology Bremen (ATB), Leopold-Franzens-Universität Innsbruck (UIBK), Atos Information Technology (ATOS), InfoTripla OY (INFT), The open group limited (TOG), Forum virium Helsinki OY (FVH), Volkswagen AG (VW), LexisNexis Risk Solutions (LN)
+- **Developed By** Tek Raj Chhetri (UIBK) and Rance J DeLong (TOG)
 
 
 ## Project
