@@ -166,7 +166,10 @@ This tool's distributed nature enables the installation of different components 
 
 
 ## Project
--  [smashHit](https://www.smashhit.eu/) 
+- smashHit
+- Web: [https://www.smashhit.eu/](https://www.smashhit.eu/) 
+
+**Note:** In smashHit documents, this tool is referred to as Automatic Contracting Tool (ACT).
 
 ## License
 [MIT](https://github.com/tekrajchhetri/GDPR_compliance_tool/blob/master/LICENSE)
