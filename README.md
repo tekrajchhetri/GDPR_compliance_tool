@@ -162,7 +162,9 @@ This tool's distributed nature enables the installation of different components 
 
 ## Contributors
 - **Consortium Partners**: Institute for Applied Systems Technology Bremen (ATB), Leopold-Franzens-Universität Innsbruck (UIBK), Atos Information Technology (ATOS), InfoTripla OY (INFT), The open group limited (TOG), Forum virium Helsinki OY (FVH), Volkswagen AG (VW), LexisNexis Risk Solutions (LN)
-- **Developed By** Tek Raj Chhetri (UIBK) and Rance J DeLong (TOG)
+- **Developed By** 
+	- Tek Raj Chhetri (UIBK) 
+	- Rance J DeLong (TOG) [https://github.com/tog-rtd/SmashHit.git](https://github.com/tog-rtd/SmashHit.git)
 
 
 ## Project
