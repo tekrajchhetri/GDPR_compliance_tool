@@ -143,7 +143,8 @@ This tool's distributed nature enables the installation of different components 
 	- **Note**: In order for this to work, the cryptographic keys need to be present. You can call `generate_key()` function from `core/security/Cryptography.py` to generate the necessary keys, which are currently disabled, i.e., no call is made to `generate_key()`.
 - Please read our paper, which is freely accessible at [https://doi.org/10.3390/s22072763](https://doi.org/10.3390/s22072763), for additional information. 
 	
-
+## Ontology
+- [https://doi.org/10.5281/zenodo.7598416](https://doi.org/10.5281/zenodo.7598416)
 ## Debugging 
 - Sometimes you might get dependency error. This might be due to your system configuration so ensure that there's no conflict of the libraries.
 ![dependency-error-annotated](https://user-images.githubusercontent.com/52251022/221037253-34e61885-99af-4d8c-bb00-a115993ca37b.png)
