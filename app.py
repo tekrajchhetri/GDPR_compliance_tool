@@ -42,7 +42,7 @@ api = Api(app)
 app.config.update(
     {
         "APISPEC_SPEC": APISpec(
-            title="Automatic Contracting API Specification",
+            title="GDPR Consent Management and Automated Compliance Verification Tool (or Automatic Contracting Tool) API Specification",
             version="v01",
             plugins=[MarshmallowPlugin()],
             openapi_version="2.0.0",
