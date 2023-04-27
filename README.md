@@ -1,4 +1,4 @@
-
+# GDPR Consent Management and Automated Compliance Verification Tool (or Automatic Contracting Tool) 
 ## System Architecture
 ![updated_act-paper-2-tek](https://user-images.githubusercontent.com/52251022/156544074-12c0934a-47a8-4133-8910-196e1afe088b.jpg)
 
