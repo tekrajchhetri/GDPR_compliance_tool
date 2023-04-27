@@ -1,31 +1,3 @@
-![image](https://user-images.githubusercontent.com/52251022/216262953-b50d0c97-ca1b-46d9-ad81-881575f1b140.png)
-**Abstract:** The enforcement of the GDPR in May 2018 has led to a paradigm shift in data protection. Organizations face significant challenges, such as demonstrating compliance (or auditability) and automated compliance verification due to the complex and dynamic nature of consent, as well as the scale at which compliance verification must be performed. Furthermore, the GDPR’s promotion of data protection by design and industrial interoperability requirements has created new technical challenges, as they require significant changes in the design and implementation of systems that handle personal data. We present a scalable data protection by design tool for automated compliance verification and auditability based on informed consent that is modeled with a knowledge graph. Automated compliance verification is made possible by implementing a regulation-to-code process that translates GDPR regulations into well-defined technical and organizational measures and, ultimately, software code. We demonstrate the effectiveness of the tool in the insurance and smart cities domains. We highlight ways in which our tool can be adapted to other domains.
-
-**Keywords:** GDPR; privacy; compliance verification; informed consent; standard data protection model; data sharing; data protection by design; knowledge graph; distributed systems
-
-**URL:** https://www.mdpi.com/1424-8220/22/7/2763 
-
-# Publication
-This work is part of "*Data Protection by Design Tool for Automated GDPR Compliance Verification Based on Semantically Modeled Informed Consent*". Therefore, if you use any code from this or [https://github.com/tog-rtd/SmashHit.git](https://github.com/tog-rtd/SmashHit.git) repository, please cite our work.
-
-```
-@Article{s22072763,
-AUTHOR = {Chhetri, Tek Raj and Kurteva, Anelia and DeLong, Rance J. and Hilscher, Rainer and Korte, Kai and Fensel, Anna},
-TITLE = {Data Protection by Design Tool for Automated GDPR Compliance Verification Based on Semantically Modeled Informed Consent},
-JOURNAL = {Sensors},
-VOLUME = {22},
-YEAR = {2022},
-NUMBER = {7},
-ARTICLE-NUMBER = {2763},
-URL = {https://www.mdpi.com/1424-8220/22/7/2763},
-ISSN = {1424-8220},
-ABSTRACT = {The enforcement of the GDPR in May 2018 has led to a paradigm shift in data protection. Organizations face significant challenges, such as demonstrating compliance (or auditability) and automated compliance verification due to the complex and dynamic nature of consent, as well as the scale at which compliance verification must be performed. Furthermore, the GDPR&rsquo;s promotion of data protection by design and industrial interoperability requirements has created new technical challenges, as they require significant changes in the design and implementation of systems that handle personal data. We present a scalable data protection by design tool for automated compliance verification and auditability based on informed consent that is modeled with a knowledge graph. Automated compliance verification is made possible by implementing a regulation-to-code process that translates GDPR regulations into well-defined technical and organizational measures and, ultimately, software code. We demonstrate the effectiveness of the tool in the insurance and smart cities domains. We highlight ways in which our tool can be adapted to other domains.},
-DOI = {10.3390/s22072763}
-}
-```
-
-
-
 
 ## System Architecture
 ![updated_act-paper-2-tek](https://user-images.githubusercontent.com/52251022/156544074-12c0934a-47a8-4133-8910-196e1afe088b.jpg)
@@ -127,7 +99,7 @@ This tool's distributed nature enables the installation of different components 
 	- After installing Docker, you can run the `docker_run.sh` file to deploy the service layer and the scheduler. If everything goes well, you should see the URL to access the API (application programming interface) endpoints, and you should also be able to access the Swagger UI.
 	![docker-deployment](https://user-images.githubusercontent.com/52251022/221034060-5e5dce65-63d9-490a-a6bf-95439033cb3d.png)
 	
-	<img width="1370" alt="screen-api" src="https://user-images.githubusercontent.com/52251022/221034111-4bb4b288-3d52-4a29-b074-bbe45955bba9.png">
+	![image](https://user-images.githubusercontent.com/52251022/234888337-68529ae9-39cc-4d6f-ba27-de17fc259fd6.png)
 
 
 	-  Upon successful deployment you should be able to perform the operations like consent creation and JWT login.
@@ -166,6 +138,26 @@ This tool's distributed nature enables the installation of different components 
 - **Developed By** 
 	- Tek Raj Chhetri (UIBK) 
 	- Rance J DeLong (TOG) [https://github.com/tog-rtd/SmashHit.git](https://github.com/tog-rtd/SmashHit.git)
+
+# Publication
+This work is part of "*Data Protection by Design Tool for Automated GDPR Compliance Verification Based on Semantically Modeled Informed Consent*". Therefore, if you use any code from this or [https://github.com/tog-rtd/SmashHit.git](https://github.com/tog-rtd/SmashHit.git) repository, please cite our work.
+
+```
+@Article{s22072763,
+AUTHOR = {Chhetri, Tek Raj and Kurteva, Anelia and DeLong, Rance J. and Hilscher, Rainer and Korte, Kai and Fensel, Anna},
+TITLE = {Data Protection by Design Tool for Automated GDPR Compliance Verification Based on Semantically Modeled Informed Consent},
+JOURNAL = {Sensors},
+VOLUME = {22},
+YEAR = {2022},
+NUMBER = {7},
+ARTICLE-NUMBER = {2763},
+URL = {https://www.mdpi.com/1424-8220/22/7/2763},
+ISSN = {1424-8220},
+ABSTRACT = {The enforcement of the GDPR in May 2018 has led to a paradigm shift in data protection. Organizations face significant challenges, such as demonstrating compliance (or auditability) and automated compliance verification due to the complex and dynamic nature of consent, as well as the scale at which compliance verification must be performed. Furthermore, the GDPR&rsquo;s promotion of data protection by design and industrial interoperability requirements has created new technical challenges, as they require significant changes in the design and implementation of systems that handle personal data. We present a scalable data protection by design tool for automated compliance verification and auditability based on informed consent that is modeled with a knowledge graph. Automated compliance verification is made possible by implementing a regulation-to-code process that translates GDPR regulations into well-defined technical and organizational measures and, ultimately, software code. We demonstrate the effectiveness of the tool in the insurance and smart cities domains. We highlight ways in which our tool can be adapted to other domains.},
+DOI = {10.3390/s22072763}
+}
+```
+
 
 
 ## Project
