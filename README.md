@@ -77,7 +77,12 @@ This tool's distributed nature enables the installation of different components 
 - Next is the deployment of the [security and privacy component](https://github.com/tog-rtd/SmashHit). Since the security and privacy component is written in Prolog, you must install all prerequisites for running Prolog programs and deploying the component. The following link should be useful for the deployment of the Prolog-based application.
 
 	- [SWI-Prolog](https://www.swi-prolog.org/download/stable)
-	- After the security and privacy component and service layer have been successfully deployed, you should be able to interact with security and privacy components for operations such as access checks.
+	
+	- With the successful deployment of the security and privacy service (or component), you should have access to the following endpoints.
+	
+		![screencapture-app-swaggerhub-apis-tog-rtd-ngac-apis-1-1-1-2023-04-27-16_27_27](https://user-images.githubusercontent.com/52251022/234895319-0af22e01-3500-49ab-85b0-057297068b08.png)
+
+	- After the security and privacy component (or service) and service layer have been successfully deployed, you should be able to interact with security and privacy components for operations such as access checks.
 	
 		![image](https://user-images.githubusercontent.com/52251022/220625143-9623a2e2-4af1-4561-ad13-7093ac39b68a.png)
 
