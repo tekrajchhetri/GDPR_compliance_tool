@@ -163,6 +163,52 @@ DOI = {10.3390/s22072763}
 }
 ```
 
+## Consent JSON Schema
+```json
+{
+  "Agents": [
+    {
+      "id": "string",
+      "role": "string"
+    }
+  ],
+  "DataProcessing": [
+    "string"
+  ],
+  "GrantedAtTime": "2023-04-28T10:58:29.150Z",
+  "Medium": "string",
+  "Purpose": "string",
+  "Resource": {
+    "additionalProp1": [
+      {
+        "data": [
+          "string"
+        ]
+      }
+    ],
+    "additionalProp2": [
+      {
+        "data": [
+          "string"
+        ]
+      }
+    ],
+    "additionalProp3": [
+      {
+        "data": [
+          "string"
+        ]
+      }
+    ]
+  },
+  "city": "string",
+  "consentid": "string",
+  "country": "string",
+  "dataprovider": "string",
+  "expirationTime": "2023-04-28T10:58:29.150Z",
+  "state": "string"
+} 
+```
 
 
 ## Project
