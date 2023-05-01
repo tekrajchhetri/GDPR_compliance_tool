@@ -143,7 +143,7 @@ This tool's distributed nature enables the installation of different components 
 	- Rance J DeLong (TOG) [https://github.com/tog-rtd/SmashHit.git](https://github.com/tog-rtd/SmashHit.git)
 
 # Publication
-This work is part of "*Data Protection by Design Tool for Automated GDPR Compliance Verification Based on Semantically Modeled Informed Consent*". Therefore, if you use any code from this or [https://github.com/tog-rtd/SmashHit.git](https://github.com/tog-rtd/SmashHit.git) repository, please cite our work.
+If you use any code from this or [https://github.com/tog-rtd/SmashHit.git](https://github.com/tog-rtd/SmashHit.git) repository, please cite our work.
 
 ```
 @Article{s22072763,
