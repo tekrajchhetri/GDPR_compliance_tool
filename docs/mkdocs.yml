@@ -1,9 +1,0 @@
-site_name: Automatic Contracting Tool
-theme:
-  name: material
-docs:
-    index.md
-    about.md
-nav:
-    - Home: 'index.md'
-    - About: 'about.md'
